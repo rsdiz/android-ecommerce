@@ -1,0 +1,115 @@
+ext {
+    // Android
+    androidMinSdkVersion = 27
+    androidTargetSdkVersion = 31
+    androidCompileSdkVersion = 31
+
+    // Libraries
+    kotlinVersion = "1.6.10"
+    uuidVersion = "0.4.0"
+    rulesVersion = '1.4.0'
+    recyclerviewVersion = '1.2.1'
+    kotlinxCoroutinesVersion = '1.6.0'
+    androidLifecycleVersion = '2.4.1'
+    androidLifecycleExtensionVersion = '2.2.0'
+    materialVersion = '1.3.0'
+    espressoVersion = '3.3.0'
+    junitAndroidTestVersion = '1.1.2'
+    junitTestVersion = '4.13.2'
+    coreKtxVersion = '1.7.0'
+    constraintlayoutVersion = '2.1.3'
+    appcompatVersion = '1.4.1'
+    glideVersion = '4.13.1'
+    gsonVersion = "2.9.0"
+    legacySupportV4Version = '1.0.0'
+    palleteVersion = '1.0.0'
+    mockitoVersion = '4.3.1'
+    retrofitVersion = '2.9.0'
+    roomVersion = '2.4.1'
+    hiltVersion = '2.41'
+    hiltLifecycleVersion = '1.0.0'
+    hiltCompilerVersion = '1.0.0'
+    fragmentVersion = '1.4.1'
+    okhttpVersion = '4.9.3'
+    androidCoreTestVersion = '2.1.0'
+    mockitoKotlinVersion = '4.0.0'
+    coroutinesTestVersion = '1.6.0'
+    idleResourceVersion = '3.3.0'
+    pagingVersion = '3.1.0'
+    javaxInjectVersion = "1"
+
+    // Testing
+    robolectricVersion = "4.7.3"
+    junitVersion = "4.12"
+    assertjVersion = "3.22.0"
+    mockitoVersion = "4.3.0"
+    dexMakerVersion = "2.28.1"
+    espressoVersion = "3.4.0"
+    mockitoKotlinVersion = "4.0.0"
+    testSupportVersion = "1.0.2"
+    mockwebserverVersion = "4.9.3"
+
+    shareDependencies = [
+            kotlinStdlib : "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
+            coreKtx : "androidx.core:core-ktx:${coreKtxVersion}"
+    ]
+
+    domainDependencies = [
+            kotlinxCoroutinesCore : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}",
+            kotlinxCoroutinesAndroid : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinxCoroutinesVersion}",
+            legacySupport : "androidx.legacy:legacy-support-v4:${legacySupportV4Version}"
+    ]
+
+    dataDependencies = [
+            kotlinxCoroutinesCore : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}",
+            kotlinxCoroutinesAndroid : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinxCoroutinesVersion}",
+            retrofit : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            converterGson : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            gson : "com.google.code.gson:gson:${gsonVersion}",
+            javaxInject : "javax.inject:javax.inject:${javaxInjectVersion}",
+            roomRuntime : "androidx.room:room-runtime:${roomVersion}",
+            roomKtx : "androidx.room:room-ktx:${roomVersion}",
+            roomCompiler : "androidx.room:room-compiler:${roomVersion}"
+    ]
+
+    mobileUiDependencies = [
+            appcompat : "androidx.appcompat:appcompat:${appcompatVersion}",
+            material : "com.google.android.material:material:${materialVersion}",
+            constraintLayout : "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}",
+            recyclerView : "androidx.recyclerview:recyclerview:${recyclerviewVersion}",
+            pallete : "androidx.palette:palette-ktx:${palleteVersion}",
+            fragment : "androidx.fragment:fragment-ktx:${fragmentVersion}",
+            paging : "androidx.paging:paging-runtime-ktx:${pagingVersion}",
+            glide : "com.github.bumptech.glide:glide:${glideVersion}",
+            viewmodel : "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion",
+            livedata : "androidx.lifecycle:lifecycle-livedata-ktx:$androidLifecycleVersion",
+            runtimeKtx : "androidx.lifecycle:lifecycle-runtime-ktx:$androidLifecycleVersion",
+            commonJava8 : "androidx.lifecycle:lifecycle-common-java8:$androidLifecycleVersion",
+            lifecycleExtension : "androidx.lifecycle:lifecycle-extensions:$androidLifecycleExtensionVersion"
+    ]
+
+    dependencyInjector = [
+            hiltAndroid : "com.google.dagger:hilt-android:$hiltVersion",
+            hiltViewmodel : "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleVersion",
+            hiltDaggerCompiler : "com.google.dagger:hilt-android-compiler:$hiltVersion",
+            hiltAndroidxCompiler : "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
+    ]
+
+    testDependencies = [
+            junit        : "junit:junit:${junitVersion}",
+            mockito      : "org.mockito.kotlin:mockito-kotlin:${mockitoKotlinVersion}",
+            assertj      : "org.assertj:assertj-core:${assertjVersion}",
+            kotlinJunit  : "org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}",
+            supportRunner: "com.android.support.test:runner:${testSupportVersion}",
+            supportRules : "com.android.support.test:rules:${testSupportVersion}",
+            mockWebServer: "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
+    ]
+
+    uiTestDependencies = [
+            junitExt : "androidx.test.ext:junit:${junitAndroidTestVersion}",
+            espressoCore : "androidx.test.espresso:espresso-core:${espressoVersion}",
+            espresso : "androidx.test.espresso:espresso-contrib:${espressoVersion}",
+            rules : "androidx.test:rules:${rulesVersion}",
+            coreTesting : "androidx.arch.core:core-testing:${androidCoreTestVersion}"
+    ]
+}
