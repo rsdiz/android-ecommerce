@@ -37,6 +37,7 @@ ext {
     idleResourceVersion = '3.3.0'
     pagingVersion = '3.1.0'
     javaxInjectVersion = "1"
+    loggingInterceptorVersion = "5.0.0-alpha.2"
 
     // Testing
     robolectricVersion = "4.7.3"
@@ -66,6 +67,7 @@ ext {
             retrofit : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             converterGson : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             gson : "com.google.code.gson:gson:${gsonVersion}",
+            loggingInterceptor  : "com.squareup.okhttp3:logging-interceptor:${loggingInterceptorVersion}",
             javaxInject : "javax.inject:javax.inject:${javaxInjectVersion}",
             roomRuntime : "androidx.room:room-runtime:${roomVersion}",
             roomKtx : "androidx.room:room-ktx:${roomVersion}",
