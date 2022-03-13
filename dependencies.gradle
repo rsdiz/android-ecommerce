@@ -58,7 +58,8 @@ ext {
     domainDependencies = [
             kotlinxCoroutinesCore : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}",
             kotlinxCoroutinesAndroid : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinxCoroutinesVersion}",
-            legacySupport : "androidx.legacy:legacy-support-v4:${legacySupportV4Version}"
+            legacySupport : "androidx.legacy:legacy-support-v4:${legacySupportV4Version}",
+            javaxInject : "javax.inject:javax.inject:${javaxInjectVersion}"
     ]
 
     dataDependencies = [

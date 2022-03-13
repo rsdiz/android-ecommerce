@@ -1,14 +1,15 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
 }
 
 android {
-    compileSdk 31
+    compileSdk androidCompileSdkVersion
 
     defaultConfig {
-        minSdk 27
-        targetSdk 31
+        minSdk androidMinSdkVersion
+        targetSdk androidTargetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -30,11 +31,15 @@ android {
 }
 
 dependencies {
+    implementation shareDependencies.coreKtx
+    implementation mobileUiDependencies.appcompat
+    implementation domainDependencies.kotlinxCoroutinesCore
+    implementation domainDependencies.kotlinxCoroutinesAndroid
+    implementation domainDependencies.legacySupport
+    implementation domainDependencies.javaxInject
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation testDependencies.junit
+
+    implementation project(":base")
+    implementation project(":data")
 }
