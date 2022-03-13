@@ -16,3 +16,4 @@ rootProject.name = "RDSHOP"
 include ':mobilecustomer'
 include ':base'
 include ':domain'
+include ':data'
