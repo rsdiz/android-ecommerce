@@ -32,6 +32,16 @@ android {
 dependencies {
     implementation shareDependencies.coreKtx
     implementation mobileUiDependencies.appcompat
+    implementation dataDependencies.kotlinxCoroutinesCore
+    implementation dataDependencies.kotlinxCoroutinesAndroid
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.converterGson
+    implementation dataDependencies.gson
+    implementation dataDependencies.loggingInterceptor
+    implementation dataDependencies.javaxInject
+    implementation dataDependencies.roomRuntime
+    implementation dataDependencies.roomKtx
+    implementation dataDependencies.roomCompiler
 
     testImplementation testDependencies.junit
 
