@@ -1,7 +1,8 @@
-package id.rsdiz.rdshop.data.source.local.room
+package id.rsdiz.rdshop.data.source.local
 
 import id.rsdiz.rdshop.data.source.local.entity.OrderEntity
 import id.rsdiz.rdshop.data.source.local.mapper.OrderMapper
+import id.rsdiz.rdshop.data.source.local.room.IOrderDao
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
