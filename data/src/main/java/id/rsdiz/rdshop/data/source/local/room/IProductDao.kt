@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.data.source.local.room
 
+import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Contracts how application interacts with stored data in [ProductEntity]
  */
+@Dao
 interface IProductDao : IBaseDao<ProductEntity> {
     @Transaction
     @Query("SELECT * FROM products")
