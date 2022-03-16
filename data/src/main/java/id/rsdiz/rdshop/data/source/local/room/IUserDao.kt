@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.data.source.local.room
 
+import androidx.room.Dao
 import androidx.room.Query
 import id.rsdiz.rdshop.data.source.local.entity.Role
 import id.rsdiz.rdshop.data.source.local.entity.UserEntity
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Contracts how application interacts with stored data in [UserEntity]
  */
+@Dao
 interface IUserDao : IBaseDao<UserEntity> {
     @Query("SELECT * FROM users")
     fun getAllUsers(): Flow<List<UserEntity>>
