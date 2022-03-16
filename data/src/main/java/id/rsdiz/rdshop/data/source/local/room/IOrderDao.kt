@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.data.source.local.room
 
+import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import id.rsdiz.rdshop.data.source.local.entity.DetailAndProduct
@@ -12,6 +13,7 @@ import org.threeten.bp.OffsetDateTime
 /**
  * Contracts how application interacts with stored data in [OrderEntity]
  */
+@Dao
 interface IOrderDao : IBaseDao<OrderEntity> {
     @Transaction
     @Query("SELECT * FROM orders")
