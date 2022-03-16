@@ -22,4 +22,5 @@ abstract class Database : RoomDatabase() {
     abstract fun productDao(): IProductDao
     abstract fun productImageDao(): IProductImageDao
     abstract fun orderDao(): IOrderDao
+    abstract fun detailOrderDao(): IDetailOrderDao
 }
