@@ -38,6 +38,9 @@ dependencies {
     implementation domainDependencies.legacySupport
     implementation domainDependencies.javaxInject
 
+    // JSR-310 backport for Android
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.1'
+
     testImplementation testDependencies.junit
 
     implementation project(":base")
