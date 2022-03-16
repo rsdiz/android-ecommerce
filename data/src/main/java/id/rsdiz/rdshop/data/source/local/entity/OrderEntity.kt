@@ -16,5 +16,5 @@ data class OrderEntity(
     val shippingCost: Int,
     val phone: String,
     val status: Short,
-    val trackingNumber: String
+    val trackingNumber: String?
 )

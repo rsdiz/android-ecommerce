@@ -2,6 +2,7 @@ package id.rsdiz.rdshop.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.threeten.bp.OffsetDateTime
 
 /**
  * Model for Order
@@ -10,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 data class Order(
     val orderId: String,
     val userId: String,
-    val date: String,
+    val date: OffsetDateTime,
     val amount: Int,
     val shipName: String,
     val shipAddress: String,
