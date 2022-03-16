@@ -43,6 +43,9 @@ dependencies {
     implementation dataDependencies.roomKtx
     implementation dataDependencies.roomCompiler
 
+    // JSR-310 backport for Android
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.1'
+
     testImplementation testDependencies.junit
 
     implementation project(":base")
