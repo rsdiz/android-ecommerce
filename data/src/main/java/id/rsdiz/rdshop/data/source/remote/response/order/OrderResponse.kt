@@ -22,7 +22,7 @@ data class OrderResponse(
     @field:SerializedName("status")
     val status: Short,
     @field:SerializedName("tracking_number")
-    val trackingNumber: String,
+    val trackingNumber: String?,
     @field:SerializedName("detail_order")
     val detailOrder: List<DetailOrderResponse>
 )
