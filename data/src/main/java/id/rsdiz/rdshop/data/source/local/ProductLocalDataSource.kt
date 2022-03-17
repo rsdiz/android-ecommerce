@@ -1,14 +1,17 @@
 package id.rsdiz.rdshop.data.source.local
 
 import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
+import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.mapper.ProductMapper
 import id.rsdiz.rdshop.data.source.local.room.IProductDao
+import id.rsdiz.rdshop.data.source.local.room.IProductImageDao
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ProductLocalDataSource @Inject constructor(
     private val productDao: IProductDao,
+    private val productImageDao: IProductImageDao,
     val mapper: ProductMapper
 ) {
     fun getAllProducts() = productDao.getAllProducts()
@@ -27,9 +30,28 @@ class ProductLocalDataSource @Inject constructor(
 
     fun update(data: ProductEntity) = productDao.update(data)
 
-    suspend fun insertAll(list: List<ProductEntity>) = productDao.insertAll(list)
+    suspend fun insertAll(
+        list: List<ProductWithImages>,
+    ) {
+        val listProducts = mutableListOf<ProductEntity>()
+        list.forEach {
+            listProducts.add(it.product)
+            productImageDao.insertAll(it.images)
+        }
+        productDao.insertAll(listProducts)
+    }
 
-    suspend fun insert(data: ProductEntity) = productDao.insert(data)
+    suspend fun insert(data: ProductWithImages) {
+        productDao.insert(data.product)
+        data.images.forEach {
+            productImageDao.insert(it)
+        }
+    }
 
-    suspend fun delete(data: ProductEntity) = productDao.delete(data)
+    suspend fun delete(data: ProductWithImages) {
+        data.images.forEach {
+            productImageDao.delete(it)
+        }
+        productDao.delete(data.product)
+    }
 }

@@ -1,7 +1,9 @@
 package id.rsdiz.rdshop.data.source.local
 
 import id.rsdiz.rdshop.data.source.local.entity.OrderEntity
+import id.rsdiz.rdshop.data.source.local.entity.OrderWithDetails
 import id.rsdiz.rdshop.data.source.local.mapper.OrderMapper
+import id.rsdiz.rdshop.data.source.local.room.IDetailOrderDao
 import id.rsdiz.rdshop.data.source.local.room.IOrderDao
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
@@ -10,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class OrderLocalDataSource @Inject constructor(
     private val orderDao: IOrderDao,
+    private val detailOrderDao: IDetailOrderDao,
     val mapper: OrderMapper
 ) {
     fun getAllOrder() = orderDao.getAllOrder()
@@ -29,9 +32,26 @@ class OrderLocalDataSource @Inject constructor(
 
     fun update(data: OrderEntity) = orderDao.update(data)
 
-    suspend fun insertAll(list: List<OrderEntity>) = orderDao.insertAll(list)
+    suspend fun insertAll(list: List<OrderWithDetails>) {
+        val listOrder = mutableListOf<OrderEntity>()
+        list.forEach {
+            listOrder.add(it.order)
+            detailOrderDao.insertAll(it.details)
+        }
+        orderDao.insertAll(listOrder)
+    }
 
-    suspend fun insert(data: OrderEntity) = orderDao.insert(data)
+    suspend fun insert(data: OrderWithDetails) {
+        orderDao.insert(data.order)
+        data.details.forEach {
+            detailOrderDao.insert(it)
+        }
+    }
 
-    suspend fun delete(data: OrderEntity) = orderDao.delete(data)
+    suspend fun delete(data: OrderWithDetails) {
+        data.details.forEach {
+            detailOrderDao.delete(it)
+        }
+        orderDao.delete(data.order)
+    }
 }
