@@ -1,6 +1,7 @@
 package id.rsdiz.rdshop.data.source.remote.response.user
 
 import com.google.gson.annotations.SerializedName
+import id.rsdiz.rdshop.data.source.remote.response.IBaseResponse
 
 /**
  * Model response for user
@@ -23,3 +24,12 @@ data class UserResponse(
     @field:SerializedName("role")
     val role: String
 )
+
+/**
+ * User Responses from API
+ */
+data class BaseUserResponse(
+    override val code: Int,
+    override val status: String,
+    override val data: UserResponse
+) : IBaseResponse<UserResponse>

@@ -1,7 +1,11 @@
 package id.rsdiz.rdshop.data.source.remote.response.order
 
 import com.google.gson.annotations.SerializedName
+import id.rsdiz.rdshop.data.source.remote.response.IBaseResponse
 
+/**
+ * Model response for order
+ */
 data class OrderResponse(
     @field:SerializedName("id")
     val id: String,
@@ -26,3 +30,12 @@ data class OrderResponse(
     @field:SerializedName("detail_order")
     val detailOrder: List<DetailOrderResponse>
 )
+
+/**
+ * Order Responses from API
+ */
+data class BaseOrderResponse(
+    override val code: Int,
+    override val status: String,
+    override val data: OrderResponse
+) : IBaseResponse<OrderResponse>

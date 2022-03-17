@@ -1,7 +1,11 @@
 package id.rsdiz.rdshop.data.source.remote.response.order
 
 import com.google.gson.annotations.SerializedName
+import id.rsdiz.rdshop.data.source.remote.response.IBaseResponse
 
+/**
+ * Model response for orders
+ */
 data class OrdersResponse(
     @field:SerializedName("count")
     val count: Int,
@@ -12,3 +16,12 @@ data class OrdersResponse(
     @field:SerializedName("results")
     val results: List<OrderResponse>
 )
+
+/**
+ * Orders Responses from API
+ */
+data class BaseOrdersResponse(
+    override val code: Int,
+    override val status: String,
+    override val data: OrdersResponse
+) : IBaseResponse<OrdersResponse>

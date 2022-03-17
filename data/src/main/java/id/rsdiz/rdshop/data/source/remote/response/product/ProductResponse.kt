@@ -1,7 +1,11 @@
 package id.rsdiz.rdshop.data.source.remote.response.product
 
 import com.google.gson.annotations.SerializedName
+import id.rsdiz.rdshop.data.source.remote.response.IBaseResponse
 
+/**
+ * Model response for product
+ */
 data class ProductResponse(
     @field:SerializedName("id")
     val id: String,
@@ -20,3 +24,12 @@ data class ProductResponse(
     @field:SerializedName("images")
     val images: List<ProductImageResponse>?
 )
+
+/**
+ * Product Responses from API
+ */
+data class BaseProductResponse(
+    override val code: Int,
+    override val status: String,
+    override val data: ProductResponse
+) : IBaseResponse<ProductResponse>
