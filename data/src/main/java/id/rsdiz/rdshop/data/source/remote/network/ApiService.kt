@@ -5,6 +5,7 @@ import id.rsdiz.rdshop.data.source.remote.response.category.BaseCategoriesRespon
 import id.rsdiz.rdshop.data.source.remote.response.category.BaseCategoryResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.BaseOrderResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.BaseOrdersResponse
+import id.rsdiz.rdshop.data.source.remote.response.order.OrderResponse
 import id.rsdiz.rdshop.data.source.remote.response.product.*
 import id.rsdiz.rdshop.data.source.remote.response.user.BaseUserResponse
 import id.rsdiz.rdshop.data.source.remote.response.user.BaseUsersResponse
@@ -19,7 +20,7 @@ interface ApiService {
     suspend fun getUsers(@Query("size") size: Int = 10): BaseUsersResponse
 
     @GET(value = "products")
-    suspend fun getProducts(@Query("size") size: Int = 10): BaseUserResponse
+    suspend fun getProducts(@Query("size") size: Int = 10): BaseProductsResponse
 
     @GET(value = "categories")
     suspend fun getCategories(): BaseCategoriesResponse
@@ -110,7 +111,6 @@ interface ApiService {
         @Part(value = "image") image: RequestBody
     ): BaseProductImageResponse
 
-    @Multipart
     @POST(value = "orders")
-    suspend fun createOrder(@Body data: RequestBody): BaseOrderResponse
+    suspend fun createOrder(@Body data: OrderResponse): BaseOrderResponse
 }
