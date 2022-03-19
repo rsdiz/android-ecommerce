@@ -5,14 +5,16 @@ import id.rsdiz.rdshop.data.source.local.entity.OrderWithDetails
 import id.rsdiz.rdshop.data.source.local.mapper.OrderMapper
 import id.rsdiz.rdshop.data.source.local.room.IDetailOrderDao
 import id.rsdiz.rdshop.data.source.local.room.IOrderDao
+import id.rsdiz.rdshop.data.source.local.room.IOrderRemoteKeysDao
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class OrderLocalDataSource @Inject constructor(
-    private val orderDao: IOrderDao,
-    private val detailOrderDao: IDetailOrderDao,
+    val orderDao: IOrderDao,
+    val detailOrderDao: IDetailOrderDao,
+    val orderRemoteKeysDao: IOrderRemoteKeysDao,
     val mapper: OrderMapper
 ) {
     fun getAllOrder() = orderDao.getAllOrder()
@@ -27,8 +29,6 @@ class OrderLocalDataSource @Inject constructor(
     ) = orderDao.getOrderByDate(startDate, endDate)
 
     fun getOrderByStatus(status: Short) = orderDao.getOrderByStatus(status)
-
-    fun getOrderDetailById(detailId: String) = orderDao.getOrderDetailById(detailId)
 
     fun update(data: OrderEntity) = orderDao.update(data)
 

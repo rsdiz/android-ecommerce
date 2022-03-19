@@ -10,6 +10,7 @@ import id.rsdiz.rdshop.data.source.remote.response.product.*
 import id.rsdiz.rdshop.data.source.remote.response.user.BaseUserResponse
 import id.rsdiz.rdshop.data.source.remote.response.user.BaseUsersResponse
 import okhttp3.RequestBody
+import org.threeten.bp.OffsetDateTime
 import retrofit2.http.*
 
 /**
@@ -26,7 +27,7 @@ interface ApiService {
     suspend fun getCategories(): BaseCategoriesResponse
 
     @GET(value = "orders")
-    suspend fun getOrders(@Query("size") size: Int = 10): BaseOrdersResponse
+    suspend fun getOrders(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseOrdersResponse
 
     @GET(value = "users/{userId}")
     suspend fun getUserById(@Path(value = "userId") userId: String): BaseUserResponse
@@ -36,6 +37,15 @@ interface ApiService {
 
     @GET(value = "orders/{orderId}")
     suspend fun getOrderById(@Path(value = "orderId") orderId: String): BaseOrderResponse
+
+    @GET(value = "orders")
+    suspend fun getOrderByUserId(@Query("user_id") userId: String): BaseOrdersResponse
+
+    @GET(value = "orders")
+    suspend fun getOrderByDate(
+        @Query("start_date") startDate: OffsetDateTime = OffsetDateTime.MIN,
+        @Query("end_date") endDate: OffsetDateTime = OffsetDateTime.MAX
+    ): BaseOrdersResponse
 
     @Multipart
     @PUT(value = "users/{userId}")

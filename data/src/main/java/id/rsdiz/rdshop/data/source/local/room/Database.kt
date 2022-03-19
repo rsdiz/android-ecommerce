@@ -13,7 +13,8 @@ import id.rsdiz.rdshop.data.source.local.entity.*
         OrderEntity::class,
         DetailOrderEntity::class,
         UserRemoteKeysEntity::class,
-        ProductRemoteKeysEntity::class
+        ProductRemoteKeysEntity::class,
+        OrderRemoteKeysEntity::class
     ],
     version = 1,
     exportSchema = true
@@ -26,5 +27,6 @@ abstract class Database : RoomDatabase() {
     abstract fun productImageDao(): IProductImageDao
     abstract fun productRemoteKeysDao(): IProductRemoteKeysDao
     abstract fun orderDao(): IOrderDao
+    abstract fun orderRemoteKeysDao(): IOrderRemoteKeysDao
     abstract fun detailOrderDao(): IDetailOrderDao
 }

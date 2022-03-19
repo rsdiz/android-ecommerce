@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.data.source.local.room
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
@@ -17,7 +18,7 @@ import org.threeten.bp.OffsetDateTime
 interface IOrderDao : IBaseDao<OrderEntity> {
     @Transaction
     @Query("SELECT * FROM orders")
-    fun getAllOrder(): Flow<List<OrderWithDetails>>
+    fun getAllOrder(): PagingSource<Int, OrderWithDetails>
 
     @Transaction
     @Query("SELECT * FROM orders WHERE orderId = :orderId")
@@ -41,4 +42,7 @@ interface IOrderDao : IBaseDao<OrderEntity> {
     @Transaction
     @Query("SELECT * FROM detail_orders WHERE detailId = :detailId")
     fun getOrderDetailById(detailId: String): Flow<DetailAndProduct>
+
+    @Query("DELETE FROM orders")
+    fun deleteAll()
 }

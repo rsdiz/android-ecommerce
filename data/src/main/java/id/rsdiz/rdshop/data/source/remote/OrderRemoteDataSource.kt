@@ -12,12 +12,13 @@ import kotlinx.coroutines.flow.flowOn
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class OrderRemoteDataSource @Inject constructor(
-    private val apiService: ApiService,
+    val apiService: ApiService,
     val mapper: OrderRemoteMapper
 ) {
     suspend fun getOrders(size: Int = 10) =
@@ -48,11 +49,57 @@ class OrderRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
                 }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
+    suspend fun getOrderByUserId(userId: String) =
+        flow {
+            try {
+                val response = apiService.getOrderByUserId(
+                    userId = userId
+                )
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
+                        )
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
+    suspend fun getOrderByDate(startDate: OffsetDateTime?, endDate: OffsetDateTime?) =
+        flow {
+            try {
+                val response = if (startDate != null && endDate != null) {
+                    apiService.getOrderByDate(
+                        startDate = startDate,
+                        endDate = endDate
+                    )
+                } else apiService.getOrderByDate()
+
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
+                        )
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
             } catch (e: Exception) {
                 emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
             }
@@ -69,7 +116,7 @@ class OrderRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -88,7 +135,7 @@ class OrderRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.status
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -107,7 +154,7 @@ class OrderRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
