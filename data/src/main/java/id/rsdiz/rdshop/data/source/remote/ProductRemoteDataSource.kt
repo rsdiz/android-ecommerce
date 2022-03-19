@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductRemoteDataSource @Inject constructor(
-    private val apiService: ApiService,
+    val apiService: ApiService,
     val mapper: ProductRemoteMapper,
 ) {
     suspend fun getProducts(size: Int = 10) =
@@ -72,7 +72,7 @@ class ProductRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.status
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -133,7 +133,7 @@ class ProductRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.status
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))

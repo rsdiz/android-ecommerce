@@ -28,7 +28,6 @@ import javax.inject.Singleton
  */
 @Singleton
 class ProductRepository @Inject constructor(
-    private val apiService: ApiService,
     private val remoteDataSource: ProductRemoteDataSource,
     private val localDataSource: ProductLocalDataSource,
     private val appExecutors: AppExecutors
@@ -38,7 +37,7 @@ class ProductRepository @Inject constructor(
     override fun getProducts(): Flow<PagingData<Product>> = Pager(
         config = PagingConfig(pageSize = 20),
         remoteMediator = ProductRemoteMediator(
-            apiService = apiService,
+            apiService = remoteDataSource.apiService,
             productDao = localDataSource.productDao,
             productImageDao = localDataSource.productImageDao,
             productRemoteKeysDao = localDataSource.productRemoteKeysDao,

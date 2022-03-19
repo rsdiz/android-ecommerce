@@ -11,7 +11,6 @@ import id.rsdiz.rdshop.data.paging.UserRemoteMediator
 import id.rsdiz.rdshop.data.source.local.UserLocalDataSource
 import id.rsdiz.rdshop.data.source.remote.UserRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
-import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import id.rsdiz.rdshop.data.source.remote.response.user.UserResponse
 import id.rsdiz.rdshop.domain.model.User
 import id.rsdiz.rdshop.domain.repository.IUserRepository
@@ -27,7 +26,6 @@ import javax.inject.Singleton
  */
 @Singleton
 class UserRepository @Inject constructor(
-    private val apiService: ApiService,
     private val remoteDataSource: UserRemoteDataSource,
     private val localDataSource: UserLocalDataSource,
     private val appExecutor: AppExecutors
@@ -37,7 +35,7 @@ class UserRepository @Inject constructor(
     override fun getUsers(): Flow<PagingData<User>> = Pager(
         config = PagingConfig(pageSize = 20),
         remoteMediator = UserRemoteMediator(
-            apiService = apiService,
+            apiService = remoteDataSource.apiService,
             userDao = localDataSource.userDao,
             userRemoteKeysDao = localDataSource.userRemoteKeysDao,
             mapper = remoteDataSource.mapper

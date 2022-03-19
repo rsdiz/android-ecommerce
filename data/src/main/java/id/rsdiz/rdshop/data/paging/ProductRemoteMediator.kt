@@ -61,7 +61,11 @@ class ProductRemoteMediator(
                         productRemoteKeysDao.deleteAll()
                     }
                     var previous: Int? = null
-                    val next: Int = page + 1
+                    var next: Int? = null
+
+                    data.next?.let {
+                        next = page + 1
+                    }
 
                     data.previous?.let {
                         previous = if (page <= 1) null else page - 1
