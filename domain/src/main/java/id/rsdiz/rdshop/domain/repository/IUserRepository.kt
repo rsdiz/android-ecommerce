@@ -3,6 +3,7 @@ package id.rsdiz.rdshop.domain.repository
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.User
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 /**
  * Contract for User Repository
@@ -27,15 +28,15 @@ interface IUserRepository {
     /**
      * Insert new user to repository
      */
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(user: User, password: String, sourceFile: File?): Resource<String>
 
     /**
-     * Update user by [userId]
+     * Update user
      */
-    suspend fun updateUser(userId: String, user: User)
+    suspend fun updateUser(user: User, password: String, sourceFile: File?): Resource<String>
 
     /**
      * Delete user from repository
      */
-    suspend fun deleteUser(userId: String)
+    suspend fun deleteUser(userId: String): Resource<String>
 }

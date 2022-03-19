@@ -1,9 +1,8 @@
 package id.rsdiz.rdshop.domain.usecase.user
 
-import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.User
 import id.rsdiz.rdshop.domain.repository.IUserRepository
-import kotlinx.coroutines.flow.Flow
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -12,15 +11,24 @@ import javax.inject.Inject
 class UserUseCase @Inject constructor(
     private val repository: IUserRepository
 ) : IUserUseCase {
-    override fun getUsers(): Flow<Resource<List<User>>> = repository.getUsers()
+    override fun getUsers() = repository.getUsers()
 
-    override fun getUser(userId: String): Flow<Resource<User>> = repository.getUser(userId)
+    override fun getUser(userId: String) = repository.getUser(userId)
 
-    override suspend fun searchUser(query: String): Resource<List<User>> = repository.searchUser(query)
+    override suspend fun searchUser(query: String) =
+        repository.searchUser(query)
 
-    override suspend fun insertUser(user: User) = repository.insertUser(user)
+    override suspend fun insertUser(
+        user: User,
+        password: String,
+        sourceFile: File?
+    ) = repository.insertUser(user, password, sourceFile)
 
-    override suspend fun updateUser(userId: String, user: User) = repository.updateUser(userId, user)
+    override suspend fun updateUser(
+        user: User,
+        password: String,
+        sourceFile: File?
+    ) = repository.updateUser(user, password, sourceFile)
 
     override suspend fun deleteUser(userId: String) = repository.deleteUser(userId)
 }

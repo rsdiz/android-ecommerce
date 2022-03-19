@@ -3,6 +3,7 @@ package id.rsdiz.rdshop.domain.usecase.user
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.User
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 /**
  * Contract for User Use Case
@@ -27,15 +28,15 @@ interface IUserUseCase {
     /**
      * Insert new user
      */
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(user: User, password: String, sourceFile: File?): Resource<String>
 
     /**
-     * Update user by [userId]
+     * Update user
      */
-    suspend fun updateUser(userId: String, user: User)
+    suspend fun updateUser(user: User, password: String, sourceFile: File?): Resource<String>
 
     /**
      * Delete user
      */
-    suspend fun deleteUser(userId: String)
+    suspend fun deleteUser(userId: String): Resource<String>
 }
