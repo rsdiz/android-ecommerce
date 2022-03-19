@@ -22,10 +22,10 @@ class UserRemoteDataSource @Inject constructor(
     private val apiService: ApiService,
     val mapper: UserRemoteMapper
 ) {
-    suspend fun getUsers() =
+    suspend fun getUsers(size: Int = 10) =
         flow {
             try {
-                val response = apiService.getUsers()
+                val response = apiService.getUsers(size = size)
                 if (response.data != null) {
                     when (response.code) {
                         200 -> emit(
@@ -50,7 +50,7 @@ class UserRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))

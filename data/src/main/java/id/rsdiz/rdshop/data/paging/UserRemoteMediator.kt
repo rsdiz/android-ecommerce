@@ -49,19 +49,19 @@ class UserRemoteMediator(
             if (response.code == 200) {
                 val responseData = response.data
                 endOfPaginationReached = responseData == null
-                responseData?.let {
+                responseData?.let { data ->
                     if (loadType == LoadType.REFRESH) {
                         userDao.deleteAll()
                         userRemoteKeysDao.deleteAll()
                     }
                     var previous: Int? = null
-                    var next: Int = page + 1
+                    val next: Int = page + 1
 
-                    responseData.previous?.let {
+                    data.previous?.let {
                         previous = if (page <= 1) null else page - 1
                     }
 
-                    val keys = responseData.results.map { user ->
+                    val keys = data.results.map { user ->
                         UserRemoteKeysEntity(
                             id = user.id,
                             previous = previous,
@@ -71,7 +71,7 @@ class UserRemoteMediator(
                     }
 
                     userRemoteKeysDao.insertAll(keys)
-                    userDao.insertAll(mapper.mapRemoteToEntities(responseData.results))
+                    userDao.insertAll(mapper.mapRemoteToEntities(data.results))
                 }
             }
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

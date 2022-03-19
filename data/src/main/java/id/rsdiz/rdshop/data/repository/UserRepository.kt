@@ -83,7 +83,7 @@ class UserRepository @Inject constructor(
             ).first()
         ) {
             is ApiResponse.Success -> {
-                remoteDataSource.mapper.mapRemoteToEntity(response.data).let {
+                remoteDataSource.mapper.mapRemoteToEntity(response.data!!).let {
                     localDataSource.insert(it)
                 }
 
@@ -118,7 +118,7 @@ class UserRepository @Inject constructor(
                 val data = localDataSource.getUserById(userId)?.first()
                 data?.let { localDataSource.delete(it) }
 
-                Resource.Success(response.data)
+                Resource.Success(response.data!!)
             }
             is ApiResponse.Empty -> Resource.Error(response.toString(), null)
             else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
