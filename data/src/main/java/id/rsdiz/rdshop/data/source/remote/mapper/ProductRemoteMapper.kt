@@ -39,7 +39,7 @@ open class ProductRemoteMapper @Inject constructor() :
             price = remote.price
         )
 
-    private fun mapProductImageRemoteToProductImageEntity(
+    fun mapProductImageRemoteToProductImageEntity(
         remote: ProductImageResponse
     ): ProductImageEntity =
         ProductImageEntity(
@@ -48,7 +48,7 @@ open class ProductRemoteMapper @Inject constructor() :
             path = remote.path
         )
 
-    private fun mapProductImageRemotesToProductImageEntities(
+    fun mapProductImageRemotesToProductImageEntities(
         remote: List<ProductImageResponse>?
     ): List<ProductImageEntity>? =
         remote?.map {

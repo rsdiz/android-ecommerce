@@ -1,8 +1,11 @@
 package id.rsdiz.rdshop.domain.usecase.product
 
+import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.Product
+import id.rsdiz.rdshop.domain.model.ProductImage
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 /**
  * Contract for Product Use Case
@@ -12,7 +15,7 @@ interface IProductUseCase {
     /**
      * Get list of products
      */
-    fun getProducts(): Flow<Resource<List<Product>>>
+    fun getProducts(): Flow<PagingData<Product>>
 
     /**
      * Get specified product by [productId]
@@ -27,15 +30,25 @@ interface IProductUseCase {
     /**
      * Insert new product
      */
-    suspend fun insertProduct(product: Product)
+    suspend fun insertProduct(product: Product, sourceFile: File?): Resource<String>
 
     /**
-     * Update product by [productId]
+     * Update product
      */
-    suspend fun updateProduct(productId: String, product: Product)
+    suspend fun updateProduct(product: Product, sourceFile: File?): Resource<String>
 
     /**
      * Delete product
      */
-    suspend fun deleteProduct(productId: String)
+    suspend fun deleteProduct(productId: String): Resource<String>
+
+    /**
+     * Insert Product Image to repository
+     */
+    suspend fun addProductImage(productId: String, sourceFile: File): Resource<ProductImage>
+
+    /**
+     * Delete Product Image from repository
+     */
+    suspend fun removeProductImage(productId: String, imageId: String): Resource<String>
 }

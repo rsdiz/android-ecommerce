@@ -1,11 +1,13 @@
 package id.rsdiz.rdshop.data.source.local.room
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.room.base.IBaseDao
+import id.rsdiz.rdshop.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 interface IProductDao : IBaseDao<ProductEntity> {
     @Transaction
     @Query("SELECT * FROM products")
-    fun getAllProducts(): Flow<ProductWithImages>
+    fun getAllProducts(): PagingSource<Int, Product>
 
     @Transaction
     @Query("SELECT * FROM products WHERE productId = :productId")
@@ -23,16 +25,19 @@ interface IProductDao : IBaseDao<ProductEntity> {
 
     @Transaction
     @Query("SELECT * FROM products WHERE categoryId = :categoryId")
-    fun getProductByCategoryId(categoryId: String): Flow<ProductWithImages>
+    fun getProductByCategoryId(categoryId: String): Flow<List<ProductWithImages>>
 
     @Transaction
     @Query("SELECT * FROM products WHERE name LIKE :word OR description LIKE :word")
-    fun searchProducts(word: String): Flow<ProductWithImages>
+    fun searchProducts(word: String): Flow<List<ProductWithImages>>
 
     @Query("SELECT * FROM products WHERE name LIKE :word AND price BETWEEN :minPrice AND :maxPrice ORDER BY price")
     fun getProductByFilter(
         word: String? = "",
         minPrice: Int? = 0,
         maxPrice: Int? = Int.MAX_VALUE
-    ): Flow<ProductWithImages>
+    ): Flow<List<ProductWithImages>>
+
+    @Query("DELETE FROM products")
+    fun deleteAll()
 }

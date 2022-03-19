@@ -47,13 +47,13 @@ open class ProductMapper @Inject constructor() : DataMapper<ProductWithImages, P
             }
         )
 
-    private fun mapProductImageEntityToProductImage(entity: ProductImageEntity): ProductImage =
+    fun mapProductImageEntityToProductImage(entity: ProductImageEntity): ProductImage =
         ProductImage(
             imageId = entity.imageId,
             path = entity.path
         )
 
-    private fun mapProductImageToProductImageEntity(
+    fun mapProductImageToProductImageEntity(
         productId: String,
         model: ProductImage
     ): ProductImageEntity =

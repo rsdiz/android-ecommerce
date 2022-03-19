@@ -12,7 +12,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,7 +24,7 @@ class ProductRemoteDataSource @Inject constructor(
     suspend fun getProducts(size: Int = 10) =
         flow {
             try {
-                val response = apiService.getProducts(size)
+                val response = apiService.getProducts(size = size)
                 if (response.data != null) {
                     when (response.code) {
                         200 -> emit(
@@ -50,7 +49,7 @@ class ProductRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -203,7 +202,4 @@ class ProductRemoteDataSource @Inject constructor(
         }
         return multipartBody.build()
     }
-
-    private fun generateRequestBody(text: String): RequestBody =
-        text.toRequestBody("text/plain".toMediaTypeOrNull())
 }

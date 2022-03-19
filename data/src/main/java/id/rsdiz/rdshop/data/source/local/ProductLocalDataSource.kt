@@ -5,13 +5,15 @@ import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.mapper.ProductMapper
 import id.rsdiz.rdshop.data.source.local.room.IProductDao
 import id.rsdiz.rdshop.data.source.local.room.IProductImageDao
+import id.rsdiz.rdshop.data.source.local.room.IProductRemoteKeysDao
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ProductLocalDataSource @Inject constructor(
-    private val productDao: IProductDao,
-    private val productImageDao: IProductImageDao,
+    val productDao: IProductDao,
+    val productImageDao: IProductImageDao,
+    val productRemoteKeysDao: IProductRemoteKeysDao,
     val mapper: ProductMapper
 ) {
     fun getAllProducts() = productDao.getAllProducts()

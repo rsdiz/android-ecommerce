@@ -20,7 +20,7 @@ interface ApiService {
     suspend fun getUsers(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseUsersResponse
 
     @GET(value = "products")
-    suspend fun getProducts(@Query("size") size: Int = 10): BaseProductsResponse
+    suspend fun getProducts(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseProductsResponse
 
     @GET(value = "categories")
     suspend fun getCategories(): BaseCategoriesResponse

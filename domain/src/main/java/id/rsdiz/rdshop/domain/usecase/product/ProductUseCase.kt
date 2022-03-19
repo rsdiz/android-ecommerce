@@ -1,9 +1,12 @@
 package id.rsdiz.rdshop.domain.usecase.product
 
+import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.Product
+import id.rsdiz.rdshop.domain.model.ProductImage
 import id.rsdiz.rdshop.domain.repository.IProductRepository
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -12,15 +15,28 @@ import javax.inject.Inject
 class ProductUseCase @Inject constructor(
     private val repository: IProductRepository
 ) : IProductUseCase {
-    override fun getProducts(): Flow<Resource<List<Product>>> = repository.getProducts()
+    override fun getProducts(): Flow<PagingData<Product>> = repository.getProducts()
 
-    override fun getProduct(productId: String): Flow<Resource<Product>> = repository.getProduct(productId)
+    override fun getProduct(productId: String): Flow<Resource<Product>> =
+        repository.getProduct(productId)
 
-    override suspend fun searchProduct(query: String): Resource<List<Product>> = repository.searchProduct(query)
+    override suspend fun searchProduct(query: String): Resource<List<Product>> =
+        repository.searchProduct(query)
 
-    override suspend fun insertProduct(product: Product) = repository.insertProduct(product)
+    override suspend fun insertProduct(product: Product, sourceFile: File?): Resource<String> =
+        repository.insertProduct(product, sourceFile)
 
-    override suspend fun updateProduct(productId: String, product: Product) = repository.updateProduct(productId, product)
+    override suspend fun updateProduct(product: Product, sourceFile: File?): Resource<String> =
+        repository.updateProduct(product, sourceFile)
 
-    override suspend fun deleteProduct(productId: String) = repository.deleteProduct(productId)
+    override suspend fun deleteProduct(productId: String): Resource<String> =
+        repository.deleteProduct(productId)
+
+    override suspend fun addProductImage(
+        productId: String,
+        sourceFile: File
+    ) = repository.addProductImage(productId, sourceFile)
+
+    override suspend fun removeProductImage(productId: String, imageId: String) =
+        repository.removeProductImage(productId, imageId)
 }
