@@ -6,12 +6,10 @@ import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import id.rsdiz.rdshop.data.source.remote.response.order.DetailOrderResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.OrderResponse
 import id.rsdiz.rdshop.domain.model.Order
-import id.rsdiz.rdshop.domain.model.OrderDetail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject

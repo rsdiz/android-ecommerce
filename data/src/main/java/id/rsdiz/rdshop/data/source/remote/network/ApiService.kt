@@ -17,7 +17,7 @@ import retrofit2.http.*
  */
 interface ApiService {
     @GET(value = "users")
-    suspend fun getUsers(@Query("size") size: Int = 10): BaseUsersResponse
+    suspend fun getUsers(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseUsersResponse
 
     @GET(value = "products")
     suspend fun getProducts(@Query("size") size: Int = 10): BaseProductsResponse

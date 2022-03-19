@@ -26,18 +26,16 @@ class ProductRemoteDataSource @Inject constructor(
         flow {
             try {
                 val response = apiService.getProducts(size)
-                when (response.code) {
-                    200 -> if (response.data.count > 0) {
-                        emit(
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
                             ApiResponse.Success(
                                 data = response.data
                             )
                         )
-                    } else {
-                        emit(ApiResponse.Empty)
+                        else -> emit(ApiResponse.Error(response.status))
                     }
-                    else -> emit(ApiResponse.Error(response.status))
-                }
+                } else emit(ApiResponse.Empty)
             } catch (e: Exception) {
                 emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
             }

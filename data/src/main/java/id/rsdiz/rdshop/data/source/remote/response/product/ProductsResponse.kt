@@ -23,5 +23,5 @@ data class ProductsResponse(
 data class BaseProductsResponse(
     override val code: Int,
     override val status: String,
-    override val data: ProductsResponse
+    override val data: ProductsResponse?
 ) : IBaseResponse<ProductsResponse>

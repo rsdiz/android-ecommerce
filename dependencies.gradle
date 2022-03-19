@@ -72,7 +72,8 @@ ext {
             javaxInject : "javax.inject:javax.inject:${javaxInjectVersion}",
             roomRuntime : "androidx.room:room-runtime:${roomVersion}",
             roomKtx : "androidx.room:room-ktx:${roomVersion}",
-            roomCompiler : "androidx.room:room-compiler:${roomVersion}"
+            roomCompiler : "androidx.room:room-compiler:${roomVersion}",
+            paging : "androidx.paging:paging-runtime-ktx:${pagingVersion}"
     ]
 
     mobileUiDependencies = [
@@ -105,7 +106,8 @@ ext {
             kotlinJunit  : "org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}",
             supportRunner: "com.android.support.test:runner:${testSupportVersion}",
             supportRules : "com.android.support.test:rules:${testSupportVersion}",
-            mockWebServer: "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
+            mockWebServer: "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}",
+            paging       : "androidx.paging:paging-common:${pagingVersion}"
     ]
 
     uiTestDependencies = [

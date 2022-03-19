@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.domain.repository
 
+import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.User
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ interface IUserRepository {
     /**
      * Get list of users
      */
-    fun getUsers(): Flow<Resource<List<User>>>
+    fun getUsers(): Flow<PagingData<User>>
 
     /**
      * Get specified user by [userId]

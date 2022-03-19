@@ -31,5 +31,5 @@ data class UserResponse(
 data class BaseUserResponse(
     override val code: Int,
     override val status: String,
-    override val data: UserResponse
+    override val data: UserResponse?
 ) : IBaseResponse<UserResponse>

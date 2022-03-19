@@ -15,5 +15,5 @@ data class CategoriesResponse(
 data class BaseCategoriesResponse(
     override val code: Int,
     override val status: String,
-    override val data: CategoriesResponse
+    override val data: CategoriesResponse?
 ) : IBaseResponse<CategoriesResponse>

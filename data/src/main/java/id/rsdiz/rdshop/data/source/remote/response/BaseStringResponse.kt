@@ -6,5 +6,5 @@ package id.rsdiz.rdshop.data.source.remote.response
 data class BaseStringResponse(
     override val code: Int,
     override val status: String,
-    override val data: String
+    override val data: String?
 ) : IBaseResponse<String>

@@ -1,12 +1,17 @@
 package id.rsdiz.rdshop.data.repository
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import id.rsdiz.rdshop.base.utils.AppExecutors
 import id.rsdiz.rdshop.data.NetworkBoundResource
 import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.paging.UserRemoteMediator
 import id.rsdiz.rdshop.data.source.local.UserLocalDataSource
 import id.rsdiz.rdshop.data.source.remote.UserRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
-import id.rsdiz.rdshop.data.source.remote.response.user.ListUserResponse
+import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import id.rsdiz.rdshop.data.source.remote.response.user.UserResponse
 import id.rsdiz.rdshop.domain.model.User
 import id.rsdiz.rdshop.domain.repository.IUserRepository
@@ -22,26 +27,23 @@ import javax.inject.Singleton
  */
 @Singleton
 class UserRepository @Inject constructor(
+    private val apiService: ApiService,
     private val remoteDataSource: UserRemoteDataSource,
     private val localDataSource: UserLocalDataSource,
     private val appExecutor: AppExecutors
 ) : IUserRepository {
-    override fun getUsers(): Flow<Resource<List<User>>> =
-        object : NetworkBoundResource<List<User>, ListUserResponse>() {
-            override fun loadFromDB(): Flow<List<User>?> = localDataSource.getAllUsers().map {
-                localDataSource.mapper.mapFromEntities(it)
-            }
 
-            override fun shouldFetch(data: List<User>?): Boolean = data.isNullOrEmpty()
-
-            override suspend fun createCall(): Flow<ApiResponse<ListUserResponse>> =
-                remoteDataSource.getUsers()
-
-            override suspend fun saveCallResult(data: ListUserResponse) =
-                remoteDataSource.mapper.mapRemoteToEntities(data.results).let {
-                    localDataSource.insertAll(it)
-                }
-        }.asFlow() as Flow<Resource<List<User>>>
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getUsers(): Flow<PagingData<User>> = Pager(
+        config = PagingConfig(pageSize = 20),
+        remoteMediator = UserRemoteMediator(
+            apiService = apiService,
+            userDao = localDataSource.userDao,
+            userRemoteKeysDao = localDataSource.userRemoteKeysDao,
+            mapper = remoteDataSource.mapper
+        ),
+        pagingSourceFactory = { localDataSource.getAllUsers() }
+    ).flow
 
     override fun getUser(userId: String): Flow<Resource<User>> =
         object : NetworkBoundResource<User, UserResponse>() {
@@ -91,7 +93,11 @@ class UserRepository @Inject constructor(
             else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
         }
 
-    override suspend fun updateUser(user: User, password: String, sourceFile: File?): Resource<String> =
+    override suspend fun updateUser(
+        user: User,
+        password: String,
+        sourceFile: File?
+    ): Resource<String> =
         when (val response = remoteDataSource.updateUser(user, password, sourceFile).first()) {
             is ApiResponse.Success -> {
                 localDataSource.mapper.mapToEntity(user).let {

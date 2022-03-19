@@ -4,12 +4,14 @@ import id.rsdiz.rdshop.data.source.local.entity.Role
 import id.rsdiz.rdshop.data.source.local.entity.UserEntity
 import id.rsdiz.rdshop.data.source.local.mapper.UserMapper
 import id.rsdiz.rdshop.data.source.local.room.IUserDao
+import id.rsdiz.rdshop.data.source.local.room.IUserRemoteKeysDao
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserLocalDataSource @Inject constructor(
-    private val userDao: IUserDao,
+    val userDao: IUserDao,
+    val userRemoteKeysDao: IUserRemoteKeysDao,
     val mapper: UserMapper
 ) {
     fun getAllUsers() = userDao.getAllUsers()

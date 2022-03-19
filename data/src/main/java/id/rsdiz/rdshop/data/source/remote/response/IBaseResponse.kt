@@ -6,5 +6,5 @@ package id.rsdiz.rdshop.data.source.remote.response
 interface IBaseResponse<R> {
     val code: Int
     val status: String
-    val data: R
+    val data: R?
 }

@@ -23,5 +23,5 @@ data class DetailOrderResponse(
 data class BaseDetailOrderResponse(
     override val code: Int,
     override val status: String,
-    override val data: DetailOrderResponse
+    override val data: DetailOrderResponse?
 ) : IBaseResponse<DetailOrderResponse>

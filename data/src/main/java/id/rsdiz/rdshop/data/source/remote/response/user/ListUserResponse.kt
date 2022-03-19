@@ -23,5 +23,5 @@ data class ListUserResponse(
 data class BaseUsersResponse(
     override val code: Int,
     override val status: String,
-    override val data: ListUserResponse
+    override val data: ListUserResponse?
 ) : IBaseResponse<ListUserResponse>

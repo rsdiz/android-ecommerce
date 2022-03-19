@@ -1,7 +1,9 @@
 package id.rsdiz.rdshop.domain.usecase.user
 
+import androidx.paging.PagingData
 import id.rsdiz.rdshop.domain.model.User
 import id.rsdiz.rdshop.domain.repository.IUserRepository
+import kotlinx.coroutines.flow.Flow
 import java.io.File
 import javax.inject.Inject
 
@@ -11,7 +13,7 @@ import javax.inject.Inject
 class UserUseCase @Inject constructor(
     private val repository: IUserRepository
 ) : IUserUseCase {
-    override fun getUsers() = repository.getUsers()
+    override fun getUsers(): Flow<PagingData<User>> = repository.getUsers()
 
     override fun getUser(userId: String) = repository.getUser(userId)
 

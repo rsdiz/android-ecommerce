@@ -37,5 +37,5 @@ data class OrderResponse(
 data class BaseOrderResponse(
     override val code: Int,
     override val status: String,
-    override val data: OrderResponse
+    override val data: OrderResponse?
 ) : IBaseResponse<OrderResponse>
