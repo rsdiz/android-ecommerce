@@ -2,7 +2,7 @@ package id.rsdiz.rdshop.domain.usecase.category
 
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.Category
-import id.rsdiz.rdshop.domain.repository.ICategoryRepository
+import id.rsdiz.rdshop.domain.repository.category.ICategoryRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -14,13 +14,11 @@ class CategoryUseCase @Inject constructor(
 ) : ICategoryUseCase {
     override fun getCategories(): Flow<Resource<List<Category>>> = repository.getCategories()
 
-    override fun getCategory(categoryId: String): Flow<Resource<Category>> =
-        repository.getCategory(categoryId)
+    override suspend fun insertCategory(name: String): Resource<String> =
+        repository.insertCategory(name)
 
-    override suspend fun insertCategory(category: Category) = repository.insertCategory(category)
-
-    override suspend fun updateCategory(categoryId: String, category: Category) =
-        repository.updateCategory(categoryId, category)
+    override suspend fun updateCategory(categoryId: String, newName: String): Resource<String> =
+        repository.updateCategory(categoryId, newName)
 
     override suspend fun deleteCategory(categoryId: String) = repository.deleteCategory(categoryId)
 }

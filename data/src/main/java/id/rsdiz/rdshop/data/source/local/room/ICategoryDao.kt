@@ -14,6 +14,9 @@ interface ICategoryDao : IBaseDao<CategoryEntity> {
     @Query("SELECT * FROM categories")
     fun getAllCategories(): Flow<List<CategoryEntity>>
 
+    @Query("SELECT * FROM categories WHERE categoryId = :categoryId")
+    fun getCategoryById(categoryId: String): Flow<CategoryEntity>
+
     @Query("SELECT * FROM categories WHERE name LIKE :word")
     fun searchCategories(word: String): Flow<List<CategoryEntity>>
 }

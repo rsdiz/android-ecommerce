@@ -21,14 +21,16 @@ class CategoryRemoteDataSource @Inject constructor(
         flow {
             try {
                 val response = apiService.getCategories()
-                when (response.code) {
-                    200 -> emit(
-                        ApiResponse.Success(
-                            data = response.data
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
                         )
-                    )
-                    else -> emit(ApiResponse.Error(response.status))
-                }
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
             } catch (e: Exception) {
                 emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
             }
@@ -44,7 +46,7 @@ class CategoryRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -63,7 +65,7 @@ class CategoryRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.status
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -82,7 +84,7 @@ class CategoryRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.data!!
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -91,6 +93,7 @@ class CategoryRemoteDataSource @Inject constructor(
                 emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
             }
         }.flowOn(Dispatchers.IO)
+
     private fun generateRequestBody(text: String): RequestBody =
         text.toRequestBody("text/plain".toMediaTypeOrNull())
 }

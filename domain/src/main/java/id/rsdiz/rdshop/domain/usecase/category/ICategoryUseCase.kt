@@ -15,22 +15,17 @@ interface ICategoryUseCase {
     fun getCategories(): Flow<Resource<List<Category>>>
 
     /**
-     * Get specified category by [categoryId]
-     */
-    fun getCategory(categoryId: String): Flow<Resource<Category>>
-
-    /**
      * Insert new category
      */
-    suspend fun insertCategory(category: Category)
+    suspend fun insertCategory(name: String): Resource<String>
 
     /**
      * Update category by [categoryId]
      */
-    suspend fun updateCategory(categoryId: String, category: Category)
+    suspend fun updateCategory(categoryId: String, newName: String): Resource<String>
 
     /**
      * Delete category
      */
-    suspend fun deleteCategory(categoryId: String)
+    suspend fun deleteCategory(categoryId: String): Resource<String>
 }

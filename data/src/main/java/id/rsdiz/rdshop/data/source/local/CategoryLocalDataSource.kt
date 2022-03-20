@@ -13,6 +13,8 @@ class CategoryLocalDataSource @Inject constructor(
 ) {
     fun getAllCategories() = categoryDao.getAllCategories()
 
+    fun getCategoryById(categoryId: String) = categoryDao.getCategoryById(categoryId)
+
     fun searchCategories(word: String) = categoryDao.searchCategories(word)
 
     fun update(data: CategoryEntity) = categoryDao.update(data)
