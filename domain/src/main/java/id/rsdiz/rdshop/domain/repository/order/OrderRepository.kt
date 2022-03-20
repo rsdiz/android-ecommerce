@@ -116,11 +116,13 @@ class OrderRepository @Inject constructor(
         }
 
     override suspend fun updateOrder(orderId: String, status: Short, trackingNumber: String): Resource<String> =
-        when (val response = remoteDataSource.updateOrder(
-            orderId = orderId,
-            status = status,
-            trackingNumber = trackingNumber
-        ).first()) {
+        when (
+            val response = remoteDataSource.updateOrder(
+                orderId = orderId,
+                status = status,
+                trackingNumber = trackingNumber
+            ).first()
+        ) {
             is ApiResponse.Success -> {
                 remoteDataSource.mapper.mapRemoteToEntity(response.data).let {
                     appExecutors.diskIO().execute {
