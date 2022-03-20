@@ -2,7 +2,7 @@ package id.rsdiz.rdshop.domain.usecase.user
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.domain.model.User
-import id.rsdiz.rdshop.domain.repository.IUserRepository
+import id.rsdiz.rdshop.domain.repository.user.IUserRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import javax.inject.Inject

@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.source.local.entity.OrderWithDetails
 import id.rsdiz.rdshop.domain.model.Order
-import id.rsdiz.rdshop.domain.repository.IOrderRepository
+import id.rsdiz.rdshop.domain.repository.order.IOrderRepository
 import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.OffsetDateTime
 import javax.inject.Inject

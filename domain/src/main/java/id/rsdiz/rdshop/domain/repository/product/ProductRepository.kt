@@ -1,4 +1,4 @@
-package id.rsdiz.rdshop.data.repository
+package id.rsdiz.rdshop.domain.repository.product
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
@@ -11,11 +11,9 @@ import id.rsdiz.rdshop.data.paging.ProductRemoteMediator
 import id.rsdiz.rdshop.data.source.local.ProductLocalDataSource
 import id.rsdiz.rdshop.data.source.remote.ProductRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
-import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import id.rsdiz.rdshop.data.source.remote.response.product.ProductResponse
 import id.rsdiz.rdshop.domain.model.Product
 import id.rsdiz.rdshop.domain.model.ProductImage
-import id.rsdiz.rdshop.domain.repository.IProductRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

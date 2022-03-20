@@ -1,4 +1,4 @@
-package id.rsdiz.rdshop.domain.repository
+package id.rsdiz.rdshop.domain.repository.order
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource

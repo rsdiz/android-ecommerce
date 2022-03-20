@@ -1,4 +1,4 @@
-package id.rsdiz.rdshop.data.repository
+package id.rsdiz.rdshop.domain.repository.user
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
@@ -13,7 +13,6 @@ import id.rsdiz.rdshop.data.source.remote.UserRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.response.user.UserResponse
 import id.rsdiz.rdshop.domain.model.User
-import id.rsdiz.rdshop.domain.repository.IUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

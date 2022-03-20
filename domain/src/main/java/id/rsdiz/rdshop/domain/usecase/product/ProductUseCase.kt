@@ -3,8 +3,7 @@ package id.rsdiz.rdshop.domain.usecase.product
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.Product
-import id.rsdiz.rdshop.domain.model.ProductImage
-import id.rsdiz.rdshop.domain.repository.IProductRepository
+import id.rsdiz.rdshop.domain.repository.product.IProductRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import javax.inject.Inject

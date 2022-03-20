@@ -1,4 +1,4 @@
-package id.rsdiz.rdshop.domain.repository
+package id.rsdiz.rdshop.domain.repository.category
 
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.domain.model.Category
