@@ -13,4 +13,14 @@ object Consts {
     const val RDSHOP_HOSTNAME = "rdshop.herokuapp.com"
     const val RDSHOP_API_KEY = BuildConfig.API_KEY
     const val API_HEADER_KEY = "X-Api-Key"
+    const val PREFERENCE_NAME = "RDSHOP"
+    const val PREF_ID = "user_id"
+    const val PREF_USERNAME = "username"
+    const val PREF_EMAIL = "email"
+    const val PREF_NAME = "name"
+    const val PREF_GENDER = "gender"
+    const val PREF_ADDRESS = "address"
+    const val PREF_PHOTO = "photo"
+    const val PREF_ROLE = "role"
+    const val PREF_TOKEN = "token"
 }

@@ -39,6 +39,7 @@ dependencies {
 
     // JSR-310 backport for Android
     implementation 'com.jakewharton.threetenabp:threetenabp:1.3.1'
+    implementation 'androidx.preference:preference:1.2.0'
 
     testImplementation testDependencies.junit
 }
