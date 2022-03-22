@@ -1,6 +1,7 @@
 package id.rsdiz.rdshop.data.source.remote.network
 
 import id.rsdiz.rdshop.data.source.remote.response.BaseStringResponse
+import id.rsdiz.rdshop.data.source.remote.response.auth.BaseSignInResponse
 import id.rsdiz.rdshop.data.source.remote.response.category.BaseCategoriesResponse
 import id.rsdiz.rdshop.data.source.remote.response.category.BaseCategoryResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.BaseOrderResponse
@@ -17,17 +18,48 @@ import retrofit2.http.*
  * Contract for available services from API Server
  */
 interface ApiService {
+    @Multipart
+    @POST(value = "auth/signin")
+    suspend fun signIn(
+        @Part(value = "usernameOrEmail") login: RequestBody,
+        @Part(value = "password") password: RequestBody
+    ): BaseSignInResponse
+
+    @Multipart
+    @POST(value = "auth/signout")
+    suspend fun signOut(
+        @Part(value = "token") apiKey: RequestBody
+    ): BaseStringResponse
+
+    @Multipart
+    @POST(value = "auth/signup")
+    suspend fun signUp(
+        @Part(value = "name") name: RequestBody,
+        @Part(value = "username") username: RequestBody,
+        @Part(value = "email") email: RequestBody,
+        @Part(value = "password") password: RequestBody
+    ): BaseStringResponse
+
     @GET(value = "users")
-    suspend fun getUsers(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseUsersResponse
+    suspend fun getUsers(
+        @Query("page") page: Int = 1,
+        @Query("size") size: Int = 20
+    ): BaseUsersResponse
 
     @GET(value = "products")
-    suspend fun getProducts(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseProductsResponse
+    suspend fun getProducts(
+        @Query("page") page: Int = 1,
+        @Query("size") size: Int = 20
+    ): BaseProductsResponse
 
     @GET(value = "categories")
     suspend fun getCategories(): BaseCategoriesResponse
 
     @GET(value = "orders")
-    suspend fun getOrders(@Query("page") page: Int = 1, @Query("size") size: Int = 20): BaseOrdersResponse
+    suspend fun getOrders(
+        @Query("page") page: Int = 1,
+        @Query("size") size: Int = 20
+    ): BaseOrdersResponse
 
     @GET(value = "users/{userId}")
     suspend fun getUserById(@Path(value = "userId") userId: String): BaseUserResponse
