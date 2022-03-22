@@ -55,6 +55,8 @@ dependencies {
     implementation mobileUiDependencies.runtimeKtx
     implementation mobileUiDependencies.commonJava8
     implementation mobileUiDependencies.lifecycleExtension
+    implementation mobileUiDependencies.navFragment
+    implementation mobileUiDependencies.navUi
 
     implementation dependencyInjector.hiltAndroid
     implementation dependencyInjector.hiltViewmodel
