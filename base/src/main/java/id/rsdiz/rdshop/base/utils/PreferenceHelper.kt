@@ -44,7 +44,7 @@ class PreferenceHelper @Inject constructor(private val context: Context) {
             key: String,
             defaultValue: T? = null
         ) = when (T::class) {
-            String::class -> getString(key, defaultValue as? String ?: "") as T
+            String::class -> getString(key, defaultValue as? String) as T?
             Int::class -> getInt(key, defaultValue as? Int ?: -1) as T
             Boolean::class -> getBoolean(key, defaultValue as? Boolean ?: false) as T
             Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T
