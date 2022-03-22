@@ -1,0 +1,74 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk androidCompileSdkVersion
+
+    defaultConfig {
+        applicationId "id.rsdiz.rdshop.seller"
+        minSdk androidMinSdkVersion
+        targetSdk androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation project(":base")
+    implementation project(":data")
+    implementation project(":domain")
+
+    implementation mobileUiDependencies.appcompat
+    implementation mobileUiDependencies.material
+    implementation mobileUiDependencies.constraintLayout
+    implementation mobileUiDependencies.recyclerView
+    implementation mobileUiDependencies.pallete
+    implementation mobileUiDependencies.fragment
+    implementation mobileUiDependencies.paging
+    implementation mobileUiDependencies.glide
+    implementation mobileUiDependencies.viewmodel
+    implementation mobileUiDependencies.livedata
+    implementation mobileUiDependencies.runtimeKtx
+    implementation mobileUiDependencies.commonJava8
+    implementation mobileUiDependencies.lifecycleExtension
+
+    implementation dependencyInjector.hiltAndroid
+    implementation dependencyInjector.hiltViewmodel
+    kapt dependencyInjector.hiltDaggerCompiler
+    kapt dependencyInjector.hiltAndroidxCompiler
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.assertj
+    testImplementation testDependencies.kotlinJunit
+    testImplementation testDependencies.mockito
+
+    androidTestImplementation uiTestDependencies.junitExt
+    androidTestImplementation uiTestDependencies.espressoCore
+    androidTestImplementation uiTestDependencies.espresso
+    androidTestImplementation uiTestDependencies.rules
+    androidTestImplementation uiTestDependencies.coreTesting
+}
