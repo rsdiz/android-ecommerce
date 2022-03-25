@@ -3,11 +3,8 @@ package id.rsdiz.rdshop.base.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PreferenceHelper @Inject constructor(private val context: Context) {
+class PreferenceHelper constructor(private val context: Context) {
 
     fun defaultPrefs(): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -19,6 +16,12 @@ class PreferenceHelper @Inject constructor(private val context: Context) {
         private inline fun SharedPreferences.edit(operation: (SharedPreferences.Editor) -> Unit) {
             val editor = this.edit()
             operation(editor)
+            editor.apply()
+        }
+
+        fun SharedPreferences.flush() {
+            val editor = this.edit()
+            editor.clear()
             editor.apply()
         }
 
@@ -44,7 +47,7 @@ class PreferenceHelper @Inject constructor(private val context: Context) {
             key: String,
             defaultValue: T? = null
         ) = when (T::class) {
-            String::class -> getString(key, defaultValue as? String) as T?
+            String::class -> getString(key, defaultValue as? String ?: "") as T
             Int::class -> getInt(key, defaultValue as? Int ?: -1) as T
             Boolean::class -> getBoolean(key, defaultValue as? Boolean ?: false) as T
             Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T

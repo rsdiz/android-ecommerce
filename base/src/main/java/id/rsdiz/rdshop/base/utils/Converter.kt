@@ -2,6 +2,7 @@ package id.rsdiz.rdshop.base.utils
 
 import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.OffsetDateTime
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,12 +19,17 @@ fun OffsetDateTime.toDate(): Date = DateTimeUtils.toDate(this.toInstant())
 /**
  * Get Date from OffsetDateTime and then return as string
  */
-fun OffsetDateTime.stringDate(): String = SimpleDateFormat(FormatPattern.LOCAL_DATE, Locale.getDefault()).format(this.toDate())
+fun OffsetDateTime.stringDate(): String =
+    SimpleDateFormat(FormatPattern.LOCAL_DATE, Locale.getDefault()).format(this.toDate())
 
 /**
  * Get Time from OffsetDateTime and then return as string
  */
-fun OffsetDateTime.stringTime(): String = SimpleDateFormat(FormatPattern.LOCAL_TIME, Locale.getDefault()).format(this.toDate())
+fun OffsetDateTime.stringTime(): String =
+    SimpleDateFormat(FormatPattern.LOCAL_TIME, Locale.getDefault()).format(this.toDate())
+
+fun Int.toRupiah(): String =
+    NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(this)
 
 /**
  * The Format of default pattern date will use in the apps
