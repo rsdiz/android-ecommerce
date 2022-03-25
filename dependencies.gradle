@@ -25,23 +25,24 @@ ext {
     palleteVersion = '1.0.0'
     mockitoVersion = '4.3.1'
     retrofitVersion = '2.9.0'
-    roomVersion = '2.4.1'
+    roomVersion = '2.4.2'
     hiltVersion = '2.41'
-    hiltLifecycleVersion = '1.0.0-alpha01'
-    hiltCompilerVersion = '1.0.0-alpha01'
+    hiltLifecycleVersion = '1.0.0-alpha03'
+    hiltCompilerVersion = '1.0.0'
     fragmentVersion = '1.4.1'
-    okhttpVersion = '4.9.3'
+    okhttpVersion = '3.14.9'
     androidCoreTestVersion = '2.1.0'
     mockitoKotlinVersion = '4.0.0'
     coroutinesTestVersion = '1.6.0'
     idleResourceVersion = '3.3.0'
-    pagingVersion = '3.1.0'
+    pagingVersion = '3.1.1'
     javaxInjectVersion = "1"
-    loggingInterceptorVersion = "5.0.0-alpha.2"
+    loggingInterceptorVersion = "5.0.0-alpha.6"
     securityCryptoVersion = "1.1.0-alpha03"
-    zeteticSqlChiperVersion = "4.4.0"
-    sqliteKtxVersion = "2.1.0"
+    zeteticSqlChiperVersion = "4.5.1"
+    sqliteKtxVersion = "2.2.0"
     navVersion = "2.3.5"
+    roomPagingVersion = "2.5.0-alpha01"
 
     // Testing
     robolectricVersion = "4.7.3"
@@ -55,7 +56,6 @@ ext {
     mockwebserverVersion = "4.9.3"
 
     shareDependencies = [
-            kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
             coreKtx     : "androidx.core:core-ktx:${coreKtxVersion}"
     ]
 
@@ -71,12 +71,14 @@ ext {
             kotlinxCoroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinxCoroutinesVersion}",
             retrofit                : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             converterGson           : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            okhttp                  : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
             gson                    : "com.google.code.gson:gson:${gsonVersion}",
             loggingInterceptor      : "com.squareup.okhttp3:logging-interceptor:${loggingInterceptorVersion}",
             javaxInject             : "javax.inject:javax.inject:${javaxInjectVersion}",
             roomRuntime             : "androidx.room:room-runtime:${roomVersion}",
             roomKtx                 : "androidx.room:room-ktx:${roomVersion}",
             roomCompiler            : "androidx.room:room-compiler:${roomVersion}",
+            roomPaging              : "androidx.room:room-paging:${roomPagingVersion}",
             paging                  : "androidx.paging:paging-runtime-ktx:${pagingVersion}",
             securityCrypto          : "androidx.security:security-crypto:${securityCryptoVersion}",
             zeteticSqlChiper        : "net.zetetic:android-database-sqlcipher:${zeteticSqlChiperVersion}",
@@ -103,7 +105,7 @@ ext {
 
     dependencyInjector = [
             hiltAndroid         : "com.google.dagger:hilt-android:$hiltVersion",
-            hiltViewmodel       : "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleVersion",
+            hiltViewmodel       : "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleVersion", // DEPRECATED
             hiltDaggerCompiler  : "com.google.dagger:hilt-android-compiler:$hiltVersion",
             hiltAndroidxCompiler: "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
     ]
