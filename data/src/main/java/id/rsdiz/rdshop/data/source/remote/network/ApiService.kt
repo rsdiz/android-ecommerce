@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.data.source.remote.network
 
+import id.rsdiz.rdshop.data.source.remote.response.BaseIntResponse
 import id.rsdiz.rdshop.data.source.remote.response.BaseStringResponse
 import id.rsdiz.rdshop.data.source.remote.response.auth.BaseSignInResponse
 import id.rsdiz.rdshop.data.source.remote.response.category.BaseCategoriesResponse
@@ -78,6 +79,18 @@ interface ApiService {
         @Query("start_date") startDate: OffsetDateTime = OffsetDateTime.MIN,
         @Query("end_date") endDate: OffsetDateTime = OffsetDateTime.MAX
     ): BaseOrdersResponse
+
+    @GET(value = "users/count")
+    suspend fun countUsers(): BaseIntResponse
+
+    @GET(value = "products/count")
+    suspend fun countProducts(): BaseIntResponse
+
+    @GET(value = "orders/count")
+    suspend fun countOrders(): BaseIntResponse
+
+    @GET(value = "categories/count")
+    suspend fun countCategories(): BaseIntResponse
 
     @Multipart
     @PUT(value = "users/{userId}")
