@@ -21,7 +21,10 @@ data class OrdersResponse(
  * Orders Responses from API
  */
 data class BaseOrdersResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: OrdersResponse?
 ) : IBaseResponse<OrdersResponse>

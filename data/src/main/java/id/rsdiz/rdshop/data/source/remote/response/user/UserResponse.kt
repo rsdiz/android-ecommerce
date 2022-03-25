@@ -16,11 +16,11 @@ data class UserResponse(
     @field:SerializedName("name")
     val name: String,
     @field:SerializedName("gender")
-    val gender: String,
+    val gender: String?,
     @field:SerializedName("address")
-    val address: String,
+    val address: String?,
     @field:SerializedName("photo")
-    val photo: String,
+    val photo: String?,
     @field:SerializedName("role")
     val role: String
 )
@@ -29,7 +29,10 @@ data class UserResponse(
  * User Responses from API
  */
 data class BaseUserResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: UserResponse?
 ) : IBaseResponse<UserResponse>

@@ -20,7 +20,10 @@ data class SignInResponse(
  * Sign In Responses from API
  */
 data class BaseSignInResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: SignInResponse?
 ) : IBaseResponse<SignInResponse>

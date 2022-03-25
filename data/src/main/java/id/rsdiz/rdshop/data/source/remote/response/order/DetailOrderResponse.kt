@@ -21,7 +21,10 @@ data class DetailOrderResponse(
  * Detail Order Responses from API
  */
 data class BaseDetailOrderResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: DetailOrderResponse?
 ) : IBaseResponse<DetailOrderResponse>

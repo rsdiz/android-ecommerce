@@ -29,7 +29,10 @@ data class ProductResponse(
  * Product Responses from API
  */
 data class BaseProductResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: ProductResponse?
 ) : IBaseResponse<ProductResponse>

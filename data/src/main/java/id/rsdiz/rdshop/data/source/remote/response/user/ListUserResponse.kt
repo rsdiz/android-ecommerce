@@ -21,7 +21,10 @@ data class ListUserResponse(
  * Users Responses from API
  */
 data class BaseUsersResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: ListUserResponse?
 ) : IBaseResponse<ListUserResponse>

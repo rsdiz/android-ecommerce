@@ -17,7 +17,10 @@ data class CategoryResponse(
  * Category Responses from API
  */
 data class BaseCategoryResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: CategoryResponse?
 ) : IBaseResponse<CategoryResponse>
