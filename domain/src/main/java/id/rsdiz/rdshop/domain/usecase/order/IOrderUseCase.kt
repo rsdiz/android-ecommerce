@@ -2,8 +2,7 @@ package id.rsdiz.rdshop.domain.usecase.order
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.data.source.local.entity.OrderWithDetails
-import id.rsdiz.rdshop.domain.model.Order
+import id.rsdiz.rdshop.data.model.Order
 import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.OffsetDateTime
 
@@ -13,9 +12,19 @@ import org.threeten.bp.OffsetDateTime
 interface IOrderUseCase {
 
     /**
+     * Count total row in orders
+     */
+    suspend fun count(): Resource<Int>
+
+    /**
      * Get list of orders
      */
-    fun getOrders(): Flow<PagingData<OrderWithDetails>>
+    fun getOrders(): Flow<PagingData<Order>>
+
+    /**
+     * Get newest list of orders
+     */
+    fun getNewestOrders(): Flow<Resource<List<Order>>>
 
     /**
      * Get specified order by [orderId]
@@ -43,5 +52,9 @@ interface IOrderUseCase {
     /**
      * Update order by [orderId]
      */
-    suspend fun updateOrder(orderId: String, status: Short, trackingNumber: String = ""): Resource<String>
+    suspend fun updateOrder(
+        orderId: String,
+        status: Short,
+        trackingNumber: String = ""
+    ): Resource<String>
 }

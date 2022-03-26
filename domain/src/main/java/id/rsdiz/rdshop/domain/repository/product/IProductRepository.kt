@@ -2,8 +2,10 @@ package id.rsdiz.rdshop.domain.repository.product
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.domain.model.Product
-import id.rsdiz.rdshop.domain.model.ProductImage
+import id.rsdiz.rdshop.data.model.Product
+import id.rsdiz.rdshop.data.model.ProductImage
+import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
+import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -11,6 +13,11 @@ import java.io.File
  * Contract for Product Repository
  */
 interface IProductRepository {
+
+    /**
+     * Count total row in products
+     */
+    suspend fun count(): Resource<Int>
 
     /**
      * Get list of products

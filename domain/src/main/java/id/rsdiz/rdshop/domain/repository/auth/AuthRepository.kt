@@ -1,7 +1,10 @@
 package id.rsdiz.rdshop.domain.repository.auth
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
+import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.flush
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.source.remote.AuthRemoteDataSource
@@ -15,10 +18,10 @@ import javax.inject.Singleton
  */
 @Singleton
 class AuthRepository @Inject constructor(
+    @ApplicationContext context: Context,
     private val dataSource: AuthRemoteDataSource,
-    preference: PreferenceHelper
 ) : IAuthRepository {
-    private val prefs = preference.customPrefs(Consts.PREFERENCE_NAME)
+    private val prefs = PreferenceHelper(context).customPrefs(Consts.PREFERENCE_NAME)
 
     override suspend fun signUp(
         name: String,
@@ -49,10 +52,10 @@ class AuthRepository @Inject constructor(
                     prefs[Consts.PREF_USERNAME] = it.username
                     prefs[Consts.PREF_EMAIL] = it.email
                     prefs[Consts.PREF_NAME] = it.name
-                    prefs[Consts.PREF_GENDER] = it.gender
+                    prefs[Consts.PREF_GENDER] = it.gender.name
                     prefs[Consts.PREF_ADDRESS] = it.address
                     prefs[Consts.PREF_PHOTO] = it.photo
-                    prefs[Consts.PREF_ROLE] = it.role
+                    prefs[Consts.PREF_ROLE] = it.role.name
                 }
 
                 prefs[Consts.PREF_TOKEN] = response.data.apiKey
@@ -66,6 +69,8 @@ class AuthRepository @Inject constructor(
     override suspend fun signOut(apiKey: String): Resource<String> =
         when (val response = dataSource.signOut(token = apiKey).first()) {
             is ApiResponse.Success -> {
+                prefs.flush()
+
                 Resource.Success(response.data)
             }
             is ApiResponse.Empty -> Resource.Error(response.toString(), null)

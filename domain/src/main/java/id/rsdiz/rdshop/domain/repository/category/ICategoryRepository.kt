@@ -1,13 +1,18 @@
 package id.rsdiz.rdshop.domain.repository.category
 
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.domain.model.Category
+import id.rsdiz.rdshop.data.model.Category
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Contract for Category Repository
  */
 interface ICategoryRepository {
+
+    /**
+     * Count total row in categories
+     */
+    suspend fun count(): Resource<Int>
 
     /**
      * Get list of category

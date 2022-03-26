@@ -7,7 +7,7 @@ import id.rsdiz.rdshop.data.source.local.CategoryLocalDataSource
 import id.rsdiz.rdshop.data.source.remote.CategoryRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.response.category.CategoriesResponse
-import id.rsdiz.rdshop.domain.model.Category
+import id.rsdiz.rdshop.data.model.Category
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -23,6 +23,17 @@ class CategoryRepository @Inject constructor(
     private val localDataSource: CategoryLocalDataSource,
     private val appExecutors: AppExecutors
 ) : ICategoryRepository {
+    override suspend fun count(): Resource<Int> =
+        when (
+            val response = remoteDataSource.countCategories().first()
+        ) {
+            is ApiResponse.Success -> {
+                Resource.Success(response.data)
+            }
+            is ApiResponse.Empty -> Resource.Error(response.toString(), null)
+            else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
+        }
+
     override fun getCategories(): Flow<Resource<List<Category>>> =
         object : NetworkBoundResource<List<Category>, CategoriesResponse>() {
             override fun loadFromDB(): Flow<List<Category>?> =

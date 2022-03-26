@@ -2,8 +2,8 @@ package id.rsdiz.rdshop.domain.usecase.product
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.domain.model.Product
-import id.rsdiz.rdshop.domain.model.ProductImage
+import id.rsdiz.rdshop.data.model.Product
+import id.rsdiz.rdshop.data.model.ProductImage
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -11,6 +11,11 @@ import java.io.File
  * Contract for Product Use Case
  */
 interface IProductUseCase {
+
+    /**
+     * Count total row in products
+     */
+    suspend fun count(): Resource<Int>
 
     /**
      * Get list of products

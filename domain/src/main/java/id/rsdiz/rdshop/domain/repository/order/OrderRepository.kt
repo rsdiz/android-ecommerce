@@ -1,20 +1,16 @@
 package id.rsdiz.rdshop.domain.repository.order
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.*
 import id.rsdiz.rdshop.base.utils.AppExecutors
 import id.rsdiz.rdshop.data.NetworkBoundResource
 import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.Order
 import id.rsdiz.rdshop.data.paging.OrderRemoteMediator
 import id.rsdiz.rdshop.data.source.local.OrderLocalDataSource
-import id.rsdiz.rdshop.data.source.local.entity.OrderWithDetails
 import id.rsdiz.rdshop.data.source.remote.OrderRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.OrderResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.OrdersResponse
-import id.rsdiz.rdshop.domain.model.Order
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -32,8 +28,17 @@ class OrderRepository @Inject constructor(
     private val appExecutors: AppExecutors
 ) : IOrderRepository {
 
+    override suspend fun count(): Resource<Int> =
+        when (
+            val response = remoteDataSource.countOrders().first()
+        ) {
+            is ApiResponse.Success -> Resource.Success(response.data)
+            is ApiResponse.Empty -> Resource.Error(response.toString(), null)
+            else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
+        }
+
     @OptIn(ExperimentalPagingApi::class)
-    override fun getOrders(): Flow<PagingData<OrderWithDetails>> = Pager(
+    override fun getOrders(): Flow<PagingData<Order>> = Pager(
         config = PagingConfig(pageSize = 20),
         remoteMediator = OrderRemoteMediator(
             apiService = remoteDataSource.apiService,
@@ -43,7 +48,29 @@ class OrderRepository @Inject constructor(
             mapper = remoteDataSource.mapper
         ),
         pagingSourceFactory = { localDataSource.getAllOrder() }
-    ).flow
+    ).flow.map { pagingData ->
+        pagingData.map { orderWithDetail ->
+            localDataSource.mapper.mapFromEntity(orderWithDetail)
+        }
+    }
+
+    override fun getNewestOrders(): Flow<Resource<List<Order>>> =
+        object : NetworkBoundResource<List<Order>, OrdersResponse>() {
+            override fun loadFromDB(): Flow<List<Order>?> =
+                localDataSource.getNewestOrder().map {
+                    localDataSource.mapper.mapFromEntities(it)
+                }
+
+            override fun shouldFetch(data: List<Order>?): Boolean = true
+
+            override suspend fun createCall(): Flow<ApiResponse<OrdersResponse>> =
+                remoteDataSource.getOrders()
+
+            override suspend fun saveCallResult(data: OrdersResponse) =
+                remoteDataSource.mapper.mapRemoteToEntities(data.results).let {
+                    localDataSource.insertAll(it)
+                }
+        }.asFlow() as Flow<Resource<List<Order>>>
 
     override fun getOrder(orderId: String): Flow<Resource<Order>> =
         object : NetworkBoundResource<Order, OrderResponse>() {
@@ -115,7 +142,11 @@ class OrderRepository @Inject constructor(
             else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
         }
 
-    override suspend fun updateOrder(orderId: String, status: Short, trackingNumber: String): Resource<String> =
+    override suspend fun updateOrder(
+        orderId: String,
+        status: Short,
+        trackingNumber: String
+    ): Resource<String> =
         when (
             val response = remoteDataSource.updateOrder(
                 orderId = orderId,

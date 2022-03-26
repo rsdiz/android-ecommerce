@@ -2,7 +2,7 @@ package id.rsdiz.rdshop.domain.usecase.product
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.domain.model.Product
+import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.domain.repository.product.IProductRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -14,6 +14,8 @@ import javax.inject.Inject
 class ProductUseCase @Inject constructor(
     private val repository: IProductRepository
 ) : IProductUseCase {
+    override suspend fun count() = repository.count()
+
     override fun getProducts(): Flow<PagingData<Product>> = repository.getProducts()
 
     override fun getProduct(productId: String): Flow<Resource<Product>> =

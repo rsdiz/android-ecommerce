@@ -1,19 +1,16 @@
 package id.rsdiz.rdshop.domain.repository.product
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.*
 import id.rsdiz.rdshop.base.utils.AppExecutors
 import id.rsdiz.rdshop.data.NetworkBoundResource
 import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.Product
+import id.rsdiz.rdshop.data.model.ProductImage
 import id.rsdiz.rdshop.data.paging.ProductRemoteMediator
 import id.rsdiz.rdshop.data.source.local.ProductLocalDataSource
 import id.rsdiz.rdshop.data.source.remote.ProductRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.response.product.ProductResponse
-import id.rsdiz.rdshop.domain.model.Product
-import id.rsdiz.rdshop.domain.model.ProductImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -30,6 +27,16 @@ class ProductRepository @Inject constructor(
     private val localDataSource: ProductLocalDataSource,
     private val appExecutors: AppExecutors
 ) : IProductRepository {
+    override suspend fun count(): Resource<Int> =
+        when (
+            val response = remoteDataSource.countProducts().first()
+        ) {
+            is ApiResponse.Success -> {
+                Resource.Success(response.data)
+            }
+            is ApiResponse.Empty -> Resource.Error(response.toString(), null)
+            else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
+        }
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getProducts(): Flow<PagingData<Product>> = Pager(
@@ -42,7 +49,11 @@ class ProductRepository @Inject constructor(
             mapper = remoteDataSource.mapper
         ),
         pagingSourceFactory = { localDataSource.getAllProducts() }
-    ).flow
+    ).flow.map { pagingData ->
+        pagingData.map { productWithImage ->
+            localDataSource.mapper.mapFromEntity(productWithImage)
+        }
+    }
 
     override fun getProduct(productId: String): Flow<Resource<Product>> =
         object : NetworkBoundResource<Product, ProductResponse>() {

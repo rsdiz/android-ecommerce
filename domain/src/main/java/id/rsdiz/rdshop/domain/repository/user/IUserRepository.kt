@@ -2,7 +2,7 @@ package id.rsdiz.rdshop.domain.repository.user
 
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.domain.model.User
+import id.rsdiz.rdshop.data.model.User
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -10,6 +10,11 @@ import java.io.File
  * Contract for User Repository
  */
 interface IUserRepository {
+
+    /**
+     * Count total row in users
+     */
+    suspend fun count(): Resource<Int>
 
     /**
      * Get list of users

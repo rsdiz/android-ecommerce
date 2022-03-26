@@ -7,12 +7,12 @@ import androidx.paging.PagingData
 import id.rsdiz.rdshop.base.utils.AppExecutors
 import id.rsdiz.rdshop.data.NetworkBoundResource
 import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.User
 import id.rsdiz.rdshop.data.paging.UserRemoteMediator
 import id.rsdiz.rdshop.data.source.local.UserLocalDataSource
 import id.rsdiz.rdshop.data.source.remote.UserRemoteDataSource
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.response.user.UserResponse
-import id.rsdiz.rdshop.domain.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -29,6 +29,15 @@ class UserRepository @Inject constructor(
     private val localDataSource: UserLocalDataSource,
     private val appExecutor: AppExecutors
 ) : IUserRepository {
+
+    override suspend fun count(): Resource<Int> =
+        when (
+            val response = remoteDataSource.countUsers().first()
+        ) {
+            is ApiResponse.Success -> Resource.Success(response.data)
+            is ApiResponse.Empty -> Resource.Error(response.toString(), null)
+            else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
+        }
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getUsers(): Flow<PagingData<User>> = Pager(
