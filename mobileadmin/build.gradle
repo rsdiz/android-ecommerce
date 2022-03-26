@@ -61,6 +61,11 @@ dependencies {
     implementation mobileUiDependencies.navFragment
     implementation mobileUiDependencies.navUi
 
+    implementation dataDependencies.roomRuntime
+    implementation dataDependencies.roomPaging
+    implementation dataDependencies.roomKtx
+    kapt dataDependencies.roomCompiler
+
     implementation dataDependencies.okhttp
     implementation dataDependencies.gson
 
