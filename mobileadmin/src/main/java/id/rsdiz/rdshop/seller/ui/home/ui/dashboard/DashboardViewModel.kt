@@ -18,7 +18,7 @@ class DashboardViewModel @Inject constructor(
     private val userUseCase: UserUseCase,
     private val productUseCase: ProductUseCase,
     private val categoryUseCase: CategoryUseCase
-) : ViewModel(), LifecycleObserver {
+) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
     private var _newestOrder = orderUseCase.getNewestOrders()
 

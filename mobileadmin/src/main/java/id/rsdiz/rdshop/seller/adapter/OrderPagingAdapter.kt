@@ -2,32 +2,24 @@ package id.rsdiz.rdshop.seller.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import id.rsdiz.rdshop.base.utils.toRupiah
-import id.rsdiz.rdshop.data.model.Order
 import id.rsdiz.rdshop.seller.common.OrderItemUIState
 import id.rsdiz.rdshop.seller.databinding.ItemOrderBinding
+import javax.inject.Inject
 
-class NewestOrderAdapter : RecyclerView.Adapter<NewestOrderAdapter.ViewHolder>() {
-    private var mutableOrderList = mutableListOf<OrderItemUIState>()
+class OrderPagingAdapter @Inject constructor() :
+    PagingDataAdapter<OrderItemUIState, OrderPagingAdapter.OrderViewHolder>(Comparator) {
     private var onItemClick: ((OrderItemUIState) -> Unit)? = null
-
-    fun setOrders(orders: List<Order>) {
-        with(mutableOrderList) {
-            clear()
-            orders.map {
-                add(OrderItemUIState(it))
-            }
-        }
-        notifyDataSetChanged()
-    }
 
     fun setOnItemClickListener(listener: ((OrderItemUIState) -> Unit)) {
         onItemClick = listener
     }
 
-    inner class ViewHolder(private val binding: ItemOrderBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class OrderViewHolder(
+        private val binding: ItemOrderBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(orderItemUIState: OrderItemUIState) {
             binding.apply {
                 itemTotal.text = orderItemUIState.getOrderTotal()
@@ -42,13 +34,19 @@ class NewestOrderAdapter : RecyclerView.Adapter<NewestOrderAdapter.ViewHolder>()
 
         init {
             binding.root.setOnClickListener {
-                onItemClick?.invoke(mutableOrderList[bindingAdapterPosition])
+                getItem(bindingAdapterPosition)?.let { orderItem ->
+                    onItemClick?.invoke(orderItem)
+                }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(
+    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
+        getItem(position)?.let { orderItemUIState -> holder.bind(orderItemUIState) }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder =
+        OrderViewHolder(
             ItemOrderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -56,8 +54,15 @@ class NewestOrderAdapter : RecyclerView.Adapter<NewestOrderAdapter.ViewHolder>()
             )
         )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(orderItemUIState = mutableOrderList[position])
+    object Comparator : DiffUtil.ItemCallback<OrderItemUIState>() {
+        override fun areItemsTheSame(
+            oldItem: OrderItemUIState,
+            newItem: OrderItemUIState
+        ): Boolean = oldItem.getSimpleOrderId() == newItem.getSimpleOrderId()
 
-    override fun getItemCount(): Int = mutableOrderList.size
+        override fun areContentsTheSame(
+            oldItem: OrderItemUIState,
+            newItem: OrderItemUIState
+        ): Boolean = oldItem == newItem
+    }
 }

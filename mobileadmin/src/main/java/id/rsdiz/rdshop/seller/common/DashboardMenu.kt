@@ -1,4 +1,4 @@
-package id.rsdiz.rdshop.seller.model
+package id.rsdiz.rdshop.seller.common
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

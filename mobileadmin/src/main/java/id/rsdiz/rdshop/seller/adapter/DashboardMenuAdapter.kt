@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.rsdiz.rdshop.seller.databinding.ItemDashboardMenuBinding
-import id.rsdiz.rdshop.seller.model.DashboardMenu
+import id.rsdiz.rdshop.seller.common.DashboardMenu
 
 class DashboardMenuAdapter : RecyclerView.Adapter<DashboardMenuAdapter.ViewHolder>() {
     private val mutableListMenu = mutableListOf<DashboardMenu>()

@@ -56,10 +56,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/blue_wood"
             app:menu="@menu/home_menu"
             app:title="Greetings"
@@ -119,20 +119,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rv_dashboard_menu" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_view_all_order"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_padding_size_medium"
-                    android:fontFamily="@font/capriola"
-                    android:text="Lihat Semua"
-                    android:textSize="11sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/text_order_title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/text_order_title"
-                    app:layout_constraintTop_toTopOf="@+id/text_order_title" />
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_newest_order"
                     android:layout_width="match_parent"
@@ -143,7 +129,7 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_view_all_order"
+                    app:layout_constraintTop_toBottomOf="@+id/text_order_title"
                     tools:itemCount="4"
                     tools:listitem="@layout/item_order" />
 
@@ -157,7 +143,7 @@
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_view_all_order" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_order_title" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/error_order_group"
@@ -180,7 +166,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_view_all_order" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_order_title" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/label_error_message"
@@ -189,7 +175,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_padding_size_small"
                     android:fontFamily="@font/capriola"
-                    android:text="Kami mengalami beberapa kendala.\nTetap tenang dan coba kembali"
+                    android:text="Anda menemui beberapa kendala.\nTetap tenang dan coba kembali"
                     android:textAlignment="center"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="@dimen/text_size_small"
@@ -233,7 +219,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_view_all_order" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_order_title" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/label_empty_message"

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.ui.order.OrderFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue_wood"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:title="Daftar Order"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"
+        app:titleTextColor="@color/white" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/card_view_small_elevation"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/content_order_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="notification,content,fab_filter" />
+
+    <TextView
+        android:id="@+id/notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pomegranate"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/capriola"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/margin_padding_size_large"
+        android:paddingVertical="@dimen/margin_padding_size_small"
+        android:text="Terdapat 4 Orderan yang belum diproses"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_small"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_orders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_view_all_order"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_order" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/error_order_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="label_error_title,label_error_message,label_error_button" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/label_error_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_padding_size_medium"
+        android:fontFamily="@font/capriola"
+        android:text="Ups, Terjadi Kendala!"
+        android:textAlignment="center"
+        android:textColor="@color/pomegranate"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/label_error_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_padding_size_small"
+        android:fontFamily="@font/capriola"
+        android:text="Anda menemui beberapa kendala.\nTetap tenang dan coba kembali"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_error_title"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/label_error_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_medium"
+        android:fontFamily="@font/capriola"
+        android:text="Coba Lagi"
+        android:textSize="@dimen/text_size_micro"
+        app:backgroundTint="@color/pomegranate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_error_message"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/margin_padding_size_large"
+        android:layout_marginBottom="@dimen/margin_padding_size_large"
+        android:clickable="true"
+        android:contentDescription="Filter Orders"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_filter_list_24"
+        app:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_filter_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/margin_padding_size_medium"
+        android:clickable="true"
+        android:contentDescription="Filter Sampai Tujuan"
+        android:focusable="true"
+        android:tooltipText="Sampai Tujuan"
+        android:visibility="invisible"
+        app:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintBottom_toTopOf="@id/fab_filter"
+        app:layout_constraintEnd_toEndOf="@id/fab_filter"
+        app:layout_constraintStart_toStartOf="@id/fab_filter"
+        app:srcCompat="@drawable/ic_baseline_filter_4_24"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_filter_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/margin_padding_size_medium"
+        android:clickable="true"
+        android:contentDescription="Filter Sedang Dikirim"
+        android:focusable="true"
+        android:tooltipText="Sedang Dikirim"
+        android:visibility="invisible"
+        app:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintBottom_toTopOf="@id/fab_filter_4"
+        app:layout_constraintEnd_toEndOf="@id/fab_filter_4"
+        app:layout_constraintStart_toStartOf="@id/fab_filter_4"
+        app:srcCompat="@drawable/ic_baseline_filter_3_24"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_filter_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/margin_padding_size_medium"
+        android:clickable="true"
+        android:contentDescription="Filter Pesanan Diproses"
+        android:focusable="true"
+        android:tooltipText="Pesanan Diproses"
+        android:visibility="invisible"
+        app:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintBottom_toTopOf="@id/fab_filter_3"
+        app:layout_constraintEnd_toEndOf="@id/fab_filter_3"
+        app:layout_constraintStart_toStartOf="@id/fab_filter_3"
+        app:srcCompat="@drawable/ic_baseline_filter_2_24"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_filter_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/margin_padding_size_medium"
+        android:clickable="true"
+        android:contentDescription="Filter Menunggu Konfirmasi"
+        android:focusable="true"
+        android:tooltipText="Menunggu Konfirmasi"
+        android:visibility="invisible"
+        app:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintBottom_toTopOf="@id/fab_filter_2"
+        app:layout_constraintEnd_toEndOf="@id/fab_filter_2"
+        app:layout_constraintStart_toStartOf="@id/fab_filter_2"
+        app:srcCompat="@drawable/ic_baseline_filter_1_24"
+        app:tint="@color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

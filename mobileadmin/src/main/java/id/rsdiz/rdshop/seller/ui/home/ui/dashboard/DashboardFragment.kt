@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -26,8 +27,8 @@ import id.rsdiz.rdshop.data.model.Order
 import id.rsdiz.rdshop.seller.R
 import id.rsdiz.rdshop.seller.adapter.DashboardMenuAdapter
 import id.rsdiz.rdshop.seller.adapter.NewestOrderAdapter
+import id.rsdiz.rdshop.seller.common.DashboardMenu
 import id.rsdiz.rdshop.seller.databinding.FragmentDashboardBinding
-import id.rsdiz.rdshop.seller.model.DashboardMenu
 import id.rsdiz.rdshop.seller.ui.splash.SplashActivity
 import kotlinx.coroutines.launch
 import java.util.*
@@ -63,13 +64,25 @@ class DashboardFragment : Fragment() {
         }
 
         newestOrderAdapter.setOnItemClickListener {
-            Toast.makeText(requireContext(), "ITEM ${it.shipName} DI KLIK", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                requireContext(),
+                "ITEM ${it.getOrderName()} DI KLIK",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
 
         dashboardMenuAdapter.setOnItemClickListener {
-            Toast.makeText(requireContext(), "MENU ${it.title} DI KLIK", Toast.LENGTH_SHORT)
-                .show()
+            when (it.title) {
+                "Order" -> {
+                    val directions =
+                        DashboardFragmentDirections.actionDashboardFragmentToOrderFragment()
+                    view.findNavController().navigate(directions)
+                }
+                else ->
+                    Toast.makeText(requireContext(), "MENU ${it.title} DI KLIK", Toast.LENGTH_SHORT)
+                        .show()
+            }
         }
 
         binding.apply {
@@ -155,9 +168,6 @@ class DashboardFragment : Fragment() {
                 content.isRefreshing = true
             }
 
-            buttonViewAllOrder.setOnClickListener {
-            }
-
             content.setOnRefreshListener {
                 Log.d("RDSHOP-DEBUG", "onViewCreated: REFRESHING")
                 lifecycleScope.launch {
@@ -210,7 +220,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun observeOrder(livedata: LiveData<Resource<List<Order>>>) {
-        viewModel.refreshOrder()
+//        viewModel.refreshOrder()
 
         livedata.observe(viewLifecycleOwner) { resources ->
             when (resources) {
@@ -273,5 +283,10 @@ class DashboardFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
