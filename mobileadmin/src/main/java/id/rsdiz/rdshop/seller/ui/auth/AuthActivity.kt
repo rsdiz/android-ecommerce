@@ -3,17 +3,17 @@ package id.rsdiz.rdshop.seller.ui.auth
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import id.rsdiz.rdshop.seller.databinding.AuthActivityBinding
+import id.rsdiz.rdshop.seller.databinding.ActivityAuthBinding
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 
-    private var _binding: AuthActivityBinding? = null
-    private val binding get() = _binding as AuthActivityBinding
+    private var _binding: ActivityAuthBinding? = null
+    private val binding get() = _binding as ActivityAuthBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = AuthActivityBinding.inflate(layoutInflater)
+        _binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
