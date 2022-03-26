@@ -19,11 +19,7 @@ class PreferenceHelper constructor(private val context: Context) {
             editor.apply()
         }
 
-        fun SharedPreferences.flush() {
-            val editor = this.edit()
-            editor.clear()
-            editor.apply()
-        }
+        fun SharedPreferences.flush() = edit { it.clear() }
 
         /**
          * puts a value for the given [key].
@@ -34,8 +30,7 @@ class PreferenceHelper constructor(private val context: Context) {
             is Boolean -> edit { it.putBoolean(key, value) }
             is Float -> edit { it.putFloat(key, value) }
             is Long -> edit { it.putLong(key, value) }
-            is Enum<*> -> edit { it.putInt(key, value.ordinal) }
-            else -> throw UnsupportedOperationException("Not yet implemented")
+            else -> throw UnsupportedOperationException("SharedPreference.set() Not yet implemented")
         }
 
         /**
@@ -52,7 +47,7 @@ class PreferenceHelper constructor(private val context: Context) {
             Boolean::class -> getBoolean(key, defaultValue as? Boolean ?: false) as T
             Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T
             Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
-            else -> throw UnsupportedOperationException("Not yet implemented")
+            else -> throw UnsupportedOperationException("SharedPreference.get() Not yet implemented")
         }
     }
 }
