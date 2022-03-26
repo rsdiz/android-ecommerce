@@ -1,10 +1,10 @@
 package id.rsdiz.rdshop.data.source.remote
 
 import id.rsdiz.rdshop.base.utils.FileHelper
+import id.rsdiz.rdshop.data.model.User
 import id.rsdiz.rdshop.data.source.remote.mapper.UserRemoteMapper
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
-import id.rsdiz.rdshop.domain.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -22,6 +22,25 @@ class UserRemoteDataSource @Inject constructor(
     val apiService: ApiService,
     val mapper: UserRemoteMapper
 ) {
+    suspend fun countUsers() =
+        flow {
+            try {
+                val response = apiService.countUsers()
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
+                        )
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
     suspend fun getUsers(size: Int = 10) =
         flow {
             try {

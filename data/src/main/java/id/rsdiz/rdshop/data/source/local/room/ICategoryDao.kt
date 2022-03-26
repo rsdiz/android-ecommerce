@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface ICategoryDao : IBaseDao<CategoryEntity> {
+    @Query("SELECT COUNT(categoryId) FROM categories")
+    fun count(): Int
+
     @Query("SELECT * FROM categories")
     fun getAllCategories(): Flow<List<CategoryEntity>>
 

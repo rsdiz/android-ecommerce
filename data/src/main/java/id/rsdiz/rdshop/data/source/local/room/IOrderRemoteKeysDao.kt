@@ -8,7 +8,7 @@ import id.rsdiz.rdshop.data.source.local.entity.OrderRemoteKeysEntity
 
 @Dao
 interface IOrderRemoteKeysDao {
-    @Query("SELECT * FROM order_remote_entity WHERE id = :OrderId")
+    @Query("SELECT * FROM order_remote_entity WHERE id = :orderId")
     suspend fun getOrderRemoteKeys(orderId: String): OrderRemoteKeysEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

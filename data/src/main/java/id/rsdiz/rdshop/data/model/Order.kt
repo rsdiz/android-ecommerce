@@ -1,4 +1,4 @@
-package id.rsdiz.rdshop.domain.model
+package id.rsdiz.rdshop.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

@@ -2,7 +2,7 @@ package id.rsdiz.rdshop.data.source.local.mapper
 
 import id.rsdiz.rdshop.data.source.local.entity.UserEntity
 import id.rsdiz.rdshop.data.source.local.mapper.base.DataMapper
-import id.rsdiz.rdshop.domain.model.User
+import id.rsdiz.rdshop.data.model.User
 import javax.inject.Inject
 
 /**

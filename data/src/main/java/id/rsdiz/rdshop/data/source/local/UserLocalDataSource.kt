@@ -14,6 +14,8 @@ class UserLocalDataSource @Inject constructor(
     val userRemoteKeysDao: IUserRemoteKeysDao,
     val mapper: UserMapper
 ) {
+    fun count() = userDao.count()
+
     fun getAllUsers() = userDao.getAllUsers()
 
     fun getUserById(userId: String) = userDao.getUserById(userId)

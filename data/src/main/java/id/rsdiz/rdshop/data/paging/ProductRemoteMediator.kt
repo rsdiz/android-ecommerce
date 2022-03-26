@@ -6,12 +6,12 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductRemoteKeysEntity
+import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.room.IProductDao
 import id.rsdiz.rdshop.data.source.local.room.IProductImageDao
 import id.rsdiz.rdshop.data.source.local.room.IProductRemoteKeysDao
 import id.rsdiz.rdshop.data.source.remote.mapper.ProductRemoteMapper
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
-import id.rsdiz.rdshop.domain.model.Product
 
 @OptIn(ExperimentalPagingApi::class)
 class ProductRemoteMediator(
@@ -20,10 +20,10 @@ class ProductRemoteMediator(
     private val productImageDao: IProductImageDao,
     private val productRemoteKeysDao: IProductRemoteKeysDao,
     private val mapper: ProductRemoteMapper
-) : RemoteMediator<Int, Product>() {
+) : RemoteMediator<Int, ProductWithImages>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, Product>
+        state: PagingState<Int, ProductWithImages>
     ): MediatorResult {
         return try {
             val page = when (loadType) {
@@ -97,25 +97,25 @@ class ProductRemoteMediator(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, Product>
+        state: PagingState<Int, ProductWithImages>
     ): ProductRemoteKeysEntity? =
         state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.productId?.let {
+            state.closestItemToPosition(position)?.product?.productId?.let {
                 productRemoteKeysDao.getProductRemoteKeys(productId = it)
             }
         }
 
     private suspend fun getRemoteKeyForFirstItem(
-        state: PagingState<Int, Product>
+        state: PagingState<Int, ProductWithImages>
     ): ProductRemoteKeysEntity? =
-        state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { product ->
-            productRemoteKeysDao.getProductRemoteKeys(productId = product.productId)
+        state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let {
+            productRemoteKeysDao.getProductRemoteKeys(productId = it.product.productId)
         }
 
     private suspend fun getRemoteKeyForLastItem(
-        state: PagingState<Int, Product>
+        state: PagingState<Int, ProductWithImages>
     ): ProductRemoteKeysEntity? =
-        state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { product ->
-            productRemoteKeysDao.getProductRemoteKeys(productId = product.productId)
+        state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let {
+            productRemoteKeysDao.getProductRemoteKeys(productId = it.product.productId)
         }
 }

@@ -16,6 +16,8 @@ class ProductLocalDataSource @Inject constructor(
     val productRemoteKeysDao: IProductRemoteKeysDao,
     val mapper: ProductMapper
 ) {
+    fun count() = productDao.count()
+
     fun getAllProducts() = productDao.getAllProducts()
 
     fun getProductById(productId: String) = productDao.getProductById(productId)

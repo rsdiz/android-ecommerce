@@ -5,7 +5,7 @@ import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import id.rsdiz.rdshop.data.source.remote.response.order.DetailOrderResponse
 import id.rsdiz.rdshop.data.source.remote.response.order.OrderResponse
-import id.rsdiz.rdshop.domain.model.Order
+import id.rsdiz.rdshop.data.model.Order
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -21,10 +21,29 @@ class OrderRemoteDataSource @Inject constructor(
     val apiService: ApiService,
     val mapper: OrderRemoteMapper
 ) {
+    suspend fun countOrders() =
+        flow {
+            try {
+                val response = apiService.countOrders()
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
+                        )
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
     suspend fun getOrders(size: Int = 10) =
         flow {
             try {
-                val response = apiService.getOrders(size)
+                val response = apiService.getOrders(page = 1, size = size)
                 if (response.data != null) {
                     when (response.code) {
                         200 -> emit(

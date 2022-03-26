@@ -16,9 +16,16 @@ import org.threeten.bp.OffsetDateTime
  */
 @Dao
 interface IOrderDao : IBaseDao<OrderEntity> {
+    @Query("SELECT COUNT(orderId) FROM orders")
+    fun count(): Int
+
     @Transaction
     @Query("SELECT * FROM orders")
     fun getAllOrder(): PagingSource<Int, OrderWithDetails>
+
+    @Transaction
+    @Query("SELECT * FROM orders ORDER BY date DESC LIMIT :maxItem")
+    fun getNewestOrder(maxItem: Int): Flow<List<OrderWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM orders WHERE orderId = :orderId")

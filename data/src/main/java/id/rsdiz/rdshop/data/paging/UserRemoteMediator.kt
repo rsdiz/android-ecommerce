@@ -9,7 +9,7 @@ import id.rsdiz.rdshop.data.source.local.room.IUserDao
 import id.rsdiz.rdshop.data.source.local.room.IUserRemoteKeysDao
 import id.rsdiz.rdshop.data.source.remote.mapper.UserRemoteMapper
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
-import id.rsdiz.rdshop.domain.model.User
+import id.rsdiz.rdshop.data.model.User
 
 @OptIn(ExperimentalPagingApi::class)
 class UserRemoteMediator(

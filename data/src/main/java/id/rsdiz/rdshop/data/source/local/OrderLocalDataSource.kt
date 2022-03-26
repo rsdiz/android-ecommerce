@@ -17,7 +17,11 @@ class OrderLocalDataSource @Inject constructor(
     val orderRemoteKeysDao: IOrderRemoteKeysDao,
     val mapper: OrderMapper
 ) {
+    fun count() = orderDao.count()
+
     fun getAllOrder() = orderDao.getAllOrder()
+
+    fun getNewestOrder(maxItem: Int = 10) = orderDao.getNewestOrder(maxItem)
 
     fun getOrderById(orderId: String) = orderDao.getOrderById(orderId)
 

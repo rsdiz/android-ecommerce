@@ -11,6 +11,8 @@ class CategoryLocalDataSource @Inject constructor(
     private val categoryDao: ICategoryDao,
     val mapper: CategoryMapper
 ) {
+    fun count() = categoryDao.count()
+
     fun getAllCategories() = categoryDao.getAllCategories()
 
     fun getCategoryById(categoryId: String) = categoryDao.getCategoryById(categoryId)

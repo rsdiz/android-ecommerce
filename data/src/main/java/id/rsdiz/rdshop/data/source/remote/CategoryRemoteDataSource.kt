@@ -17,6 +17,25 @@ class CategoryRemoteDataSource @Inject constructor(
     private val apiService: ApiService,
     val mapper: CategoryRemoteMapper
 ) {
+    suspend fun countCategories() =
+        flow {
+            try {
+                val response = apiService.countCategories()
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
+                        )
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
     suspend fun getCategories() =
         flow {
             try {

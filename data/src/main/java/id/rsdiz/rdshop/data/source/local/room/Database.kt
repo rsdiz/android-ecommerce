@@ -2,6 +2,8 @@ package id.rsdiz.rdshop.data.source.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import id.rsdiz.rdshop.data.source.local.converter.DateTypeConverter
 import id.rsdiz.rdshop.data.source.local.entity.*
 
 @Database(
@@ -17,8 +19,9 @@ import id.rsdiz.rdshop.data.source.local.entity.*
         OrderRemoteKeysEntity::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
+@TypeConverters(DateTypeConverter::class)
 abstract class Database : RoomDatabase() {
     abstract fun userDao(): IUserDao
     abstract fun userRemoteKeysDao(): IUserRemoteKeysDao

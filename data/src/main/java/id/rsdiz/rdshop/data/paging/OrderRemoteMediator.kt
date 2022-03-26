@@ -12,7 +12,6 @@ import id.rsdiz.rdshop.data.source.local.room.IOrderDao
 import id.rsdiz.rdshop.data.source.local.room.IOrderRemoteKeysDao
 import id.rsdiz.rdshop.data.source.remote.mapper.OrderRemoteMapper
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
-import id.rsdiz.rdshop.domain.model.Order
 
 @OptIn(ExperimentalPagingApi::class)
 class OrderRemoteMediator(

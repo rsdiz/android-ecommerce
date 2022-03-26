@@ -3,10 +3,10 @@ package id.rsdiz.rdshop.data.source.local.room
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
+import id.rsdiz.rdshop.data.model.User
 import id.rsdiz.rdshop.data.source.local.entity.Role
 import id.rsdiz.rdshop.data.source.local.entity.UserEntity
 import id.rsdiz.rdshop.data.source.local.room.base.IBaseDao
-import id.rsdiz.rdshop.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface IUserDao : IBaseDao<UserEntity> {
+    @Query("SELECT COUNT(userId) FROM users")
+    fun count(): Int
+
     @Query("SELECT * FROM users")
     fun getAllUsers(): PagingSource<Int, User>
 

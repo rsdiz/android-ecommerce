@@ -4,7 +4,7 @@ import id.rsdiz.rdshop.base.utils.FileHelper
 import id.rsdiz.rdshop.data.source.remote.mapper.ProductRemoteMapper
 import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
-import id.rsdiz.rdshop.domain.model.Product
+import id.rsdiz.rdshop.data.model.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -21,6 +21,25 @@ class ProductRemoteDataSource @Inject constructor(
     val apiService: ApiService,
     val mapper: ProductRemoteMapper,
 ) {
+    suspend fun countProducts() =
+        flow {
+            try {
+                val response = apiService.countProducts()
+                if (response.data != null) {
+                    when (response.code) {
+                        200 -> emit(
+                            ApiResponse.Success(
+                                data = response.data
+                            )
+                        )
+                        else -> emit(ApiResponse.Error(response.status))
+                    }
+                } else emit(ApiResponse.Empty)
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+
     suspend fun getProducts(size: Int = 10) =
         flow {
             try {

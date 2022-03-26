@@ -19,7 +19,10 @@ data class ProductImageResponse(
  * ProductImage Responses from API
  */
 data class BaseProductImageResponse(
+    @field:SerializedName("code")
     override val code: Int,
+    @field:SerializedName("status")
     override val status: String,
+    @field:SerializedName("data")
     override val data: ProductImageResponse?
 ) : IBaseResponse<ProductImageResponse>

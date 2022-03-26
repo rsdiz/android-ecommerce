@@ -7,7 +7,6 @@ import androidx.room.Transaction
 import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.room.base.IBaseDao
-import id.rsdiz.rdshop.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,9 +14,12 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface IProductDao : IBaseDao<ProductEntity> {
+    @Query("SELECT COUNT(productId) FROM products")
+    fun count(): Int
+
     @Transaction
     @Query("SELECT * FROM products")
-    fun getAllProducts(): PagingSource<Int, Product>
+    fun getAllProducts(): PagingSource<Int, ProductWithImages>
 
     @Transaction
     @Query("SELECT * FROM products WHERE productId = :productId")
@@ -31,6 +33,7 @@ interface IProductDao : IBaseDao<ProductEntity> {
     @Query("SELECT * FROM products WHERE name LIKE :word OR description LIKE :word")
     fun searchProducts(word: String): Flow<List<ProductWithImages>>
 
+    @Transaction
     @Query("SELECT * FROM products WHERE name LIKE :word AND price BETWEEN :minPrice AND :maxPrice ORDER BY price")
     fun getProductByFilter(
         word: String? = "",

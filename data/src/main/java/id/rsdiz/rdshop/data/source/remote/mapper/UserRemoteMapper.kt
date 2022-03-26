@@ -12,25 +12,18 @@ import javax.inject.Inject
  */
 open class UserRemoteMapper @Inject constructor() : EntityMapper<UserResponse, UserEntity> {
     override fun mapRemoteToEntity(remote: UserResponse): UserEntity {
-        val gender = when (remote.gender) {
-            "male" -> Gender.MALE
-            "female" -> Gender.FEMALE
-            else -> Gender.OTHER
-        }
+        val gender = remote.gender?.let { Gender.valueOf(it) }
 
-        val role = when (remote.role) {
-            "admin" -> Role.ADMIN
-            else -> Role.CUSTOMER
-        }
+        val role = Role.valueOf(remote.role)
 
         return UserEntity(
             userId = remote.id,
             username = remote.username,
             email = remote.email,
             name = remote.name,
-            gender = gender,
-            address = remote.address,
-            photo = remote.photo,
+            gender = gender ?: Gender.OTHER,
+            address = remote.address ?: "",
+            photo = remote.photo ?: "",
             role = role
         )
     }

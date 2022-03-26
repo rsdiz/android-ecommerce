@@ -14,6 +14,7 @@ import id.rsdiz.rdshop.base.utils.SSLCertificateConfigurator
 import id.rsdiz.rdshop.data.R
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -22,19 +23,11 @@ import javax.net.ssl.X509TrustManager
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
-    @Provides
-    fun providePreferenceHelper(
-        @ApplicationContext context: Context
-    ) = PreferenceHelper(context)
-
+object NetworkModule {
     @Provides
     fun provideOkHttpClient(
-        @ApplicationContext context: Context,
-        preferenceHelper: PreferenceHelper
+        @ApplicationContext context: Context
     ): OkHttpClient {
-        val prefs = preferenceHelper.customPrefs(Consts.PREFERENCE_NAME)
-
         val trustManagerFactory =
             SSLCertificateConfigurator.getTrustManager(context, R.raw.certificate_rdshop)
         val trustManagers = trustManagerFactory.trustManagers
@@ -55,7 +48,9 @@ class NetworkModule {
                 ).socketFactory,
                 trustManager
             )
-            .addInterceptor(HeaderInterceptor(prefs[Consts.PREF_TOKEN] ?: Consts.API_HEADER_KEY))
+            .addInterceptor(HeaderInterceptor(apiKey = getApiKey(context)))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .connectTimeout(Consts.TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(Consts.TIMEOUT, TimeUnit.SECONDS)
             .build()
@@ -68,4 +63,14 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build().create(ApiService::class.java)
+
+    private fun getApiKey(context: Context): String {
+        val prefs = PreferenceHelper(context).customPrefs(Consts.PREFERENCE_NAME)
+
+        val apiKey: String = prefs[Consts.PREF_TOKEN, ""]
+
+        return apiKey.ifEmpty {
+            Consts.RDSHOP_API_KEY
+        }
+    }
 }

@@ -4,8 +4,8 @@ import id.rsdiz.rdshop.data.source.local.entity.DetailOrderEntity
 import id.rsdiz.rdshop.data.source.local.entity.OrderEntity
 import id.rsdiz.rdshop.data.source.local.entity.OrderWithDetails
 import id.rsdiz.rdshop.data.source.local.mapper.base.DataMapper
-import id.rsdiz.rdshop.domain.model.Order
-import id.rsdiz.rdshop.domain.model.OrderDetail
+import id.rsdiz.rdshop.data.model.Order
+import id.rsdiz.rdshop.data.model.OrderDetail
 import javax.inject.Inject
 
 /**

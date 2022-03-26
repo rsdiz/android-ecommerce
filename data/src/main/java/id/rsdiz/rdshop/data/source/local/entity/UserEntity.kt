@@ -15,4 +15,3 @@ data class UserEntity(
     val photo: String,
     val role: Role
 )
-

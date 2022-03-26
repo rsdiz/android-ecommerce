@@ -2,7 +2,7 @@ package id.rsdiz.rdshop.data.source.local.mapper
 
 import id.rsdiz.rdshop.data.source.local.entity.CategoryEntity
 import id.rsdiz.rdshop.data.source.local.mapper.base.DataMapper
-import id.rsdiz.rdshop.domain.model.Category
+import id.rsdiz.rdshop.data.model.Category
 import javax.inject.Inject
 
 /**
