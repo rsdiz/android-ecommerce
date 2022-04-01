@@ -86,17 +86,17 @@ class DashboardFragment : Fragment() {
         }
 
         binding.apply {
-            toolbar.title = when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-                in 0..11 -> {
+            toolbar.title = when (Calendar.getInstance().get(Calendar.HOUR)) {
+                in 0..10 -> {
                     "Selamat Pagi "
                 }
-                in 12..16 -> {
+                in 11..14 -> {
                     "Selamat Siang "
                 }
-                in 16..21 -> {
-                    "Selamat Siang "
+                in 15..18 -> {
+                    "Selamat Sore "
                 }
-                in 21..24 -> {
+                in 19..24 -> {
                     "Selamat Malam "
                 }
                 else -> {
@@ -234,7 +234,7 @@ class DashboardFragment : Fragment() {
                 }
                 is Resource.Loading -> updateUiRvNewestOrderVisibility(false)
                 is Resource.Error -> {
-                    updateUiRvNewestOrderVisibility(false)
+                    updateUiRvNewestOrderVisibility(null)
                     binding.errorOrderGroup.visibility = View.VISIBLE
                 }
             }
