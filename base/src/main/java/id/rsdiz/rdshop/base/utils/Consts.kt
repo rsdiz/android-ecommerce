@@ -23,4 +23,8 @@ object Consts {
     const val PREF_PHOTO = "photo"
     const val PREF_ROLE = "role"
     const val PREF_TOKEN = "token"
+    const val STATUS_WAITING: Short = 0
+    const val STATUS_PROCESSED: Short = 1
+    const val STATUS_DISPATCH: Short = 2
+    const val STATUS_ARRIVED: Short = 3
 }

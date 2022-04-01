@@ -19,7 +19,7 @@ interface IOrderRepository {
     /**
      * Get list of orders
      */
-    fun getOrders(): Flow<PagingData<Order>>
+    fun getOrders(status: Short?): Flow<PagingData<Order>>
 
     /**
      * Get newest list of orders

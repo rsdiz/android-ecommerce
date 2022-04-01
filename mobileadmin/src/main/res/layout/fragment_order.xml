@@ -223,4 +223,22 @@
         app:srcCompat="@drawable/ic_baseline_filter_1_24"
         app:tint="@color/white" />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_clear_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Hapus Filter"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/pomegranate"
+        app:elevation="@dimen/card_view_small_elevation"
+        app:icon="@drawable/ic_baseline_close_24"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/fab_filter" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

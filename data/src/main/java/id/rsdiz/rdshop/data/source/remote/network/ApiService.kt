@@ -59,7 +59,8 @@ interface ApiService {
     @GET(value = "orders")
     suspend fun getOrders(
         @Query("page") page: Int = 1,
-        @Query("size") size: Int = 20
+        @Query("size") size: Int = 20,
+        @Query("status") status: Short?
     ): BaseOrdersResponse
 
     @GET(value = "users/{userId}")

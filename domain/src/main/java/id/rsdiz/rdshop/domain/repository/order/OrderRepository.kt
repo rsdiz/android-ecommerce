@@ -38,16 +38,23 @@ class OrderRepository @Inject constructor(
         }
 
     @OptIn(ExperimentalPagingApi::class)
-    override fun getOrders(): Flow<PagingData<Order>> = Pager(
+    override fun getOrders(status: Short?): Flow<PagingData<Order>> = Pager(
         config = PagingConfig(pageSize = 20),
         remoteMediator = OrderRemoteMediator(
             apiService = remoteDataSource.apiService,
             orderDao = localDataSource.orderDao,
             detailOrderDao = localDataSource.detailOrderDao,
             orderRemoteKeysDao = localDataSource.orderRemoteKeysDao,
-            mapper = remoteDataSource.mapper
+            mapper = remoteDataSource.mapper,
+            status = status
         ),
-        pagingSourceFactory = { localDataSource.getAllOrder() }
+        pagingSourceFactory = {
+            if (status == null) {
+                localDataSource.getAllOrder()
+            } else {
+                localDataSource.getOrderByStatus(status)
+            }
+        }
     ).flow.map { pagingData ->
         pagingData.map { orderWithDetail ->
             localDataSource.mapper.mapFromEntity(orderWithDetail)

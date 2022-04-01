@@ -19,7 +19,8 @@ class OrderRemoteMediator(
     private val orderDao: IOrderDao,
     private val detailOrderDao: IDetailOrderDao,
     private val orderRemoteKeysDao: IOrderRemoteKeysDao,
-    private val mapper: OrderRemoteMapper
+    private val mapper: OrderRemoteMapper,
+    private val status: Short?
 ) : RemoteMediator<Int, OrderWithDetails>() {
     override suspend fun load(loadType: LoadType, state: PagingState<Int, OrderWithDetails>): MediatorResult {
         return try {
@@ -46,7 +47,7 @@ class OrderRemoteMediator(
                 }
             }
 
-            val response = apiService.getOrders(page = page)
+            val response = apiService.getOrders(page = page, status = status)
             var endOfPaginationReached = false
 
             if (response.code == 200) {

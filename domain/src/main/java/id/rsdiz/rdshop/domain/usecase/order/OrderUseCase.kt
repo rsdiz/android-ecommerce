@@ -16,7 +16,7 @@ class OrderUseCase @Inject constructor(
 ) : IOrderUseCase {
     override suspend fun count() = repository.count()
 
-    override fun getOrders(): Flow<PagingData<Order>> = repository.getOrders()
+    override fun getOrders(status: Short?): Flow<PagingData<Order>> = repository.getOrders(status = status)
 
     override fun getNewestOrders(): Flow<Resource<List<Order>>> = repository.getNewestOrders()
 

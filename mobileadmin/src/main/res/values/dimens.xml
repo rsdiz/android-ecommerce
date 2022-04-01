@@ -19,6 +19,7 @@
     <dimen name="card_view_small_radius">12dp</dimen>
     <dimen name="card_view_medium_radius">16dp</dimen>
     <dimen name="card_view_small_elevation">8dp</dimen>
+    <dimen name="card_view_medium_elevation">12dp</dimen>
     <!--  Layout sizes  -->
     <dimen name="layout_platform_size">52dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->

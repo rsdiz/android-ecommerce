@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import dagger.hilt.android.AndroidEntryPoint
+import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.collect
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.seller.R
@@ -57,11 +58,24 @@ class OrderFragment : Fragment() {
             R.anim.to_bottom_animation
         )
     }
+    private val fromBottomAnimationClear: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.from_bottom_animation
+        )
+    }
+    private val toBottomAnimationClear: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.to_bottom_animation
+        )
+    }
 
     @Inject
     lateinit var orderPagingAdapter: OrderPagingAdapter
 
     private var filterButtonClicked = false
+    private var isFilterActive = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,15 +117,16 @@ class OrderFragment : Fragment() {
             orderPagingAdapter.withLoadStateFooter(
                 FooterPagingAdapter(orderPagingAdapter::retry)
             )
-        collectLast(viewModel.getOrders(), ::setOrders)
+        collectOrders()
+    }
+
+    private suspend fun collectOrders(status: Short? = null) {
+        collectLast(viewModel.getOrders(status), ::setOrders)
     }
 
     private fun setOrderUiState(loadState: LoadState) {
         val uiState = OrderUiState(loadState)
         binding.apply {
-//            loadingIndicator.visibility = uiState.getProgressBarVisibility()
-//            contentOrderGroup.visibility = uiState.getListVisibility()
-//            errorOrderGroup.visibility = uiState.getErrorVisibility()
             loadingIndicator.visibility = uiState.getProgressBarVisibility()
             contentOrderGroup.visibility = View.VISIBLE
             errorOrderGroup.visibility = uiState.getErrorVisibility()
@@ -128,12 +143,43 @@ class OrderFragment : Fragment() {
                 onFabFilterClicked()
             }
             fabFilter1.setOnClickListener {
+                lifecycleScope.launch {
+                    collectOrders(Consts.STATUS_WAITING)
+                    onFabFilterClicked()
+                    isFilterActive = true
+                    setFabClearFilter()
+                }
             }
             fabFilter2.setOnClickListener {
+                lifecycleScope.launch {
+                    collectOrders(Consts.STATUS_PROCESSED)
+                    onFabFilterClicked()
+                    isFilterActive = true
+                    setFabClearFilter()
+                }
             }
             fabFilter3.setOnClickListener {
+                lifecycleScope.launch {
+                    collectOrders(Consts.STATUS_DISPATCH)
+                    onFabFilterClicked()
+                    isFilterActive = true
+                    setFabClearFilter()
+                }
             }
             fabFilter4.setOnClickListener {
+                lifecycleScope.launch {
+                    collectOrders(Consts.STATUS_ARRIVED)
+                    onFabFilterClicked()
+                    isFilterActive = true
+                    setFabClearFilter()
+                }
+            }
+            fabClearFilter.setOnClickListener {
+                lifecycleScope.launch {
+                    collectOrders()
+                    isFilterActive = false
+                    setFabClearFilter()
+                }
             }
         }
     }
@@ -144,6 +190,18 @@ class OrderFragment : Fragment() {
         fabButtonSetClickable()
 
         filterButtonClicked = !filterButtonClicked
+    }
+
+    private fun setFabClearFilter() {
+        binding.apply {
+            if (isFilterActive) {
+                fabClearFilter.visibility = View.VISIBLE
+                fabClearFilter.startAnimation(fromBottomAnimationClear)
+            } else {
+                fabClearFilter.visibility = View.INVISIBLE
+                fabClearFilter.startAnimation(toBottomAnimationClear)
+            }
+        }
     }
 
     private fun setFabFilterVisibility(buttonClicked: Boolean) {

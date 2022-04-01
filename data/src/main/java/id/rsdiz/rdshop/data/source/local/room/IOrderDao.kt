@@ -44,7 +44,7 @@ interface IOrderDao : IBaseDao<OrderEntity> {
 
     @Transaction
     @Query("SELECT * FROM orders WHERE status = :status")
-    fun getOrderByStatus(status: Short): Flow<List<OrderWithDetails>>
+    fun getOrderByStatus(status: Short): PagingSource<Int, OrderWithDetails>
 
     @Transaction
     @Query("SELECT * FROM detail_orders WHERE detailId = :detailId")

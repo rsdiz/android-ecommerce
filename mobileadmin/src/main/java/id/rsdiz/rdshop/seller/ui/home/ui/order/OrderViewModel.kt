@@ -1,7 +1,6 @@
 package id.rsdiz.rdshop.seller.ui.home.ui.order
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,8 +13,9 @@ import javax.inject.Inject
 class OrderViewModel @Inject constructor(
     private val orderUseCase: OrderUseCase
 ) : ViewModel() {
-    fun getOrders() = orderUseCase.getOrders()
-        .map { pagingData ->
-            pagingData.map { order -> OrderItemUIState(order) }
-        }.cachedIn(viewModelScope)
+    fun getOrders(status: Short?) =
+        orderUseCase.getOrders(status)
+            .map { pagingData ->
+                pagingData.map { order -> OrderItemUIState(order) }
+            }.cachedIn(viewModelScope)
 }

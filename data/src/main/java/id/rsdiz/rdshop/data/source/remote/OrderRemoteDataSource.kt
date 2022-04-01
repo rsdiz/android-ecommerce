@@ -43,7 +43,7 @@ class OrderRemoteDataSource @Inject constructor(
     suspend fun getOrders(size: Int = 10) =
         flow {
             try {
-                val response = apiService.getOrders(page = 1, size = size)
+                val response = apiService.getOrders(page = 1, size = size, status = null)
                 if (response.data != null) {
                     when (response.code) {
                         200 -> emit(
