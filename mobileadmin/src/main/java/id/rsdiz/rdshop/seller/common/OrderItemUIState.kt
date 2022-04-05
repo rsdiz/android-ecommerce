@@ -14,7 +14,9 @@ data class OrderItemUIState(
 
     fun getOrderMonth() = order.date.month.toString().slice(0..2)
 
-    fun getFullDate() = StringBuilder(getOrderDate()).append(getOrderMonth()).append(getOrderYear()).toString()
+    fun getOrderMonthNumber() = order.date.monthValue
+
+    fun getFullDate() = StringBuilder(getOrderDate()).append(" ").append(getOrderMonth()).append(" ").append(getOrderYear()).toString()
 
     fun getOrderTotal() = order.amount.toRupiah()
 
@@ -22,7 +24,14 @@ data class OrderItemUIState(
 
     fun getOrderTime() = order.date.stringTime()
 
-    fun getSimpleOrderId() = order.orderId.split('-')[4]
+    fun getSimpleOrderId() = StringBuilder("INV")
+        .append('/')
+        .append(getOrderYear())
+        .append(getOrderMonthNumber())
+        .append(getOrderDate())
+        .append('/')
+        .append(order.orderId.split('-')[4])
+        .toString()
 
     fun getOriginalOrderId() = order.orderId
 
@@ -44,7 +53,9 @@ data class OrderItemUIState(
 
     fun getAddressPostalCode() = order.shipAddress.split('|')[2]
 
-    fun getTrackingNumber() = order.trackingNumber
+    fun getTrackingNumber() = order.trackingNumber?.split('|')?.get(0)
+
+    fun getTrackingCourier() = order.trackingNumber?.split('|')?.get(1)
 
     fun getPhone() = order.phone
 

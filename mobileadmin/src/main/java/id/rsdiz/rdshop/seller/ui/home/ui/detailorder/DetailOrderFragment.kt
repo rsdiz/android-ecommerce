@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -140,6 +142,13 @@ class DetailOrderFragment : Fragment() {
                 .show()
         }
 
+        binding.rvDetailOrder.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
+            adapter = productListAdapter
+        }
+
         for (orderDetail in list) {
             collectLast(viewModel.getProduct(orderDetail.productId)) { resource ->
                 when (resource) {
@@ -227,12 +236,30 @@ class DetailOrderFragment : Fragment() {
                     iconOrderStatus.setImageResource(R.drawable.ic_baseline_delivery_dining_24)
                     buttonUpdateStatus.text = "Lacak Pengiriman"
                     buttonUpdateStatus.setOnClickListener {
+                        if (orderItemUiState.getTrackingNumber() != null) {
+                            val directions =
+                                DetailOrderFragmentDirections.actionDetailOrderFragmentToTrackingFragment(
+                                    orderItemUiState.getTrackingNumber()!!,
+                                    orderItemUiState.getTrackingCourier()!!,
+                                    orderItemUiState.getOrderStatusKey().toInt()
+                                )
+                            view?.findNavController()?.navigate(directions)
+                        }
                     }
                 }
                 Consts.STATUS_ARRIVED -> {
                     iconOrderStatus.setImageResource(R.drawable.ic_baseline_home_work_24)
                     buttonUpdateStatus.text = "Detail Pengiriman"
                     buttonUpdateStatus.setOnClickListener {
+                        if (orderItemUiState.getTrackingNumber() != null) {
+                            val directions =
+                                DetailOrderFragmentDirections.actionDetailOrderFragmentToTrackingFragment(
+                                    orderItemUiState.getTrackingNumber()!!,
+                                    orderItemUiState.getTrackingCourier()!!,
+                                    orderItemUiState.getOrderStatusKey().toInt()
+                                )
+                            view?.findNavController()?.navigate(directions)
+                        }
                     }
                 }
             }

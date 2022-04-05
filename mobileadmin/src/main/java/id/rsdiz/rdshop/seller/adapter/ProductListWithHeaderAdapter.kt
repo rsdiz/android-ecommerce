@@ -49,11 +49,25 @@ class ProductListWithHeaderAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is VHProduct) {
-            holder.bind(data[position])
+            holder.bind(getItem(position))
         }
     }
 
-    override fun getItemCount(): Int = data.size
+    private fun getItem(position: Int): OrderDetailItemUiState {
+        return data[position - 1]
+    }
+
+    private fun isPositionHeader(position: Int): Boolean {
+        return position == 0
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (isPositionHeader(position))
+            return TYPE_HEADER
+        return TYPE_ITEM
+    }
+
+    override fun getItemCount(): Int = data.size + 1
 
     inner class VHProduct(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -68,7 +82,7 @@ class ProductListWithHeaderAdapter(
 
         init {
             binding.root.setOnClickListener {
-                onItemClickListener.invoke(data[bindingAdapterPosition])
+                onItemClickListener.invoke(getItem(bindingAdapterPosition))
             }
         }
     }
