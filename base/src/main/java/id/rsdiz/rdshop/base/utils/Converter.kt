@@ -29,7 +29,7 @@ fun OffsetDateTime.stringTime(): String =
     SimpleDateFormat(FormatPattern.LOCAL_TIME, Locale.getDefault()).format(this.toDate())
 
 fun Int.toRupiah(): String =
-    NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(this)
+    NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(this) + ",-"
 
 /**
  * The Format of default pattern date will use in the apps
