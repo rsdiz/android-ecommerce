@@ -64,12 +64,11 @@ class DashboardFragment : Fragment() {
         }
 
         newestOrderAdapter.setOnItemClickListener {
-            Toast.makeText(
-                requireContext(),
-                "ITEM ${it.getOrderName()} DI KLIK",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            val directions =
+                DashboardFragmentDirections.actionDashboardFragmentToDetailOrderFragment(
+                    it.getOriginalOrderId()
+                )
+            view.findNavController().navigate(directions)
         }
 
         dashboardMenuAdapter.setOnItemClickListener {
@@ -172,11 +171,16 @@ class DashboardFragment : Fragment() {
                 Log.d("RDSHOP-DEBUG", "onViewCreated: REFRESHING")
                 lifecycleScope.launch {
                     observeMenu(viewModel.countData())
-                    observeOrder(viewModel.newestOrder)
+                    viewModel.refreshOrder()
                     content.isRefreshing = false
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        viewModel.newestOrder.removeObservers(viewLifecycleOwner)
+        super.onDestroyView()
     }
 
     private fun observeMenu(list: List<Resource<Int>>) {
@@ -220,8 +224,6 @@ class DashboardFragment : Fragment() {
     }
 
     private fun observeOrder(livedata: LiveData<Resource<List<Order>>>) {
-//        viewModel.refreshOrder()
-
         livedata.observe(viewLifecycleOwner) { resources ->
             when (resources) {
                 is Resource.Success -> {

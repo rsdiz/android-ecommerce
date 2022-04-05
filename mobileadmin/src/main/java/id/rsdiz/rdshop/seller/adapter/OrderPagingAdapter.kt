@@ -28,7 +28,7 @@ class OrderPagingAdapter @Inject constructor() :
                 itemOrderDate.text = orderItemUIState.getOrderDate()
                 itemOrderMonth.text = orderItemUIState.getOrderMonth()
                 itemName.text = orderItemUIState.getOrderName()
-                itemStatus.text = orderItemUIState.getOrderStatus()
+                itemStatus.text = orderItemUIState.getOrderStatusValue()
             }
         }
 

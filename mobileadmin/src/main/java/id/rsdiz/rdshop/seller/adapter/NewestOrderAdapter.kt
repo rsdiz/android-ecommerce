@@ -3,7 +3,6 @@ package id.rsdiz.rdshop.seller.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import id.rsdiz.rdshop.base.utils.toRupiah
 import id.rsdiz.rdshop.data.model.Order
 import id.rsdiz.rdshop.seller.common.OrderItemUIState
 import id.rsdiz.rdshop.seller.databinding.ItemOrderBinding
@@ -36,7 +35,7 @@ class NewestOrderAdapter : RecyclerView.Adapter<NewestOrderAdapter.ViewHolder>()
                 itemOrderDate.text = orderItemUIState.getOrderDate()
                 itemOrderMonth.text = orderItemUIState.getOrderMonth()
                 itemName.text = orderItemUIState.getOrderName()
-                itemStatus.text = orderItemUIState.getOrderStatus()
+                itemStatus.text = orderItemUIState.getOrderStatusValue()
             }
         }
 

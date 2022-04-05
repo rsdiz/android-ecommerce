@@ -17,4 +17,5 @@
     <color name="alto">#FFDEDEDE</color>
     <color name="mine_shaft">#FF212121</color>
     <color name="pomegranate">#F44336</color>
+    <color name="transparent">#00000000</color>
 </resources>

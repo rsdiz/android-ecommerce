@@ -3,4 +3,28 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="string_count_product">Order %1$d Jenis Produk</string>
+    <string name="string_order_id">ID: #%1$s</string>
+    <string name="label_order_date">Waktu dan Tanggal Pemesanan</string>
+    <string name="string_order_date">%1$s %2$s (%3$s)</string>
+    <string name="label_shipping_cost">Ongkos Kirim</string>
+    <string name="label_total">Total</string>
+    <string name="label_order_address">Alamat Penerima</string>
+    <string name="string_order_address">%1$s\n%2$s\n%3$s (%4$s)</string>
+    <string name="string_phone_number">Telp. %1$s</string>
+    <string name="label_order_status">Status Pesanan</string>
+    <string-array name="courier">
+        <item>JNE Express</item>
+        <item>J&amp;T Express</item>
+        <item>SiCepat</item>
+        <item>Ninja Express</item>
+        <item>ID Express</item>
+        <item>Lion Parcel</item>
+        <item>Pos Indonesia</item>
+        <item>Wahana</item>
+        <item>TIKI</item>
+        <item>AnterAja</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

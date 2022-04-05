@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import dagger.hilt.android.AndroidEntryPoint
@@ -100,11 +100,10 @@ class OrderFragment : Fragment() {
 
     private suspend fun setupOrderPagingAdapter() {
         orderPagingAdapter.setOnItemClickListener {
-            Toast.makeText(
-                requireContext(),
-                "ORDER #${it.getSimpleOrderId()} CLICKED!",
-                Toast.LENGTH_SHORT
-            ).show()
+            val directions = OrderFragmentDirections.actionOrderFragmentToDetailOrderFragment(
+                it.getOriginalOrderId()
+            )
+            view?.findNavController()?.navigate(directions)
         }
 
         collect(
@@ -252,5 +251,10 @@ class OrderFragment : Fragment() {
                 fabFilter4.isClickable = false
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

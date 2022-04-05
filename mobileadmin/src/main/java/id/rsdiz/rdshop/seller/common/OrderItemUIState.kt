@@ -14,7 +14,11 @@ data class OrderItemUIState(
 
     fun getOrderMonth() = order.date.month.toString().slice(0..2)
 
-    fun getOrderTotal() = order.amount.toRupiah() + ",-"
+    fun getFullDate() = StringBuilder(getOrderDate()).append(getOrderMonth()).append(getOrderYear()).toString()
+
+    fun getOrderTotal() = order.amount.toRupiah()
+
+    fun getShippingCost() = order.shippingCost.toRupiah()
 
     fun getOrderTime() = order.date.stringTime()
 
@@ -24,7 +28,7 @@ data class OrderItemUIState(
 
     fun getOrderName() = order.shipName
 
-    fun getOrderStatus() = when (order.status) {
+    fun getOrderStatusValue() = when (order.status) {
         0.toShort() -> "Menunggu Konfirmasi"
         1.toShort() -> "Pesanan Diproses"
         2.toShort() -> "Sedang Dikirim"
@@ -32,7 +36,13 @@ data class OrderItemUIState(
         else -> "Tidak Diketahui"
     }
 
-    fun getOrderAddress() = order.shipAddress
+    fun getOrderStatusKey() = order.status
+
+    fun getAddressStreetName() = order.shipAddress.split('|')[0]
+
+    fun getAddressCountry() = order.shipAddress.split('|')[1]
+
+    fun getAddressPostalCode() = order.shipAddress.split('|')[2]
 
     fun getTrackingNumber() = order.trackingNumber
 
