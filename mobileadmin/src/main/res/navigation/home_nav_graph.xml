@@ -39,5 +39,25 @@
             app:argType="id.rsdiz.rdshop.data.model.Order"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_detailOrderFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment"
+            app:launchSingleTop="true" >
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/trackingFragment"
+        android:name="id.rsdiz.rdshop.seller.ui.home.ui.tracking.TrackingFragment"
+        android:label="fragment_tracking"
+        tools:layout="@layout/fragment_tracking" >
+        <argument
+            android:name="trackingNumber"
+            app:argType="string" />
+        <argument
+            android:name="trackingCourier"
+            app:argType="string" />
+        <argument
+            android:name="status"
+            app:argType="integer" />
     </fragment>
 </navigation>
