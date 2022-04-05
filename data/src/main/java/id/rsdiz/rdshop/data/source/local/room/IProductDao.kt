@@ -23,7 +23,7 @@ interface IProductDao : IBaseDao<ProductEntity> {
 
     @Transaction
     @Query("SELECT * FROM products WHERE productId = :productId")
-    fun getProductById(productId: String): Flow<ProductWithImages>
+    fun getProductById(productId: String): Flow<ProductWithImages?>
 
     @Transaction
     @Query("SELECT * FROM products WHERE categoryId = :categoryId")

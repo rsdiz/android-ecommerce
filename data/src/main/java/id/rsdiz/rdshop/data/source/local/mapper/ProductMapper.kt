@@ -1,11 +1,11 @@
 package id.rsdiz.rdshop.data.source.local.mapper
 
+import id.rsdiz.rdshop.data.model.Product
+import id.rsdiz.rdshop.data.model.ProductImage
 import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductImageEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.mapper.base.DataMapper
-import id.rsdiz.rdshop.data.model.Product
-import id.rsdiz.rdshop.data.model.ProductImage
 import javax.inject.Inject
 
 /**

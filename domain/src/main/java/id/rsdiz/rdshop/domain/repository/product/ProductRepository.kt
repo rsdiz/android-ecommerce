@@ -59,7 +59,7 @@ class ProductRepository @Inject constructor(
         object : NetworkBoundResource<Product, ProductResponse>() {
             override fun loadFromDB(): Flow<Product?> =
                 localDataSource.getProductById(productId = productId).map {
-                    localDataSource.mapper.mapFromEntity(it)
+                    it?.let { data -> localDataSource.mapper.mapFromEntity(data) }
                 }
 
             override fun shouldFetch(data: Product?): Boolean = data?.productId.isNullOrEmpty()
@@ -117,7 +117,7 @@ class ProductRepository @Inject constructor(
         when (val response = remoteDataSource.deleteProduct(productId = productId).first()) {
             is ApiResponse.Success -> {
                 val data = localDataSource.getProductById(productId).first()
-                data.let { localDataSource.delete(it) }
+                data?.let { localDataSource.delete(it) }
 
                 Resource.Success(response.data!!)
             }
@@ -160,7 +160,7 @@ class ProductRepository @Inject constructor(
         ) {
             is ApiResponse.Success -> {
                 val data = localDataSource.getProductById(productId).first()
-                data.let { localDataSource.delete(it) }
+                data?.let { localDataSource.delete(it) }
 
                 Resource.Success(response.data!!)
             }
