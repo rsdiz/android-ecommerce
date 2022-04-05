@@ -37,5 +37,5 @@ fun Int.toRupiah(): String =
 object FormatPattern {
     const val DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssX"
     const val LOCAL_DATE = "dd MMMM yyyy"
-    const val LOCAL_TIME = "HH:mm:ss"
+    const val LOCAL_TIME = "HH:mm"
 }
