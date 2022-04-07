@@ -83,6 +83,11 @@ class DashboardFragment : Fragment() {
                         DashboardFragmentDirections.actionDashboardFragmentToProductFragment()
                     view.findNavController().navigate(directions)
                 }
+                "Kategori" -> {
+                    val directions =
+                        DashboardFragmentDirections.actionDashboardFragmentToCategoryFragment()
+                    view.findNavController().navigate(directions)
+                }
                 else ->
                     Toast.makeText(requireContext(), "MENU ${it.title} DI KLIK", Toast.LENGTH_SHORT)
                         .show()

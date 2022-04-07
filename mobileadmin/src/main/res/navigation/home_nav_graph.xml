@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_productFragment"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -68,4 +71,9 @@
         android:name="id.rsdiz.rdshop.seller.ui.home.ui.product.ProductFragment"
         android:label="fragment_product"
         tools:layout="@layout/fragment_product" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="id.rsdiz.rdshop.seller.ui.home.ui.category.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
 </navigation>
