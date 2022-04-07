@@ -19,9 +19,10 @@ import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.seller.R
 import id.rsdiz.rdshop.seller.adapter.FooterPagingAdapter
 import id.rsdiz.rdshop.seller.adapter.OrderPagingAdapter
+import id.rsdiz.rdshop.seller.common.LoadStateUi
 import id.rsdiz.rdshop.seller.common.OrderItemUIState
-import id.rsdiz.rdshop.seller.common.OrderUiState
 import id.rsdiz.rdshop.seller.databinding.FragmentOrderBinding
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -120,15 +121,41 @@ class OrderFragment : Fragment() {
     }
 
     private suspend fun collectOrders(status: Short? = null) {
-        collectLast(viewModel.getOrders(status), ::setOrders)
+        collectLast(viewModel.getOrders(status).cancellable(), ::setOrders)
     }
 
     private fun setOrderUiState(loadState: LoadState) {
-        val uiState = OrderUiState(loadState)
+        val ui = LoadStateUi(loadState)
         binding.apply {
-            loadingIndicator.visibility = uiState.getProgressBarVisibility()
-            contentOrderGroup.visibility = View.VISIBLE
-            errorOrderGroup.visibility = uiState.getErrorVisibility()
+            val isVisible = ui.getListVisibility()
+
+            setVisibilityContent(isVisible, ui.getProgressBarVisibility() == View.VISIBLE)
+
+            if (ui.getErrorVisibility() == View.VISIBLE) {
+                errorText.text = ui.getErrorMessage()
+            }
+        }
+    }
+
+    private fun setVisibilityContent(visibility: Int, isLoading: Boolean = false) {
+        binding.apply {
+            when (visibility) {
+                View.VISIBLE -> {
+                    layoutContent.visibility = visibility
+                    layoutLoading.visibility = View.GONE
+                    layoutError.visibility = View.GONE
+                }
+                View.GONE -> {
+                    layoutContent.visibility = visibility
+                    if (isLoading) {
+                        layoutLoading.visibility = View.VISIBLE
+                        layoutError.visibility = View.GONE
+                    } else {
+                        layoutLoading.visibility = View.GONE
+                        layoutError.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
     }
 

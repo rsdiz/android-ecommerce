@@ -20,19 +20,8 @@
         app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"
         app:titleTextColor="@color/white" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/loading_indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="@dimen/card_view_small_elevation"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/content_order_group"
+        android:id="@+id/layout_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -81,59 +70,77 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/error_order_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="label_error_title,label_error_message,label_error_button" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/label_error_title"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_loading"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin_padding_size_medium"
-        android:fontFamily="@font/capriola"
-        android:text="Ups, Terjadi Kendala!"
-        android:textAlignment="center"
-        android:textColor="@color/pomegranate"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/label_error_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin_padding_size_small"
-        android:fontFamily="@font/capriola"
-        android:text="Anda menemui beberapa kendala.\nTetap tenang dan coba kembali"
-        android:textAlignment="center"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label_error_title"
-        app:layout_constraintWidth_percent="0.7" />
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/blue_wood"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/label_error_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_padding_size_medium"
-        android:fontFamily="@font/capriola"
-        android:text="Coba Lagi"
-        android:textSize="@dimen/text_size_micro"
-        app:backgroundTint="@color/pomegranate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label_error_message"
-        app:layout_constraintWidth_percent="0.7" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:fontFamily="@font/capriola"
+            android:text="Loading"
+            android:textColor="@color/white" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:text="Oh tidak, Terjadi Masalah!"
+            android:textSize="@dimen/text_size_large" />
+
+        <TextView
+            android:textColor="@color/alto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="Sepertinya ada masalah saat mengambil data,\ntetap tenang dan coba lagi nanti."
+            android:textAlignment="center" />
+
+        <TextView
+            android:textColor="@color/hippie_blue"
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="[VALUE ERROR]"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_micro" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/label_error_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:fontFamily="@font/capriola"
+            android:text="Coba Lagi"
+            android:textSize="@dimen/text_size_micro"
+            app:backgroundTint="@color/pomegranate" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_filter"

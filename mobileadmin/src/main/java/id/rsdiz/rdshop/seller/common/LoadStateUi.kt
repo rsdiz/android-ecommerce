@@ -3,7 +3,7 @@ package id.rsdiz.rdshop.seller.common
 import androidx.paging.LoadState
 import id.rsdiz.rdshop.seller.common.base.BaseUiState
 
-data class OrderUiState(
+data class LoadStateUi(
     private val loadState: LoadState
 ) : BaseUiState() {
     fun getProgressBarVisibility() = getViewVisibility(isVisible = loadState is LoadState.Loading)
