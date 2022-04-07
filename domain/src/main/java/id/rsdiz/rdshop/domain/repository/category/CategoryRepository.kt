@@ -47,7 +47,7 @@ class CategoryRepository @Inject constructor(
                 remoteDataSource.getCategories()
 
             override suspend fun saveCallResult(data: CategoriesResponse) =
-                remoteDataSource.mapper.mapRemoteToEntities(data.data).let {
+                remoteDataSource.mapper.mapRemoteToEntities(data.results).let {
                     localDataSource.insertAll(it)
                 }
         }.asFlow() as Flow<Resource<List<Category>>>

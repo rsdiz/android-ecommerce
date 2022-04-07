@@ -7,7 +7,8 @@ import id.rsdiz.rdshop.data.source.remote.response.IBaseResponse
  * Model response for categories
  */
 data class CategoriesResponse(
-    val data: List<CategoryResponse>
+    val count: Int,
+    val results: List<CategoryResponse>
 )
 
 /**
