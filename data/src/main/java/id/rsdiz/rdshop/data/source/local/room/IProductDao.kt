@@ -42,5 +42,5 @@ interface IProductDao : IBaseDao<ProductEntity> {
     ): Flow<List<ProductWithImages>>
 
     @Query("DELETE FROM products")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

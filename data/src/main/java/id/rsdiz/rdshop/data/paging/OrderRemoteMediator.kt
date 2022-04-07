@@ -58,6 +58,7 @@ class OrderRemoteMediator(
                         orderDao.deleteAll()
                         orderRemoteKeysDao.deleteAll()
                     }
+
                     var previous: Int? = null
                     var next: Int? = null
 
@@ -80,12 +81,10 @@ class OrderRemoteMediator(
 
                     orderRemoteKeysDao.insertAll(keys)
 
-                    val orderList = mutableListOf<OrderEntity>()
                     mapper.mapRemoteToEntities(data.results).map {
-                        orderList.add(it.order)
+                        orderDao.insert(it.order)
                         detailOrderDao.insertAll(it.details)
                     }
-                    orderDao.insertAll(orderList)
                 }
             }
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

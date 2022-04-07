@@ -4,7 +4,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductRemoteKeysEntity
 import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import id.rsdiz.rdshop.data.source.local.room.IProductDao
@@ -60,6 +59,7 @@ class ProductRemoteMediator(
                         productDao.deleteAll()
                         productRemoteKeysDao.deleteAll()
                     }
+
                     var previous: Int? = null
                     var next: Int? = null
 
@@ -82,12 +82,10 @@ class ProductRemoteMediator(
 
                     productRemoteKeysDao.insertAll(keys)
 
-                    val productList = mutableListOf<ProductEntity>()
                     mapper.mapRemoteToEntities(data.results).map {
-                        productList.add(it.product)
+                        productDao.insert(it.product)
                         productImageDao.insertAll(it.images)
                     }
-                    productDao.insertAll(productList)
                 }
             }
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

@@ -51,5 +51,5 @@ interface IOrderDao : IBaseDao<OrderEntity> {
     fun getOrderDetailById(detailId: String): Flow<DetailAndProduct>
 
     @Query("DELETE FROM orders")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
