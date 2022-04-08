@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class DashboardMenu(
     val title: String,
     val imageResId: Int,
-    var count: Int
+    var count: Int = 0
 ) : Parcelable

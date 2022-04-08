@@ -89,6 +89,8 @@ class OrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setVisibilityContent(View.GONE, true)
+
         binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }

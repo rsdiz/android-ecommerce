@@ -264,6 +264,7 @@
         android:background="?attr/colorSurface"
         android:gravity="center"
         android:orientation="vertical"
+        android:paddingBottom="140dp"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -276,7 +277,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/capriola"
-            android:text="Loading..."
+            android:text="Memuat Data..."
             android:textSize="@dimen/text_size_large" />
 
         <TextView
@@ -284,7 +285,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_small"
             android:fontFamily="@font/capriola"
-            android:text="Terima kasih telah menggunakan\nAplikasi Rdshop."
+            android:text="Mohon Tunggu Sebentar"
             android:textAlignment="center" />
 
     </LinearLayout>

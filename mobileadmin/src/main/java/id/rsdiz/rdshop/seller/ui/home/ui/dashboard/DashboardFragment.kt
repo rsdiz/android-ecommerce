@@ -3,7 +3,6 @@ package id.rsdiz.rdshop.seller.ui.home.ui.dashboard
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,11 +56,7 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        lifecycleScope.launch {
-            observeMenu(viewModel.countData())
-            observeOrder(viewModel.newestOrder)
-        }
+        updateUiLoadingVisibility(false)
 
         newestOrderAdapter.setOnItemClickListener {
             val directions =
@@ -161,7 +156,8 @@ class DashboardFragment : Fragment() {
             }
 
             rvDashboardMenu.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                layoutManager =
+                    GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
                 setHasFixedSize(true)
                 adapter = dashboardMenuAdapter
             }
@@ -178,13 +174,17 @@ class DashboardFragment : Fragment() {
             }
 
             content.setOnRefreshListener {
-                Log.d("RDSHOP-DEBUG", "onViewCreated: REFRESHING")
                 lifecycleScope.launch {
                     observeMenu(viewModel.countData())
                     viewModel.refreshOrder()
                     content.isRefreshing = false
                 }
             }
+        }
+
+        lifecycleScope.launch {
+            observeMenu(viewModel.countData())
+            observeOrder(viewModel.newestOrder)
         }
     }
 
@@ -194,28 +194,22 @@ class DashboardFragment : Fragment() {
     }
 
     private fun observeMenu(list: List<Resource<Int>>) {
-        val titleList = listOf("Akun", "Kategori", "Produk", "Order")
-        val imageResIdList = listOf(
-            R.drawable.ic_baseline_group_24,
-            R.drawable.ic_dashboard_black_24dp,
-            R.drawable.ic_baseline_layers_24,
-            R.drawable.ic_baseline_receipt_24
+        val listMenu: List<DashboardMenu> = listOf(
+            DashboardMenu("Akun", R.drawable.ic_baseline_group_24),
+            DashboardMenu("Kategori", R.drawable.ic_dashboard_black_24dp),
+            DashboardMenu("Produk", R.drawable.ic_baseline_layers_24),
+            DashboardMenu("Order", R.drawable.ic_baseline_receipt_24)
         )
 
         var index = 0
         var isFetchedAll = false
         var errorMessage = ""
-        val listMenu = mutableListOf<DashboardMenu>()
+
         list.forEach { resources ->
             when (resources) {
                 is Resource.Success -> {
                     resources.data?.let { count ->
-                        val dashboardMenu = DashboardMenu(
-                            title = titleList[index],
-                            imageResId = imageResIdList[index],
-                            count = count
-                        )
-                        listMenu.add(dashboardMenu)
+                        listMenu[index].count = count
                         isFetchedAll = true
                     }
                 }
@@ -229,7 +223,8 @@ class DashboardFragment : Fragment() {
             }
             index++
         }
-        dashboardMenuAdapter.refreshMenu(listMenu)
+
+        dashboardMenuAdapter.submitData(listMenu)
         updateUiLoadingVisibility(isFetchedAll, errorMessage)
     }
 

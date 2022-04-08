@@ -3,36 +3,31 @@ package id.rsdiz.rdshop.seller.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import id.rsdiz.rdshop.seller.databinding.ItemDashboardMenuBinding
 import id.rsdiz.rdshop.seller.common.DashboardMenu
+import id.rsdiz.rdshop.seller.databinding.ItemDashboardMenuBinding
 
 class DashboardMenuAdapter : RecyclerView.Adapter<DashboardMenuAdapter.ViewHolder>() {
-    private val mutableListMenu = mutableListOf<DashboardMenu>()
+    private var mutableListMenu = mutableListOf<DashboardMenu>()
     private var onItemClick: ((DashboardMenu) -> Unit)? = null
 
-    fun refreshMenu(list: List<DashboardMenu>) {
-        with(mutableListMenu) {
-            clear()
-            addAll(list)
-        }
+    fun submitData(list: List<DashboardMenu>) {
+        mutableListMenu.clear()
+        mutableListMenu.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun addMenu(index: Int, dashboardMenu: DashboardMenu) {
-        with(mutableListMenu) {
-            add(index, dashboardMenu)
-            notifyItemInserted(index)
-        }
+    fun insertData(dashboardMenu: DashboardMenu) {
+        val position = itemCount
+        mutableListMenu.add(position, dashboardMenu)
+        notifyItemInserted(position)
     }
 
-    fun updateMenu(index: Int, newDashboardMenu: DashboardMenu) {
-        with(mutableListMenu) {
-            set(index, newDashboardMenu)
-            notifyItemChanged(index)
-        }
+    fun updateData(index: Int, newDashboardMenu: DashboardMenu) {
+        mutableListMenu[index] = newDashboardMenu
+        notifyItemChanged(index)
     }
 
-    fun isMenuAvailable(menu: DashboardMenu) =
+    fun isDataAvailable(menu: DashboardMenu) =
         mutableListMenu.find {
             it.title == menu.title
         } != null

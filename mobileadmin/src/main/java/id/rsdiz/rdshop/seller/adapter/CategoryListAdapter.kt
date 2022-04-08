@@ -15,9 +15,8 @@ class CategoryListAdapter @Inject constructor() :
     fun submitData(categories: List<Category>) {
         mutableCategories.clear()
         categories.map {
-            mutableCategories.add(it)
+            insertData(it)
         }
-        notifyDataSetChanged()
     }
 
     fun insertData(category: Category) {

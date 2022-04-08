@@ -24,7 +24,7 @@
         android:id="@+id/layout_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:constraint_referenced_ids="notification,content,fab_filter" />
 
     <TextView
@@ -76,21 +76,21 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            app:indicatorColor="@color/blue_wood"/>
+            app:indicatorColor="@color/blue_wood" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_medium"
             android:fontFamily="@font/capriola"
-            android:text="Loading"
-            android:textColor="@color/white" />
+            android:text="Memuat Data..."
+            android:textSize="@dimen/text_size_small" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -103,24 +103,23 @@
         android:visibility="gone">
 
         <TextView
-            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/capriola"
             android:text="Oh tidak, Terjadi Masalah!"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_size_large" />
 
         <TextView
-            android:textColor="@color/alto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_small"
             android:fontFamily="@font/capriola"
             android:text="Sepertinya ada masalah saat mengambil data,\ntetap tenang dan coba lagi nanti."
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/alto" />
 
         <TextView
-            android:textColor="@color/hippie_blue"
             android:id="@+id/error_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -128,6 +127,7 @@
             android:fontFamily="@font/capriola"
             android:text="[VALUE ERROR]"
             android:textAlignment="center"
+            android:textColor="@color/hippie_blue"
             android:textSize="@dimen/text_size_micro" />
 
         <com.google.android.material.button.MaterialButton
@@ -238,6 +238,7 @@
         android:focusable="true"
         android:text="Hapus Filter"
         android:textColor="@color/white"
+        android:visibility="invisible"
         app:backgroundTint="@color/pomegranate"
         app:elevation="@dimen/card_view_small_elevation"
         app:icon="@drawable/ic_baseline_close_24"
@@ -245,7 +246,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/fab_filter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="@+id/fab_filter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
