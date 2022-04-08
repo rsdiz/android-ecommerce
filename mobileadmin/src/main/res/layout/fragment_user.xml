@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_reverse_bluewood_no_radius"
     android:orientation="vertical"
-    tools:context=".ui.home.ui.category.CategoryFragment">
+    tools:context=".ui.home.ui.user.UserFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -14,7 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/transparent"
         app:navigationIcon="@drawable/ic_arrow_left"
-        app:title="Kelola Kategori"
+        app:title="Kelola Akun"
         app:titleCentered="true"
         app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"
         app:titleTextColor="@color/white" />
@@ -26,7 +26,7 @@
         android:visibility="visible">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refresh_category"
+            android:id="@+id/refresh_user"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -36,30 +36,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_category_list"
+                android:id="@+id/rv_user_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="8"
-                tools:listitem="@layout/item_category_list" />
+                tools:listitem="@layout/item_user_list" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_add_product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:text="Tambah Kategori"
-            android:textColor="@color/black"
-            app:backgroundTint="@color/web_orange"
-            app:elevation="@dimen/card_view_medium_elevation"
-            app:icon="@drawable/ic_baseline_add_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

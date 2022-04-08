@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="?attr/colorBackground"
+    app:cardCornerRadius="@dimen/card_view_medium_radius"
+    app:cardElevation="@dimen/cardview_default_elevation"
+    app:cardUseCompatPadding="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:ellipsize="end"
+            android:fontFamily="@font/capriola"
+            android:gravity="start"
+            android:lines="1"
+            android:paddingVertical="@dimen/margin_padding_size_micro"
+            android:textAlignment="textStart"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Full Name" />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+            android:layout_marginBottom="@dimen/margin_padding_size_small"
+            android:ellipsize="end"
+            android:fontFamily="@font/capriola"
+            android:gravity="start"
+            android:lines="1"
+            android:paddingVertical="@dimen/margin_padding_size_micro"
+            android:textAlignment="textStart"
+            android:textColor="?attr/colorOnBackgroundDarker"
+            android:textSize="@dimen/text_size_small"
+            tools:text="username" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

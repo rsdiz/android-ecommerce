@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.seller.databinding.FragmentTrackingBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TrackingFragment : Fragment() {
@@ -43,9 +46,18 @@ class TrackingFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
 
-            webView.loadUrl(url)
-            webView.settings.javaScriptEnabled = true
-            webView.webViewClient = WebViewClient()
+            lifecycleScope.launch {
+                webView.settings.javaScriptEnabled = true
+                webView.webViewClient = WebViewClient()
+
+                webView.loadUrl(url).let {
+                    delay(3000L)
+                    webView.loadUrl("javascript:setExp('${dataArgs.trackingCourier}');")
+                    webView.loadUrl("javascript:doCheckR();")
+                    delay(2000L)
+                    webView.loadUrl("#collapseTwo")
+                }
+            }
         }
     }
 

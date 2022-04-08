@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="250dp"
     android:layout_height="130dp"
-    app:cardBackgroundColor="?attr/colorBackground"
     android:layout_gravity="center_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="?attr/colorBackground"
     app:cardCornerRadius="@dimen/card_view_small_radius"
     app:cardElevation="@dimen/cardview_default_elevation"
     app:cardUseCompatPadding="true">
@@ -25,12 +27,12 @@
             android:id="@+id/product_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="?attr/colorOnBackground"
             android:layout_margin="@dimen/margin_padding_size_small"
             android:ellipsize="end"
             android:gravity="center"
             android:lines="3"
             android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
             tools:text="Product Name" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

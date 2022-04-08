@@ -116,7 +116,8 @@ class DetailOrderFragment : Fragment() {
             textOrderDate.text = getString(
                 R.string.string_order_date,
                 orderItemUiState.getOrderTime(),
-                timeZoneInitials,
+                // timeZoneInitials,
+                "",
                 orderItemUiState.getFullDate()
             )
             textShippingCost.text = orderItemUiState.getShippingCost()
@@ -131,12 +132,12 @@ class DetailOrderFragment : Fragment() {
             textOrderPhone.text =
                 getString(R.string.string_phone_number, orderItemUiState.getPhone())
 
-            setStatusUi(orderItemUiState)
             setRvDetailOrder(orderItemUiState.getOrderDetail())
+            setStatusUi(orderItemUiState)
         }
     }
 
-    private suspend fun setRvDetailOrder(list: List<OrderDetail>) {
+    private fun setRvDetailOrder(list: List<OrderDetail>) {
         productListAdapter = ProductListWithHeaderAdapter {
             Toast.makeText(requireContext(), "Clicked ${it.getProductName()}", Toast.LENGTH_SHORT)
                 .show()
@@ -149,12 +150,14 @@ class DetailOrderFragment : Fragment() {
             adapter = productListAdapter
         }
 
+        productListAdapter.clear()
+
         for (orderDetail in list) {
-            collectLast(viewModel.getProduct(orderDetail.productId)) { resource ->
+            viewModel.getProduct(orderDetail.productId).observe(viewLifecycleOwner) { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         resource.data?.let {
-                            productListAdapter.addData(
+                            productListAdapter.insertData(
                                 OrderDetailItemUiState(
                                     product = it,
                                     orderDetail = orderDetail
@@ -180,7 +183,8 @@ class DetailOrderFragment : Fragment() {
                 trackingLayout.findViewById<TextInputLayout>(R.id.input_tracking_number)
 
             val courierList = resources.getStringArray(R.array.courier).toList()
-            val adapter = ArrayAdapter(requireContext(), R.layout.item_list_courier, courierList)
+            val adapter =
+                ArrayAdapter(requireContext(), R.layout.item_list_courier, courierList)
             (trackingCourier.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
             textOrderStatus.text = orderItemUiState.getOrderStatusValue()

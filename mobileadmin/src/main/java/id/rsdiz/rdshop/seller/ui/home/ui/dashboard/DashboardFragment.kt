@@ -30,6 +30,7 @@ import id.rsdiz.rdshop.seller.common.DashboardMenu
 import id.rsdiz.rdshop.seller.databinding.FragmentDashboardBinding
 import id.rsdiz.rdshop.seller.ui.splash.SplashActivity
 import kotlinx.coroutines.launch
+import org.threeten.bp.OffsetDateTime
 import java.util.*
 
 @AndroidEntryPoint
@@ -54,9 +55,15 @@ class DashboardFragment : Fragment() {
         return binding.root
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_DATA_READY, true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateUiLoadingVisibility(false)
+
+        updateUiLoadingVisibility(savedInstanceState?.getBoolean(IS_DATA_READY) ?: false)
 
         newestOrderAdapter.setOnItemClickListener {
             val directions =
@@ -83,29 +90,24 @@ class DashboardFragment : Fragment() {
                         DashboardFragmentDirections.actionDashboardFragmentToCategoryFragment()
                     view.findNavController().navigate(directions)
                 }
+                "Akun" -> {
+                    val directions =
+                        DashboardFragmentDirections.actionDashboardFragmentToUserFragment()
+                    view.findNavController().navigate(directions)
+                }
                 else ->
-                    Toast.makeText(requireContext(), "MENU ${it.title} DI KLIK", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Not Implemented Yet!", Toast.LENGTH_SHORT)
                         .show()
             }
         }
 
         binding.apply {
-            toolbar.title = when (Calendar.getInstance().get(Calendar.HOUR)) {
-                in 0..10 -> {
-                    "Selamat Pagi "
-                }
-                in 11..14 -> {
-                    "Selamat Siang "
-                }
-                in 15..18 -> {
-                    "Selamat Sore "
-                }
-                in 19..24 -> {
-                    "Selamat Malam "
-                }
-                else -> {
-                    "Halo!"
-                }
+            toolbar.title = when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+                in 0..10 -> "Selamat Pagi "
+                in 11..14 -> "Selamat Siang "
+                in 15..18 -> "Selamat Sore "
+                in 19..24 -> "Selamat Malam "
+                else -> "Halo!"
             }.plus(prefs[Consts.PREF_NAME, prefs[Consts.PREF_USERNAME, ""]])
 
             toolbar.menu.forEach {
@@ -186,6 +188,11 @@ class DashboardFragment : Fragment() {
             observeMenu(viewModel.countData())
             observeOrder(viewModel.newestOrder)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.newestOrder.removeObservers(viewLifecycleOwner)
     }
 
     override fun onDestroyView() {
@@ -295,5 +302,9 @@ class DashboardFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        private const val IS_DATA_READY = "isDataReady"
     }
 }

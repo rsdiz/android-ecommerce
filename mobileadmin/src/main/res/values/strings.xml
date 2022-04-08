@@ -13,6 +13,8 @@
     <string name="string_order_address">%1$s\n%2$s\n%3$s (%4$s)</string>
     <string name="string_phone_number">Telp. %1$s</string>
     <string name="label_order_status">Status Pesanan</string>
+    <string name="string_user_fullname">Nama: %1$s</string>
+    <string name="string_user_username">Username: %1$s</string>
     <string-array name="courier">
         <item>JNE Express</item>
         <item>J&amp;T Express</item>

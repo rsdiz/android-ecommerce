@@ -10,12 +10,16 @@
     
     <color name="blue_wood">#FF2C4557</color>
     <color name="black_pearl">#FF051826</color>
+    <color name="web_orange_light">#FFFFCC5D</color>
     <color name="web_orange">#FFF0A500</color>
+    <color name="web_orange_darker">#FF906300</color>
     <color name="silver_chalice">#FFAFAFAF</color>
     <color name="hippie_blue">#FF6095BB</color>
     <color name="chathams_blue">#FF17537E</color>
     <color name="alto">#FFDEDEDE</color>
     <color name="mine_shaft">#FF212121</color>
-    <color name="pomegranate">#F44336</color>
+    <color name="pomegranate_light">#FFF88E86</color>
+    <color name="pomegranate">#FFF44336</color>
+    <color name="pomegranate_darker">#FFA91409</color>
     <color name="transparent">#00000000</color>
 </resources>

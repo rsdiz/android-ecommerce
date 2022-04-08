@@ -8,6 +8,8 @@ data class OrderDetailItemUiState(
     private val product: Product,
     private val orderDetail: OrderDetail
 ) : BaseUiState() {
+    fun getDetailId() = orderDetail.detailId
+
     fun getProductName() = product.name
 
     fun getProductId() = orderDetail.productId

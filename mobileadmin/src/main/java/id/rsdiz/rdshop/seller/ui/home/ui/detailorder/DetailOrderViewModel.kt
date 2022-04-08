@@ -1,6 +1,8 @@
 package id.rsdiz.rdshop.seller.ui.home.ui.detailorder
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.rsdiz.rdshop.domain.usecase.order.OrderUseCase
 import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
@@ -14,7 +16,9 @@ class DetailOrderViewModel @Inject constructor(
     private val userUseCase: UserUseCase
 ) : ViewModel() {
     fun getOrder(orderId: String) = orderUseCase.getOrder(orderId)
-    fun getProduct(productId: String) = productUseCase.getProduct(productId)
+    fun getProduct(productId: String) =
+        productUseCase.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
+
     fun getUser(userId: String) = userUseCase.getUser(userId)
     suspend fun updateOrderStatus(orderId: String, status: Short, trackingNumber: String = "") =
         orderUseCase.updateOrder(

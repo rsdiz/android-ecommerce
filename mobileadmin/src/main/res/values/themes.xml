@@ -15,6 +15,7 @@
         <item name="colorSurface">@color/alto</item>
         <item name="colorBackground">@color/white</item>
         <item name="colorOnBackground">@color/black</item>
+        <item name="colorOnBackgroundDarker">@color/mine_shaft</item>
         <item name="iconColorLight">@color/white</item>
         <item name="iconColorDark">@color/mine_shaft</item>
     </style>
@@ -34,6 +35,7 @@
         <item name="colorSurface">@color/alto</item>
         <item name="colorBackground">@color/white</item>
         <item name="colorOnBackground">@color/black</item>
+        <item name="colorOnBackgroundDarker">@color/mine_shaft</item>
         <item name="iconColorLight">@color/white</item>
         <item name="iconColorDark">@color/mine_shaft</item>
     </style>
@@ -45,6 +47,7 @@
 
     <attr name="colorBackground" />
     <attr name="colorOnBackground" />
+    <attr name="colorOnBackgroundDarker" />
     <attr name="iconColorLight" />
     <attr name="iconColorDark" />
 </resources>

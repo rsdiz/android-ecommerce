@@ -13,11 +13,21 @@ class ProductListWithHeaderAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val data: MutableList<OrderDetailItemUiState> = mutableListOf()
 
-    fun addData(orderDetailItemUiState: OrderDetailItemUiState) {
-        val position = data.size
-        data.add(position, orderDetailItemUiState)
-        notifyItemInserted(position)
+    fun clear() {
+        data.clear()
+        notifyDataSetChanged()
     }
+
+    fun insertData(orderDetailItemUiState: OrderDetailItemUiState) {
+        val position = data.size
+        if (checkData(orderDetailItemUiState.getDetailId())) {
+            data.add(position, orderDetailItemUiState)
+            notifyItemInserted(position)
+        }
+    }
+
+    private fun checkData(detailId: String) =
+        data.find { it.getDetailId() == detailId } == null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
