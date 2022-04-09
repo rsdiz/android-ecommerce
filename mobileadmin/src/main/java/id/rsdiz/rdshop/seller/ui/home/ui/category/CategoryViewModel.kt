@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    categoryUseCase: CategoryUseCase
+    private val categoryUseCase: CategoryUseCase
 ) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
     private var _categories = categoryUseCase.getCategories()
@@ -21,6 +21,8 @@ class CategoryViewModel @Inject constructor(
     fun refreshCategory() {
         reloadTrigger.value = true
     }
+
+    suspend fun addCategory(name: String) = categoryUseCase.insertCategory(name = name)
 
     val categories: LiveData<Resource<List<Category>>>
         get() = reloadTrigger.switchMap {
