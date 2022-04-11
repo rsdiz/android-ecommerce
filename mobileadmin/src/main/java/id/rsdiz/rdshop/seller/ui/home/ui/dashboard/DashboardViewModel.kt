@@ -22,12 +22,10 @@ class DashboardViewModel @Inject constructor(
     private var reloadTrigger = MutableLiveData<Boolean>()
     private var _newestOrder = orderUseCase.getNewestOrders()
 
-    suspend fun countData() = listOf(
-        userUseCase.count(),
-        categoryUseCase.count(),
-        productUseCase.count(),
-        orderUseCase.count()
-    )
+    suspend fun countUser() = userUseCase.count()
+    suspend fun countCategory() = categoryUseCase.count()
+    suspend fun countProduct() = productUseCase.count()
+    suspend fun countOrder() = orderUseCase.count()
 
     init {
         refreshOrder()

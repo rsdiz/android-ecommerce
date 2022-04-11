@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="?attr/colorBackground"
     app:cardCornerRadius="@dimen/margin_padding_size_small"
     app:cardElevation="@dimen/margin_padding_size_small"
@@ -48,6 +50,21 @@
             android:fontFamily="@font/capriola"
             android:textSize="@dimen/text_size_small"
             android:text="Total"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toBottomOf="@+id/item_title" />
+
+        <TextView
+            android:id="@+id/item_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/pomegranate"
+            android:text="Error!"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_image"
             app:layout_constraintTop_toBottomOf="@+id/item_title" />

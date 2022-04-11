@@ -30,7 +30,6 @@ import id.rsdiz.rdshop.seller.common.DashboardMenu
 import id.rsdiz.rdshop.seller.databinding.FragmentDashboardBinding
 import id.rsdiz.rdshop.seller.ui.splash.SplashActivity
 import kotlinx.coroutines.launch
-import org.threeten.bp.OffsetDateTime
 import java.util.*
 
 @AndroidEntryPoint
@@ -71,6 +70,10 @@ class DashboardFragment : Fragment() {
                     it.getOriginalOrderId()
                 )
             view.findNavController().navigate(directions)
+        }
+
+        lifecycleScope.launch {
+            observeOrder(viewModel.newestOrder)
         }
 
         dashboardMenuAdapter.setOnItemClickListener {
@@ -176,18 +179,15 @@ class DashboardFragment : Fragment() {
             }
 
             content.setOnRefreshListener {
+                observeMenu()
                 lifecycleScope.launch {
-                    observeMenu(viewModel.countData())
                     viewModel.refreshOrder()
                     content.isRefreshing = false
                 }
             }
         }
 
-        lifecycleScope.launch {
-            observeMenu(viewModel.countData())
-            observeOrder(viewModel.newestOrder)
-        }
+        observeMenu()
     }
 
     override fun onPause() {
@@ -200,39 +200,59 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun observeMenu(list: List<Resource<Int>>) {
+    private fun observeMenu() {
         val listMenu: List<DashboardMenu> = listOf(
             DashboardMenu("Akun", R.drawable.ic_baseline_group_24),
             DashboardMenu("Kategori", R.drawable.ic_dashboard_black_24dp),
             DashboardMenu("Produk", R.drawable.ic_baseline_layers_24),
             DashboardMenu("Order", R.drawable.ic_baseline_receipt_24)
         )
+        dashboardMenuAdapter.submitData(listMenu)
 
-        var index = 0
-        var isFetchedAll = false
-        var errorMessage = ""
-
-        list.forEach { resources ->
-            when (resources) {
-                is Resource.Success -> {
-                    resources.data?.let { count ->
-                        listMenu[index].count = count
-                        isFetchedAll = true
-                    }
-                }
-                is Resource.Error -> {
-                    isFetchedAll = false
-                    errorMessage = resources.message.toString()
-                }
-                else -> {
-                    isFetchedAll = false
-                }
-            }
-            index++
+        lifecycleScope.launch {
+            observeMenu(listMenu[0], viewModel.countUser())
         }
 
-        dashboardMenuAdapter.submitData(listMenu)
-        updateUiLoadingVisibility(isFetchedAll, errorMessage)
+        lifecycleScope.launch {
+            observeMenu(listMenu[1], viewModel.countCategory())
+        }
+
+        lifecycleScope.launch {
+            observeMenu(listMenu[2], viewModel.countProduct())
+        }
+
+        lifecycleScope.launch {
+            observeMenu(listMenu[3], viewModel.countOrder())
+        }
+
+        updateUiLoadingVisibility(true)
+    }
+
+    private fun observeMenu(menu: DashboardMenu, resource: Resource<Int>) {
+        when (resource) {
+            is Resource.Success -> {
+                resource.data?.let { count ->
+                    menu.count = count
+                    menu.isError = false
+                    dashboardMenuAdapter.apply {
+                        updateData(
+                            getIndex(menu),
+                            menu
+                        )
+                    }
+                }
+            }
+            is Resource.Error -> {
+                menu.isError = true
+                dashboardMenuAdapter.apply {
+                    updateData(
+                        getIndex(menu),
+                        menu
+                    )
+                }
+            }
+            else -> {}
+        }
     }
 
     private fun observeOrder(livedata: LiveData<Resource<List<Order>>>) {

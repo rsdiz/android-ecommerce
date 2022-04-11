@@ -1,6 +1,7 @@
 package id.rsdiz.rdshop.seller.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.rsdiz.rdshop.seller.common.DashboardMenu
@@ -16,21 +17,25 @@ class DashboardMenuAdapter : RecyclerView.Adapter<DashboardMenuAdapter.ViewHolde
         notifyDataSetChanged()
     }
 
-    fun insertData(dashboardMenu: DashboardMenu) {
-        val position = itemCount
-        mutableListMenu.add(position, dashboardMenu)
-        notifyItemInserted(position)
+    fun insertData(index: Int, dashboardMenu: DashboardMenu) {
+        mutableListMenu.add(index, dashboardMenu)
+        notifyItemInserted(index)
     }
 
     fun updateData(index: Int, newDashboardMenu: DashboardMenu) {
+        if (index == -1) return
         mutableListMenu[index] = newDashboardMenu
         notifyItemChanged(index)
     }
 
-    fun isDataAvailable(menu: DashboardMenu) =
-        mutableListMenu.find {
-            it.title == menu.title
-        } != null
+    fun getIndex(menu: DashboardMenu): Int {
+        mutableListMenu.onEachIndexed { i, m ->
+            if (menu.title == m.title) {
+                return i
+            }
+        }
+        return -1
+    }
 
     fun setOnItemClickListener(listener: ((DashboardMenu) -> Unit)) {
         onItemClick = listener
@@ -42,7 +47,14 @@ class DashboardMenuAdapter : RecyclerView.Adapter<DashboardMenuAdapter.ViewHolde
             binding.apply {
                 itemImage.setImageResource(dashboardMenu.imageResId)
                 itemTitle.text = dashboardMenu.title
-                itemTotal.text = "Total: ${dashboardMenu.count}"
+                if (dashboardMenu.isError) {
+                    itemError.visibility = View.VISIBLE
+                    itemTotal.visibility = View.GONE
+                } else {
+                    itemError.visibility = View.GONE
+                    itemTotal.visibility = View.VISIBLE
+                    itemTotal.text = "Total: ${dashboardMenu.count}"
+                }
             }
         }
 
