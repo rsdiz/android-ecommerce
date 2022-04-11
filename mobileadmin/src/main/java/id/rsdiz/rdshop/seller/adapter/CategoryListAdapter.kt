@@ -5,24 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.rsdiz.rdshop.data.model.Category
 import id.rsdiz.rdshop.seller.databinding.ItemCategoryListBinding
-import javax.inject.Inject
 
-class CategoryListAdapter @Inject constructor() :
-    RecyclerView.Adapter<CategoryListAdapter.ViewHolder>() {
+class CategoryListAdapter : RecyclerView.Adapter<CategoryListAdapter.ViewHolder>() {
     private var mutableCategories = mutableListOf<Category>()
-    private var onItemClick: ((Category) -> Unit)? = null
+    private var onItemClick: ((Int, Category) -> Unit)? = null
 
     fun submitData(categories: List<Category>) {
         mutableCategories.clear()
-        categories.map {
-            insertData(it)
-        }
-    }
-
-    fun insertData(category: Category) {
-        val position = itemCount
-        mutableCategories.add(position, category)
-        notifyItemInserted(position)
+        mutableCategories.addAll(categories)
+        notifyDataSetChanged()
     }
 
     fun updateData(index: Int, category: Category) {
@@ -35,7 +26,7 @@ class CategoryListAdapter @Inject constructor() :
         notifyItemRemoved(index)
     }
 
-    fun setOnItemClickListener(listener: ((Category) -> Unit)) {
+    fun setOnItemClickListener(listener: ((Int, Category) -> Unit)) {
         onItemClick = listener
     }
 
@@ -49,7 +40,7 @@ class CategoryListAdapter @Inject constructor() :
 
         init {
             binding.root.setOnClickListener {
-                onItemClick?.invoke(mutableCategories[bindingAdapterPosition])
+                onItemClick?.invoke(bindingAdapterPosition, mutableCategories[bindingAdapterPosition])
             }
         }
     }

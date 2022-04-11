@@ -24,6 +24,12 @@ class CategoryViewModel @Inject constructor(
 
     suspend fun addCategory(name: String) = categoryUseCase.insertCategory(name = name)
 
+    suspend fun deleteCategory(categoryId: String) =
+        categoryUseCase.deleteCategory(categoryId = categoryId)
+
+    suspend fun updateCategory(category: Category) =
+        categoryUseCase.updateCategory(categoryId = category.categoryId, newName = category.name)
+
     val categories: LiveData<Resource<List<Category>>>
         get() = reloadTrigger.switchMap {
             _categories.asLiveData(viewModelScope.coroutineContext)

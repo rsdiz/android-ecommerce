@@ -1,6 +1,7 @@
 package id.rsdiz.rdshop.seller.ui.home.ui.category
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,18 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.Category
 import id.rsdiz.rdshop.seller.adapter.CategoryListAdapter
 import id.rsdiz.rdshop.seller.databinding.DialogAddEditCategoryBinding
 import id.rsdiz.rdshop.seller.databinding.FragmentCategoryBinding
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,10 +32,9 @@ class CategoryFragment : Fragment() {
 
     private val viewModel: CategoryViewModel by viewModels()
 
-    @Inject
-    lateinit var categoryListAdapter: CategoryListAdapter
+    private val categoryListAdapter = CategoryListAdapter()
 
-    private val materialDialog = MaterialAlertDialogBuilder(requireContext())
+    private lateinit var materialDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,8 +64,73 @@ class CategoryFragment : Fragment() {
             viewModel.refreshCategory()
         }
 
-        categoryListAdapter.setOnItemClickListener {
-            Toast.makeText(context, "Category Clicked!", Toast.LENGTH_SHORT).show()
+        categoryListAdapter.setOnItemClickListener { position, data ->
+            materialDialog = MaterialAlertDialogBuilder(requireContext())
+            val categoryLayout = DialogAddEditCategoryBinding.inflate(LayoutInflater.from(binding.root.context))
+            val inputCategoryName: EditText? = categoryLayout.inputCategoryName.editText
+            categoryLayout.inputCategoryName.editText?.text = Editable.Factory.getInstance().newEditable(data.name)
+
+            materialDialog.setView(categoryLayout.root)
+                .setTitle("Edit Kategori")
+                .setNeutralButton("Batal") { dialog, _ ->
+                    removeParent(categoryLayout.root)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Hapus") { dialog, _ ->
+                    lifecycleScope.launch {
+                        when (val response = viewModel.deleteCategory(data.categoryId)) {
+                            is Resource.Success -> {
+                                Snackbar.make(
+                                    requireContext(),
+                                    binding.root,
+                                    response.data.toString(),
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                removeParent(categoryLayout.root)
+                                categoryListAdapter.deleteData(position)
+                                dialog.dismiss()
+                            }
+                            is Resource.Error -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Gagal Menghapus Kategori!\nError: ${response.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+                .setPositiveButton("Simpan") { dialog, _ ->
+                    lifecycleScope.launch {
+                        val newData = Category(data.categoryId, inputCategoryName?.text.toString())
+                        when (val response = viewModel.updateCategory(newData)) {
+                            is Resource.Success -> {
+                                Snackbar.make(
+                                    requireContext(),
+                                    binding.root,
+                                    response.data.toString(),
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                removeParent(categoryLayout.root)
+                                categoryListAdapter.updateData(position, newData)
+                                dialog.dismiss()
+                            }
+                            is Resource.Error -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Gagal Mengupdate Kategori!\nError: ${response.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+                .setOnCancelListener {
+                    removeParent(categoryLayout.root)
+                }
+                .show()
         }
 
         lifecycleScope.launch {
@@ -113,6 +181,7 @@ class CategoryFragment : Fragment() {
     }
 
     private fun setupFabButton() {
+        materialDialog = MaterialAlertDialogBuilder(requireContext())
         val categoryLayout = DialogAddEditCategoryBinding.inflate(LayoutInflater.from(binding.root.context))
         val inputCategoryName: EditText? = categoryLayout.inputCategoryName.editText
 
@@ -131,7 +200,7 @@ class CategoryFragment : Fragment() {
                                 Snackbar.make(
                                     requireContext(),
                                     binding.root,
-                                    response.message.toString(),
+                                    response.data.toString(),
                                     Snackbar.LENGTH_SHORT
                                 ).show()
                                 removeParent(categoryLayout.root)
