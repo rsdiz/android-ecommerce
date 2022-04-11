@@ -64,9 +64,12 @@ class ProductFragment : Fragment() {
         }
 
         lifecycleScope.launch {
+            observeProductCount()
+        }
+
+        lifecycleScope.launch {
             setupFabButton()
             fetchProducts()
-            observeProductCount()
         }
     }
 
