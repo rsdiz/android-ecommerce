@@ -23,7 +23,7 @@ class UserPagingAdapter @Inject constructor() :
         fun bind(user: User) {
             binding.apply {
                 username.text = root.context.resources.getString(R.string.string_user_username, user.username)
-                fullname.text = root.context.resources.getString(R.string.string_user_fullname, user.username)
+                fullname.text = root.context.resources.getString(R.string.string_user_fullname, user.name)
             }
         }
 
