@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="notification,content,fab_filter" />
+        app:constraint_referenced_ids="notification,content,fab_filter,fab_clear_filter" />
 
     <TextView
         android:id="@+id/notification"

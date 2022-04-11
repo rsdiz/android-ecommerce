@@ -158,6 +158,8 @@ class OrderFragment : Fragment() {
                     }
                 }
             }
+            if (isFilterActive) fabClearFilter.visibility = View.VISIBLE
+            else fabClearFilter.visibility = View.INVISIBLE
         }
     }
 
