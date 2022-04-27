@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+
+        <shape android:shape="rectangle">
+
+            <stroke
+                android:width="4dp"
+                android:color="@color/silver_chalice"
+                android:dashWidth="8dp"
+                android:dashGap="2dp" />
+
+            <corners android:radius="@dimen/card_view_small_radius" />
+
+        </shape>
+
+    </item>
+
+    <item
+        android:bottom="24dp"
+        android:drawable="@drawable/ic_baseline_add_24"
+        android:left="24dp"
+        android:right="24dp"
+        android:top="24dp" />
+
+</layer-list>

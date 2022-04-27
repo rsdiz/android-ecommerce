@@ -23,11 +23,14 @@ class CategoryRepository @Inject constructor(
     private val localDataSource: CategoryLocalDataSource,
     private val appExecutors: AppExecutors
 ) : ICategoryRepository {
+    private var totalData = 0
+
     override suspend fun count(): Resource<Int> =
         when (
             val response = remoteDataSource.countCategories().first()
         ) {
             is ApiResponse.Success -> {
+                totalData = response.data
                 Resource.Success(response.data)
             }
             is ApiResponse.Empty -> Resource.Error(response.toString(), null)
@@ -41,7 +44,7 @@ class CategoryRepository @Inject constructor(
                     localDataSource.mapper.mapFromEntities(it)
                 }
 
-            override fun shouldFetch(data: List<Category>?): Boolean = data.isNullOrEmpty()
+            override fun shouldFetch(data: List<Category>?): Boolean = data?.size != totalData
 
             override suspend fun createCall(): Flow<ApiResponse<CategoriesResponse>> =
                 remoteDataSource.getCategories()

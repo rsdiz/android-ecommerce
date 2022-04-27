@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation shareDependencies.coreKtx
 
+    implementation mobileUiDependencies.activity
     implementation mobileUiDependencies.appcompat
     implementation mobileUiDependencies.material
     implementation mobileUiDependencies.constraintLayout

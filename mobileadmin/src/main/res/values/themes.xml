@@ -45,6 +45,16 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
+    <style name="Theme.RDSHOP.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <style name="Theme.RDSHOP.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
     <attr name="colorBackground" />
     <attr name="colorOnBackground" />
     <attr name="colorOnBackgroundDarker" />

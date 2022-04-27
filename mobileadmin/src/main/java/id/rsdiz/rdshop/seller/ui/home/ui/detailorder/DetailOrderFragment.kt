@@ -184,7 +184,7 @@ class DetailOrderFragment : Fragment() {
 
             val courierList = resources.getStringArray(R.array.courier).toList()
             val adapter =
-                ArrayAdapter(requireContext(), R.layout.item_list_courier, courierList)
+                ArrayAdapter(requireContext(), R.layout.item_list_text, courierList)
             (trackingCourier.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
             textOrderStatus.text = orderItemUiState.getOrderStatusValue()

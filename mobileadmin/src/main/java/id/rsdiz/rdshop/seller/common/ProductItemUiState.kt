@@ -15,4 +15,6 @@ data class ProductItemUiState(
     val productPrice = product.price.toRupiah()
     val productWeight = StringBuilder(product.weight.toString()).append(' ').append("Kg").toString()
     val productImages = product.image
+
+    val data get() = product
 }

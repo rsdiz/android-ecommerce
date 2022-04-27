@@ -43,6 +43,7 @@ ext {
     sqliteKtxVersion = "2.2.0"
     navVersion = "2.3.5"
     roomPagingVersion = "2.5.0-alpha01"
+    activityVersion = "1.2.4"
 
     // Testing
     robolectricVersion = "4.7.3"
@@ -86,6 +87,7 @@ ext {
     ]
 
     mobileUiDependencies = [
+            activity          : "androidx.activity:activity-ktx:${activityVersion}",
             appcompat         : "androidx.appcompat:appcompat:${appcompatVersion}",
             material          : "com.google.android.material:material:${materialVersion}",
             constraintLayout  : "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}",

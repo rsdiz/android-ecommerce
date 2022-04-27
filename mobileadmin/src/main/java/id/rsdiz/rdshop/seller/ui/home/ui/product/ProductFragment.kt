@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -50,8 +50,14 @@ class ProductFragment : Fragment() {
         }
 
         productPagingAdapter.setOnItemClickListener {
-            Toast.makeText(requireContext(), "Clicked ${it.productName} !", Toast.LENGTH_SHORT)
-                .show()
+//            Toast.makeText(requireContext(), "Clicked ${it.productName} !", Toast.LENGTH_SHORT)
+//                .show()
+//            ProductDialog.display(ProductDialog.TYPE_EDIT, requireActivity().supportFragmentManager)
+            val directions = ProductFragmentDirections.actionProductFragmentToProductDialog(
+                ProductDialog.TYPE_EDIT,
+                it.data
+            )
+            view.findNavController().navigate(directions)
         }
 
         binding.refreshProducts.setOnRefreshListener {
@@ -63,12 +69,13 @@ class ProductFragment : Fragment() {
             }
         }
 
+        setupFabButton()
+
         lifecycleScope.launch {
             observeProductCount()
         }
 
         lifecycleScope.launch {
-            setupFabButton()
             fetchProducts()
         }
     }
@@ -155,8 +162,20 @@ class ProductFragment : Fragment() {
     private fun setupFabButton() {
         binding.apply {
             buttonAddProduct.setOnClickListener {
-                Toast.makeText(requireContext(), "Add Button Clicked!", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), "Add Button Clicked!", Toast.LENGTH_SHORT).show()
+//                ProductDialog.display(ProductDialog.TYPE_ADD, requireActivity().supportFragmentManager)
+                val directions = ProductFragmentDirections.actionProductFragmentToProductDialog(
+                    ProductDialog.TYPE_ADD,
+                    null
+                )
+                view?.findNavController()?.navigate(directions)
             }
+        }
+    }
+
+    private fun removeParent(view: View) {
+        if (view.parent != null) {
+            (view.parent as ViewGroup).removeView(view)
         }
     }
 

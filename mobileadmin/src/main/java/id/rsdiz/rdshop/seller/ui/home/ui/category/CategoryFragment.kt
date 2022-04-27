@@ -76,10 +76,12 @@ class CategoryFragment : Fragment() {
                     removeParent(categoryLayout.root)
                     dialog.dismiss()
                 }
-                .setNegativeButton("Hapus") { dialog, _ ->
+                .setNegativeButton("Hapus") { _, _ ->
+                    setVisibilityLoadingIndicator(View.VISIBLE)
                     lifecycleScope.launch {
                         when (val response = viewModel.deleteCategory(data.categoryId)) {
                             is Resource.Success -> {
+                                setVisibilityLoadingIndicator(View.GONE)
                                 Snackbar.make(
                                     requireContext(),
                                     binding.root,
@@ -88,9 +90,9 @@ class CategoryFragment : Fragment() {
                                 ).show()
                                 removeParent(categoryLayout.root)
                                 categoryListAdapter.deleteData(position)
-                                dialog.dismiss()
                             }
                             is Resource.Error -> {
+                                setVisibilityLoadingIndicator(View.GONE)
                                 Toast.makeText(
                                     requireContext(),
                                     "Gagal Menghapus Kategori!\nError: ${response.message}",
@@ -102,10 +104,12 @@ class CategoryFragment : Fragment() {
                     }
                 }
                 .setPositiveButton("Simpan") { dialog, _ ->
+                    setVisibilityLoadingIndicator(View.VISIBLE)
                     lifecycleScope.launch {
                         val newData = Category(data.categoryId, inputCategoryName?.text.toString())
                         when (val response = viewModel.updateCategory(newData)) {
                             is Resource.Success -> {
+                                setVisibilityLoadingIndicator(View.GONE)
                                 Snackbar.make(
                                     requireContext(),
                                     binding.root,
@@ -117,6 +121,7 @@ class CategoryFragment : Fragment() {
                                 dialog.dismiss()
                             }
                             is Resource.Error -> {
+                                setVisibilityLoadingIndicator(View.GONE)
                                 Toast.makeText(
                                     requireContext(),
                                     "Gagal Mengupdate Kategori!\nError: ${response.message}",
@@ -180,6 +185,10 @@ class CategoryFragment : Fragment() {
         }
     }
 
+    private fun setVisibilityLoadingIndicator(visibility: Int) {
+        binding.loadingIndicator.visibility = visibility
+    }
+
     private fun setupFabButton() {
         materialDialog = MaterialAlertDialogBuilder(requireContext())
         val categoryLayout = DialogAddEditCategoryBinding.inflate(LayoutInflater.from(binding.root.context))
@@ -194,9 +203,11 @@ class CategoryFragment : Fragment() {
                     dialog.dismiss()
                 }
                 .setPositiveButton("Tambahkan") { dialog, _ ->
+                    setVisibilityLoadingIndicator(View.VISIBLE)
                     lifecycleScope.launch {
                         when (val response = viewModel.addCategory(inputCategoryName?.text.toString())) {
                             is Resource.Success -> {
+                                setVisibilityLoadingIndicator(View.GONE)
                                 Snackbar.make(
                                     requireContext(),
                                     binding.root,
@@ -208,6 +219,7 @@ class CategoryFragment : Fragment() {
                                 dialog.dismiss()
                             }
                             is Resource.Error -> {
+                                setVisibilityLoadingIndicator(View.GONE)
                                 Toast.makeText(
                                     requireContext(),
                                     "Gagal Menambahkan Kategori!\nError: ${response.message}",

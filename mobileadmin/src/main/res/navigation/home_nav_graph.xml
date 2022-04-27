@@ -101,7 +101,13 @@
         android:id="@+id/productFragment"
         android:name="id.rsdiz.rdshop.seller.ui.home.ui.product.ProductFragment"
         android:label="fragment_product"
-        tools:layout="@layout/fragment_product" />
+        tools:layout="@layout/fragment_product" >
+        <action
+            android:id="@+id/action_productFragment_to_productDialog"
+            app:destination="@id/productDialog"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down" />
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="id.rsdiz.rdshop.seller.ui.home.ui.category.CategoryFragment"
@@ -112,4 +118,17 @@
         android:name="id.rsdiz.rdshop.seller.ui.home.ui.user.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
+    <dialog
+        android:id="@+id/productDialog"
+        android:name="id.rsdiz.rdshop.seller.ui.home.ui.product.ProductDialog"
+        android:label="ProductDialog"
+        tools:layout="@layout/dialog_add_edit_product">
+        <argument
+            android:name="DIALOG_TYPE"
+            app:argType="integer" />
+        <argument
+            android:name="product"
+            app:argType="id.rsdiz.rdshop.data.model.Product"
+            app:nullable="true" />
+    </dialog>
 </navigation>
