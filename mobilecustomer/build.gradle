@@ -1,15 +1,19 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "androidx.navigation.safeargs"
+    id 'kotlin-parcelize'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
 }
 
 android {
-    compileSdk 31
+    compileSdk androidCompileSdkVersion
 
     defaultConfig {
         applicationId "id.rsdiz.rdshop"
-        minSdk 27
-        targetSdk 31
+        minSdk androidMinSdkVersion
+        targetSdk androidTargetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -29,14 +33,63 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
+
+    configurations {
+        cleanedAnnotations
+        implementation.exclude group: 'com.intellij' , module:'annotations'
+    }
 }
 
 dependencies {
+    implementation shareDependencies.coreKtx
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation mobileUiDependencies.activity
+    implementation mobileUiDependencies.appcompat
+    implementation mobileUiDependencies.material
+    implementation mobileUiDependencies.constraintLayout
+    implementation mobileUiDependencies.recyclerView
+    implementation mobileUiDependencies.pallete
+    implementation mobileUiDependencies.fragment
+    implementation mobileUiDependencies.paging
+    implementation mobileUiDependencies.glide
+    implementation mobileUiDependencies.viewmodel
+    implementation mobileUiDependencies.livedata
+    implementation mobileUiDependencies.runtimeKtx
+    implementation mobileUiDependencies.lifecycleExtension
+    implementation mobileUiDependencies.navFragment
+    implementation mobileUiDependencies.navUi
+
+    implementation dataDependencies.roomRuntime
+    implementation dataDependencies.roomPaging
+    implementation dataDependencies.roomKtx
+    kapt dataDependencies.roomCompiler
+
+    implementation dataDependencies.okhttp
+    implementation dataDependencies.gson
+
+    implementation dependencyInjector.hiltAndroid
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt dependencyInjector.hiltDaggerCompiler
+    kapt dependencyInjector.hiltAndroidxCompiler
+
+    // JSR-310 backport for Android
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.4.0'
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.assertj
+    testImplementation testDependencies.kotlinJunit
+    testImplementation testDependencies.mockito
+
+    androidTestImplementation uiTestDependencies.junitExt
+    androidTestImplementation uiTestDependencies.espressoCore
+    androidTestImplementation uiTestDependencies.espresso
+    androidTestImplementation uiTestDependencies.rules
+    androidTestImplementation uiTestDependencies.coreTesting
+
+    implementation project(":base")
+    implementation project(":data")
+    implementation project(":domain")
 }
