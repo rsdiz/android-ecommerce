@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.RDSHOP" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/web_orange</item>
+        <item name="colorPrimaryVariant">@color/hippie_blue</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -12,5 +12,29 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorBackground">@color/black_pearl</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnBackgroundDarker">@color/alto</item>
+        <item name="iconColorLight">@color/web_orange</item>
+        <item name="iconColorDark">@color/hippie_blue</item>
+    </style>
+
+    <style name="Theme.RDSHOP.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/web_orange</item>
+        <item name="colorPrimaryVariant">@color/black_pearl</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="colorBackground">@color/black_pearl</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnBackgroundDarker">@color/alto</item>
+        <item name="iconColorLight">@color/web_orange</item>
+        <item name="iconColorDark">@color/hippie_blue</item>
     </style>
 </resources>

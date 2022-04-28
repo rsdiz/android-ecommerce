@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">RDSHOP</string>
+    <string-array name="courier">
+        <item>JNE Express</item>
+        <item>J&amp;T Express</item>
+        <item>SiCepat</item>
+        <item>Ninja Express</item>
+        <item>ID Express</item>
+        <item>Lion Parcel</item>
+        <item>Pos Indonesia</item>
+        <item>Wahana</item>
+        <item>TIKI</item>
+        <item>AnterAja</item>
+    </string-array>
 </resources>
