@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    tools:context=".ui.auth.AuthFragment">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@drawable/background_gradient_bluewood"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_marginTop="@dimen/margin_padding_size_xxlarge"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_rdshop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Logo RDSHOP" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/capriola"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/margin_padding_size_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_xxlarge"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:elevation="12dp"
+        android:paddingVertical="35dp"
+        android:paddingHorizontal="@dimen/margin_padding_size_large"
+        android:background="@drawable/bg_white_radius"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title">
+
+        <TextView
+            android:id="@+id/welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Selamat Datang!" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:textColor="?attr/colorOnBackground"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:textSize="12sp"
+            android:text="Nikmati Kemudahan Berbelanja Online\nMulai dan Temukan Barang Impian\nDalam Genggaman!" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="240dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/margin_padding_size_xxlarge"
+            android:text="LOGIN" />
+
+        <Button
+            android:id="@+id/registration_button"
+            android:layout_width="240dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:text="REGISTRASI" />
+
+        <Button
+            android:id="@+id/catalog_button"
+            android:layout_width="240dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:text="MASUK TANPA LOGIN" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/made_with_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/capriola"
+        android:text="MADE WITH ♥ USING"
+        android:textSize="@dimen/text_size_small"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/kotlin_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/kotlin_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KOTLIN"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        android:fontFamily="@font/capriola"
+        android:layout_marginBottom="@dimen/margin_padding_size_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

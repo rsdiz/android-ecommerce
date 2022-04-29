@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RDSHOP.NoActionBar">
         <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>

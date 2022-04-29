@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="1dp"
+        android:drawable="?attr/colorBackground"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp" />
+
+    <item
+        android:bottom="12dp"
+        android:top="12dp"
+        android:drawable="@drawable/ic_baseline_archive_24"
+        android:left="12dp"
+        android:right="12dp" />
+</layer-list>

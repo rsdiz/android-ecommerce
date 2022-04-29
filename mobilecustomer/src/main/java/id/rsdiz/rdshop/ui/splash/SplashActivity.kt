@@ -11,6 +11,7 @@ import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.databinding.ActivitySplashBinding
+import id.rsdiz.rdshop.ui.auth.AuthActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
 
         val token: String? = prefs[Consts.PREF_TOKEN, BuildConfig.API_KEY]
         val homeIntent: Intent = if (token.equals(BuildConfig.API_KEY) || token.isNullOrEmpty()) {
-            Intent(this, /* TODO: Redirect to Un-auth Navigation Graph */)
+            Intent(this, AuthActivity::class.java)
         } else {
             Toast.makeText(applicationContext, "Sudah Login!", Toast.LENGTH_SHORT).show()
             Intent(this, /* TODO: Redirect to Auth Navigation Graph */)
