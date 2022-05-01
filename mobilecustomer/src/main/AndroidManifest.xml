@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RDSHOP.NoActionBar">
         <activity
+            android:name=".ui.home.HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home" />
+        <activity
             android:name=".ui.auth.AuthActivity"
             android:exported="false" />
         <activity

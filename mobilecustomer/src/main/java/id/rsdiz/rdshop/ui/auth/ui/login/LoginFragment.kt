@@ -16,6 +16,7 @@ import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.source.local.entity.Role
 import id.rsdiz.rdshop.databinding.FragmentLoginBinding
+import id.rsdiz.rdshop.ui.home.HomeActivity
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -70,7 +71,7 @@ class LoginFragment : Fragment() {
                                 startActivity(
                                     Intent(
                                         requireActivity().applicationContext,
-                                        // TODO: Redirect to Homepage Authenticated
+                                        HomeActivity::class.java
                                     ).addFlags(
                                         Intent.FLAG_ACTIVITY_CLEAR_TOP
                                     ).addFlags(
