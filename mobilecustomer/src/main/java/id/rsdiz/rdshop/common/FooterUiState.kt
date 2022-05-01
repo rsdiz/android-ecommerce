@@ -1,7 +1,7 @@
 package id.rsdiz.rdshop.common
 
 import androidx.paging.LoadState
-import id.rsdiz.rdshop.seller.common.base.BaseUiState
+import id.rsdiz.rdshop.common.base.BaseUiState
 
 data class FooterUiState(private val loadState: LoadState) : BaseUiState() {
 

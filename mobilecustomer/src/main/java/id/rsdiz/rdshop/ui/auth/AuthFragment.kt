@@ -29,6 +29,14 @@ class AuthFragment : Fragment() {
                 val direction = AuthFragmentDirections.actionAuthFragmentToLoginFragment()
                 view.findNavController().navigate(direction)
             }
+            registrationButton.setOnClickListener {
+                val direction = AuthFragmentDirections.actionAuthFragmentToRegisterFragment()
+                view.findNavController().navigate(direction)
+            }
+            catalogButton.setOnClickListener {
+                val direction = AuthFragmentDirections.actionAuthFragmentToCatalogFragment()
+                view.findNavController().navigate(direction)
+            }
         }
     }
 
