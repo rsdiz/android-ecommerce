@@ -9,6 +9,19 @@
         android:id="@+id/navigation_home"
         android:name="id.rsdiz.rdshop.ui.home.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="id.rsdiz.rdshop.ui.home.ui.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
