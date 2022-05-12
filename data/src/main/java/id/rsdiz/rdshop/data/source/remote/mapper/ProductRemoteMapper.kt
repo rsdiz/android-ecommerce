@@ -36,7 +36,7 @@ open class ProductRemoteMapper @Inject constructor() :
             weight = remote.weight,
             stock = remote.stock,
             description = remote.description,
-            price = remote.price
+            price = remote.price,
         )
 
     fun mapProductImageRemoteToProductImageEntity(

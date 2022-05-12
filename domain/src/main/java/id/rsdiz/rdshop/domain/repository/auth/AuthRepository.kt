@@ -52,7 +52,7 @@ class AuthRepository @Inject constructor(
                     prefs[Consts.PREF_USERNAME] = it.username
                     prefs[Consts.PREF_EMAIL] = it.email
                     prefs[Consts.PREF_NAME] = it.name
-                    prefs[Consts.PREF_GENDER] = it.gender.name
+                    prefs[Consts.PREF_GENDER] = it.gender?.name
                     prefs[Consts.PREF_ADDRESS] = it.address
                     prefs[Consts.PREF_PHOTO] = it.photo
                     prefs[Consts.PREF_ROLE] = it.role.name

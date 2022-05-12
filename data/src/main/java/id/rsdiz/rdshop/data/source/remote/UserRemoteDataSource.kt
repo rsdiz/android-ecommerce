@@ -84,7 +84,14 @@ class UserRemoteDataSource @Inject constructor(
             try {
                 val response = apiService.updateUser(
                     userId = user.userId,
-                    data = generateRequestBody(user, password, sourceFile)
+                    name = generateRequestBody(user.name),
+                    email = generateRequestBody(user.email),
+                    username = generateRequestBody(user.username),
+                    password = generateRequestBody(password),
+                    gender = generateRequestBody(user.gender.toString()),
+                    address = generateRequestBody(user.address.toString()),
+                    role = generateRequestBody(user.role.toString()),
+                    photoFile = generateRequestMultipart(sourceFile)
                 )
                 when (response.code) {
                     200 -> emit(
@@ -167,7 +174,7 @@ class UserRemoteDataSource @Inject constructor(
             .addFormDataPart("username", user.username)
             .addFormDataPart("password", password)
             .addFormDataPart("gender", user.gender.toString())
-            .addFormDataPart("address", user.address)
+            .addFormDataPart("address", user.address.toString())
             .addFormDataPart("role", user.role.toString())
 
         // Set file data if available
@@ -185,6 +192,21 @@ class UserRemoteDataSource @Inject constructor(
         return multipartBody.build()
     }
 
-    private fun generateRequestBody(text: String): RequestBody =
-        text.toRequestBody("text/plain".toMediaTypeOrNull())
+    private fun generateRequestBody(text: String, type: String = "text/plain"): RequestBody =
+        text.toRequestBody(type.toMediaTypeOrNull())
+
+    private fun generateRequestBody(file: File?, type: String = "image/*"): RequestBody? =
+        file?.asRequestBody(type.toMediaTypeOrNull())
+
+    private fun generateRequestMultipart(sourceFile: File?): MultipartBody.Part? {
+        val filePart = sourceFile?.let {
+            MultipartBody.Part.createFormData(
+                "photoFile",
+                it.nameWithoutExtension,
+                it.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        return filePart
+    }
 }

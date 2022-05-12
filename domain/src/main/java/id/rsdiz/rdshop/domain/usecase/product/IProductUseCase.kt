@@ -56,4 +56,9 @@ interface IProductUseCase {
      * Delete Product Image from repository
      */
     suspend fun removeProductImage(productId: String, imageId: String): Resource<String>
+
+    /**
+     * Add Product to Favorite Product
+     */
+    suspend fun switchProductFavorite(productId: String)
 }

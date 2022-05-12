@@ -55,6 +55,11 @@ class ProductRepository @Inject constructor(
         }
     }
 
+    override fun getFavoriteProducts(): Flow<List<Product>> =
+        localDataSource.getFavoriteProducts().map {
+            localDataSource.mapper.mapFromEntities(it)
+        }
+
     override fun getProduct(productId: String): Flow<Resource<Product>> =
         object : NetworkBoundResource<Product, ProductResponse>() {
             override fun loadFromDB(): Flow<Product?> =
@@ -162,9 +167,18 @@ class ProductRepository @Inject constructor(
                 val data = localDataSource.getProductById(productId).first()
                 data?.let { localDataSource.delete(it) }
 
-                Resource.Success(response.data!!)
+                Resource.Success(response.data)
             }
             is ApiResponse.Empty -> Resource.Error(response.toString(), null)
             else -> Resource.Error((response as ApiResponse.Error).errorMessage, null)
         }
+
+    override suspend fun switchProductFavorite(productId: String) {
+        val data = localDataSource.getProductById(productId).first()
+        data?.let {
+            appExecutors.diskIO().execute {
+                localDataSource.switchFavorite(data)
+            }
+        }
+    }
 }

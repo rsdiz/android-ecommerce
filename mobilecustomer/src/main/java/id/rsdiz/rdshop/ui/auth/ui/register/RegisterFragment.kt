@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null

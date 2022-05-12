@@ -24,7 +24,7 @@
         android:id="@+id/layout_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize">
+        android:layout_marginBottom="152dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                 android:id="@+id/product_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_padding_size_small"
+                android:layout_marginVertical="@dimen/margin_padding_size_medium"
                 android:layout_marginStart="@dimen/margin_padding_size_large"
                 android:layout_marginEnd="@dimen/margin_padding_size_small"
                 android:fontFamily="@font/capriola"
@@ -75,7 +75,7 @@
                 android:id="@+id/product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_padding_size_small"
+                android:layout_marginVertical="@dimen/margin_padding_size_medium"
                 android:layout_marginEnd="@dimen/margin_padding_size_large"
                 android:layout_marginStart="@dimen/margin_padding_size_small"
                 android:fontFamily="@font/capriola"
@@ -93,7 +93,7 @@
                 android:id="@+id/product_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_padding_size_small"
+                android:layout_marginVertical="@dimen/margin_padding_size_medium"
                 android:layout_marginHorizontal="@dimen/margin_padding_size_large"
                 android:fontFamily="@font/capriola"
                 android:textAlignment="textStart"
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_padding_size_large"
-                android:layout_marginVertical="@dimen/margin_padding_size_small"
+                android:layout_marginVertical="@dimen/margin_padding_size_medium"
                 android:fontFamily="@font/capriola"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -125,7 +125,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_content_action"
         android:layout_width="match_parent"
-        android:layout_marginTop="-56dp"
+        android:layout_marginTop="-152dp"
         android:layout_height="?actionBarSize"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/margin_padding_size_small"

@@ -23,7 +23,8 @@ open class ProductMapper @Inject constructor() : DataMapper<ProductWithImages, P
             price = entity.product.price,
             image = entity.images.map {
                 mapProductImageEntityToProductImage(it)
-            }
+            },
+            isFavorite = entity.product.isFavorite
         )
 
     override fun mapFromEntities(entities: List<ProductWithImages>): List<Product> =
@@ -40,7 +41,8 @@ open class ProductMapper @Inject constructor() : DataMapper<ProductWithImages, P
                 weight = model.weight,
                 stock = model.stock,
                 description = model.description,
-                price = model.price
+                price = model.price,
+                isFavorite = model.isFavorite
             ),
             images = model.image.map {
                 mapProductImageToProductImageEntity(model.productId, it)

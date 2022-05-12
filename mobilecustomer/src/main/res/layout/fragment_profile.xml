@@ -52,6 +52,16 @@
                 tools:text="@tools:sample/full_names" />
 
             <Button
+                android:id="@+id/button_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_padding_size_large"
+                android:text="Edit Profile"
+                app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toStartOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+
+            <Button
                 android:id="@+id/button_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,7 +70,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+                app:layout_constraintTop_toBottomOf="@+id/button_edit_profile" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

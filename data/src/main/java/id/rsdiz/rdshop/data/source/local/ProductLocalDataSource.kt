@@ -20,6 +20,8 @@ class ProductLocalDataSource @Inject constructor(
 
     fun getAllProducts() = productDao.getAllProducts()
 
+    fun getFavoriteProducts() = productDao.getFavoriteProducts()
+
     fun getProductById(productId: String) = productDao.getProductById(productId)
 
     fun getProductByCategoryId(categoryId: String) = productDao.getProductByCategoryId(categoryId)
@@ -57,5 +59,12 @@ class ProductLocalDataSource @Inject constructor(
             productImageDao.delete(it)
         }
         productDao.delete(data.product)
+    }
+
+    fun switchFavorite(data: ProductWithImages) {
+        data.product.let {
+            it.isFavorite = !it.isFavorite
+        }
+        productDao.update(data.product)
     }
 }

@@ -12,5 +12,6 @@ data class ProductEntity(
     val weight: Float,
     val stock: Int,
     val description: String,
-    val price: Int
+    val price: Int,
+    var isFavorite: Boolean = false
 )

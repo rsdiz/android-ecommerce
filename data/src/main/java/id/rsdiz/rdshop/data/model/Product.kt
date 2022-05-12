@@ -15,5 +15,6 @@ data class Product(
     val stock: Int,
     val description: String,
     val price: Int,
-    val image: List<ProductImage>
+    val image: List<ProductImage>,
+    var isFavorite: Boolean = false
 ) : Parcelable

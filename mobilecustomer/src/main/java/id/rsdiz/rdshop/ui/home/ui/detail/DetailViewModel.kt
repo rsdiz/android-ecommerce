@@ -18,17 +18,14 @@ class DetailViewModel @Inject constructor(
         productUseCase.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
     }.asFlow()
 
-    fun getCategories(categoryId: String) = reloadTrigger.switchMap {
-        _categories.asLiveData(viewModelScope.coroutineContext).map {
-            it.data?.let { list ->
-                list.firstOrNull { category -> category.categoryId == categoryId }
-            }
-        }
-    }
+    fun getCategories() =
+        _categories.asLiveData(viewModelScope.coroutineContext)
 
     fun refreshCategory() {
         reloadTrigger.value = true
     }
+
+    suspend fun switchFavorite(productId: String) = productUseCase.switchProductFavorite(productId)
 
     init {
         refreshCategory()

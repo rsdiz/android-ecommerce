@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -8,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.R
 import id.rsdiz.rdshop.databinding.ActivityHomeBinding
+import java.io.File
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -47,7 +49,37 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try {
+            trimCache(this)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         _binding = null
         _navHostFragment = null
+    }
+
+    private fun trimCache(context: Context) {
+        try {
+            val dir: File = context.cacheDir
+            if (dir.isDirectory) {
+                deleteDir(dir)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun deleteDir(dir: File?): Boolean {
+        if (dir != null && dir.isDirectory) {
+            val children: Array<String> = dir.list()
+            for (i in children.indices) {
+                val success = deleteDir(File(dir, children[i]))
+                if (!success) {
+                    return false
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir?.delete() ?: false
     }
 }

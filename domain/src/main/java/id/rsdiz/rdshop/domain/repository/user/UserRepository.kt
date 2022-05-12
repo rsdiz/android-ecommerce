@@ -53,12 +53,12 @@ class UserRepository @Inject constructor(
 
     override fun getUser(userId: String): Flow<Resource<User>> =
         object : NetworkBoundResource<User, UserResponse>() {
-            override fun loadFromDB(): Flow<User?>? =
-                localDataSource.getUserById(userId = userId)?.map {
-                    localDataSource.mapper.mapFromEntity(it)
+            override fun loadFromDB(): Flow<User?> =
+                localDataSource.getUserById(userId = userId).map {
+                    it?.let { localDataSource.mapper.mapFromEntity(it) }
                 }
 
-            override fun shouldFetch(data: User?): Boolean = data?.userId.isNullOrEmpty()
+            override fun shouldFetch(data: User?): Boolean = true
 
             override suspend fun createCall(): Flow<ApiResponse<UserResponse>> =
                 remoteDataSource.getUserById(userId = userId)

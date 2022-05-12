@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
+    tools:context=".ui.home.ui.profile.edit.EditProfileActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_gradient_reverse_bluecharm_no_radius"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:title="Edit Profile"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"
+        app:titleTextColor="@color/white" />
+
+    <ScrollView
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/profile_image"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/margin_padding_size_large"
+                    app:cardElevation="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_preview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/backgrounds/scenic" />
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.25"
+                        android:src="@drawable/ic_baseline_camera_24"
+                        app:tint="@color/black" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/label_edit_profile_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                    android:fontFamily="@font/capriola"
+                    android:text="Ubah Foto Profil"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="@dimen/text_size_medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/profile_image"
+                    app:layout_constraintTop_toTopOf="@+id/profile_image" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_camera"
+                    android:layout_width="0dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_padding_size_small"
+                    android:text="Kamera"
+                    app:layout_constraintEnd_toEndOf="@+id/label_edit_profile_image"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/label_edit_profile_image"
+                    app:layout_constraintTop_toBottomOf="@+id/label_edit_profile_image"
+                    app:layout_constraintVertical_bias="0" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_gallery"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Galeri"
+                    app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                    app:layout_constraintEnd_toEndOf="@+id/label_edit_profile_image"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/label_edit_profile_image"
+                    app:layout_constraintTop_toBottomOf="@+id/button_camera"
+                    app:layout_constraintVertical_bias="0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_profile_username"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:enabled="false"
+                android:hint="Username"
+                app:helperText="Tidak Bisa diubah"
+                app:startIconDrawable="@drawable/ic_person_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_profile_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:hint="Nama"
+                app:counterEnabled="true"
+                app:counterMaxLength="30"
+                app:helperText="Maksimal Karakter"
+                app:startIconDrawable="@drawable/ic_person_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:text="Jenis Kelamin:" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/input_profile_gender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:entries="@array/gender"
+                android:padding="@dimen/margin_padding_size_medium"
+                android:spinnerMode="dialog" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_profile_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:hint="Alamat">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:text="Kota:" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/input_profile_address_city"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/margin_padding_size_medium"
+                android:spinnerMode="dialog" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_padding_size_medium"
+                android:text="Provinsi:" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/input_profile_address_province"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/margin_padding_size_medium"
+                android:spinnerMode="dialog" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_profile_address_postal_code"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginVertical="@dimen/margin_padding_size_medium"
+                android:hint="Kode POS"
+                app:counterEnabled="true"
+                app:counterMaxLength="5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginVertical="@dimen/margin_padding_size_medium"
+                android:text="Simpan" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/hippie_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:fontFamily="@font/capriola"
+            android:text="Loading"
+            android:textColor="?attr/colorOnBackground" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:text="Oh tidak, Terjadi Masalah!"
+            android:textColor="@color/pomegranate"
+            android:textSize="@dimen/text_size_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="Sepertinya ada masalah saat mengambil data,\ntetap tenang dan coba lagi nanti."
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground" />
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="[VALUE ERROR]"
+            android:textAlignment="center"
+            android:textColor="@color/hippie_blue"
+            android:textSize="@dimen/text_size_micro" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -23,5 +23,19 @@
             android:name="productId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="id.rsdiz.rdshop.ui.home.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_editProfileActivity"
+            app:destination="@id/editProfileActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/editProfileActivity"
+        android:name="id.rsdiz.rdshop.ui.home.ui.profile.edit.EditProfileActivity"
+        android:label="activity_edit_profile"
+        tools:layout="@layout/activity_edit_profile" />
 
 </navigation>

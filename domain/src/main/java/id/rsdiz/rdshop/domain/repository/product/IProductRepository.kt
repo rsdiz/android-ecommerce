@@ -4,8 +4,6 @@ import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.data.model.ProductImage
-import id.rsdiz.rdshop.data.source.local.entity.ProductEntity
-import id.rsdiz.rdshop.data.source.local.entity.ProductWithImages
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -23,6 +21,11 @@ interface IProductRepository {
      * Get list of products
      */
     fun getProducts(): Flow<PagingData<Product>>
+
+    /**
+     * Get List of Favorite Products
+     */
+    fun getFavoriteProducts(): Flow<List<Product>>
 
     /**
      * Get specified product by [productId]
@@ -58,4 +61,9 @@ interface IProductRepository {
      * Delete Product Image from repository
      */
     suspend fun removeProductImage(productId: String, imageId: String): Resource<String>
+
+    /**
+     * Add Product to Favorite Product
+     */
+    suspend fun switchProductFavorite(productId: String)
 }

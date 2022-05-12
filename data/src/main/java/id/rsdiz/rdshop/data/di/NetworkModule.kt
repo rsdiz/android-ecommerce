@@ -12,6 +12,7 @@ import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.SSLCertificateConfigurator
 import id.rsdiz.rdshop.data.R
+import id.rsdiz.rdshop.data.source.remote.network.ApiRajaOngkirService
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,11 +26,9 @@ import javax.net.ssl.X509TrustManager
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
-    fun provideOkHttpClient(
-        @ApplicationContext context: Context
-    ): OkHttpClient {
+    fun provideApiService(@ApplicationContext context: Context): ApiService {
         val trustManagerFactory =
-            SSLCertificateConfigurator.getTrustManager(context, R.raw.certificate_rdshop)
+            SSLCertificateConfigurator.getTrustManager(context, R.raw.certificate_rdshop2)
         val trustManagers = trustManagerFactory.trustManagers
         if (trustManagers.size != 1 || trustManagers[0] !is X509TrustManager) {
             throw IllegalStateException(
@@ -40,29 +39,26 @@ object NetworkModule {
         }
         val trustManager = trustManagers[0] as X509TrustManager
 
-        return OkHttpClient.Builder()
+        val client = OkHttpClient.Builder()
             .sslSocketFactory(
                 SSLCertificateConfigurator.getSSLConfiguration(
                     context,
-                    R.raw.certificate_rdshop
+                    R.raw.certificate_rdshop2
                 ).socketFactory,
                 trustManager
             )
-            .addInterceptor(HeaderInterceptor(apiKey = getApiKey(context)))
+            .addInterceptor(HeaderInterceptor(headerName = Consts.API_HEADER_KEY, apiKey = getApiKey(context)))
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .connectTimeout(Consts.TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(Consts.TIMEOUT, TimeUnit.SECONDS)
-            .build()
-    }
 
-    @Provides
-    fun provideApiService(client: OkHttpClient): ApiService =
-        Retrofit.Builder()
+        return Retrofit.Builder()
             .baseUrl(Consts.RDSHOP_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
+            .client(client.build())
             .build().create(ApiService::class.java)
+    }
 
     private fun getApiKey(context: Context): String {
         val prefs = PreferenceHelper(context).customPrefs(Consts.PREFERENCE_NAME)
@@ -72,5 +68,19 @@ object NetworkModule {
         return apiKey.ifEmpty {
             Consts.RDSHOP_API_KEY
         }
+    }
+
+    @Provides
+    fun provideApiRajaOngkirService(@ApplicationContext context: Context): ApiRajaOngkirService {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor(headerName = Consts.RAJAONGKIR_API_HEADER_KEY, apiKey = Consts.RAJAONGKIR_API_KEY))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+
+        return Retrofit.Builder()
+            .baseUrl(Consts.RAJAONGKIR_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client.build())
+            .build().create(ApiRajaOngkirService::class.java)
     }
 }

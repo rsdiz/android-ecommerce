@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.flush
@@ -19,6 +20,7 @@ import id.rsdiz.rdshop.databinding.FragmentLoginBinding
 import id.rsdiz.rdshop.ui.home.HomeActivity
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null

@@ -21,7 +21,7 @@ interface IUserDao : IBaseDao<UserEntity> {
     fun getAllUsers(): PagingSource<Int, User>
 
     @Query("SELECT * FROM users WHERE userId = :userId")
-    fun getUserById(userId: String): Flow<UserEntity>?
+    fun getUserById(userId: String): Flow<UserEntity?>
 
     @Query("SELECT * FROM users WHERE userId = :userId")
     fun getUserEntityById(userId: String): UserEntity?

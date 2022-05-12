@@ -10,9 +10,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.adapter.FooterPagingAdapter
 import id.rsdiz.rdshop.adapter.ProductPagingGridAdapter
 import id.rsdiz.rdshop.base.utils.collect
@@ -20,6 +22,7 @@ import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.common.LoadStateUi
 import id.rsdiz.rdshop.common.ProductItemUiState
 import id.rsdiz.rdshop.databinding.FragmentHomeBinding
+import id.rsdiz.rdshop.ui.auth.AuthFragmentDirections
 import id.rsdiz.rdshop.ui.home.IOnBackPressed
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -27,6 +30,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), IOnBackPressed {
 
     private var _binding: FragmentHomeBinding? = null
@@ -52,7 +56,11 @@ class HomeFragment : Fragment(), IOnBackPressed {
         super.onViewCreated(view, savedInstanceState)
 
         productPagingAdapter.setOnItemClickListener {
+            val direction = HomeFragmentDirections.actionNavigationHomeToDetailFragment(it.productId)
+            view.findNavController().navigate(direction)
         }
+
+        binding.fabToTop.visibility = View.GONE
 
         binding.content.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY > oldScrollY + 12) binding.fabToTop.hide()
@@ -127,6 +135,7 @@ class HomeFragment : Fragment(), IOnBackPressed {
             action = ::setProductUiState
         )
         collectProducts()
+        binding.fabToTop.visibility = View.VISIBLE
     }
 
     private suspend fun collectProducts() {

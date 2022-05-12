@@ -40,4 +40,7 @@ class ProductUseCase @Inject constructor(
 
     override suspend fun removeProductImage(productId: String, imageId: String) =
         repository.removeProductImage(productId, imageId)
+
+    override suspend fun switchProductFavorite(productId: String) =
+        repository.switchProductFavorite(productId)
 }

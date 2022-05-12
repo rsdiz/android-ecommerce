@@ -49,9 +49,11 @@ data class OrderItemUIState(
 
     fun getAddressStreetName() = order.shipAddress.split('|')[0]
 
-    fun getAddressCountry() = order.shipAddress.split('|')[1]
+    fun getAddressCity() = order.shipAddress.split('|')[1]
 
-    fun getAddressPostalCode() = order.shipAddress.split('|')[2]
+    fun getAddressProvince() = order.shipAddress.split('|')[2]
+
+    fun getAddressPostalCode() = order.shipAddress.split('|')[3]
 
     fun getTrackingNumber() = order.trackingNumber?.split('|')?.get(0)
 

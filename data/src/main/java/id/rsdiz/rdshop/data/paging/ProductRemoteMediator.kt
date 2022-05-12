@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -11,6 +12,7 @@ import id.rsdiz.rdshop.data.source.local.room.IProductImageDao
 import id.rsdiz.rdshop.data.source.local.room.IProductRemoteKeysDao
 import id.rsdiz.rdshop.data.source.remote.mapper.ProductRemoteMapper
 import id.rsdiz.rdshop.data.source.remote.network.ApiService
+import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPagingApi::class)
 class ProductRemoteMediator(
@@ -55,7 +57,14 @@ class ProductRemoteMediator(
                 val responseData = response.data
                 endOfPaginationReached = responseData == null
                 responseData?.let { data ->
+
+                    val oldData = mutableListOf<ProductWithImages>()
                     if (loadType == LoadType.REFRESH) {
+                        mapper.mapRemoteToEntities(data.results).map {
+                            val current = productDao.getProductById(it.product.productId).first()
+                            current?.let { oldData.add(current) }
+                        }
+
                         productDao.deleteAll()
                         productRemoteKeysDao.deleteAll()
                     }
@@ -83,6 +92,17 @@ class ProductRemoteMediator(
                     productRemoteKeysDao.insertAll(keys)
 
                     mapper.mapRemoteToEntities(data.results).map {
+                        val currentData =
+                            if (loadType != LoadType.REFRESH) {
+                                productDao.getProductById(it.product.productId).first()
+                            } else {
+                                oldData.firstOrNull { old -> old.product.productId == it.product.productId }
+                            }
+
+                        currentData?.let { current ->
+                            it.product.isFavorite = current.product.isFavorite
+                        }
+
                         productDao.insert(it.product)
                         productImageDao.insertAll(it.images)
                     }

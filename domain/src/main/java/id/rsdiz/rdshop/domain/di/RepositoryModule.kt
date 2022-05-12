@@ -9,6 +9,8 @@ import id.rsdiz.rdshop.domain.repository.auth.AuthRepository
 import id.rsdiz.rdshop.domain.repository.auth.IAuthRepository
 import id.rsdiz.rdshop.domain.repository.category.CategoryRepository
 import id.rsdiz.rdshop.domain.repository.category.ICategoryRepository
+import id.rsdiz.rdshop.domain.repository.ongkir.IOngkirRepository
+import id.rsdiz.rdshop.domain.repository.ongkir.OngkirRepository
 import id.rsdiz.rdshop.domain.repository.order.IOrderRepository
 import id.rsdiz.rdshop.domain.repository.order.OrderRepository
 import id.rsdiz.rdshop.domain.repository.product.IProductRepository
@@ -33,4 +35,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindOrderRepository(repository: OrderRepository): IOrderRepository
+
+    @Binds
+    abstract fun bindOngkirRepository(repository: OngkirRepository): IOngkirRepository
 }

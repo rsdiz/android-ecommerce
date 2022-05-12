@@ -22,6 +22,10 @@ interface IProductDao : IBaseDao<ProductEntity> {
     fun getAllProducts(): PagingSource<Int, ProductWithImages>
 
     @Transaction
+    @Query("SELECT * FROM products WHERE isFavorite = 1")
+    fun getFavoriteProducts(): Flow<List<ProductWithImages>>
+
+    @Transaction
     @Query("SELECT * FROM products WHERE productId = :productId")
     fun getProductById(productId: String): Flow<ProductWithImages?>
 

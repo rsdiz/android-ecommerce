@@ -11,6 +11,7 @@ import id.rsdiz.rdshop.data.source.remote.response.order.OrderResponse
 import id.rsdiz.rdshop.data.source.remote.response.product.*
 import id.rsdiz.rdshop.data.source.remote.response.user.BaseUserResponse
 import id.rsdiz.rdshop.data.source.remote.response.user.BaseUsersResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.threeten.bp.OffsetDateTime
 import retrofit2.http.*
@@ -97,7 +98,14 @@ interface ApiService {
     @PUT(value = "users/{userId}")
     suspend fun updateUser(
         @Path(value = "userId") userId: String,
-        @Body data: RequestBody
+        @Part(value = "name") name: RequestBody,
+        @Part(value = "email") email: RequestBody,
+        @Part(value = "username") username: RequestBody,
+        @Part(value = "password") password: RequestBody,
+        @Part(value = "gender") gender: RequestBody,
+        @Part(value = "address") address: RequestBody,
+        @Part(value = "role") role: RequestBody,
+        @Part photoFile: MultipartBody.Part?
     ): BaseUserResponse
 
     @Multipart

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +19,7 @@ import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
+import id.rsdiz.rdshop.base.utils.collect
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.databinding.FragmentProfileBinding
@@ -47,9 +49,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            collectLast(viewModel.getUser(prefs[Consts.PREF_ID, ""])) { resource ->
+            collectLast(viewModel.getUser(prefs[Consts.PREF_ID])) { resource ->
                 when (resource) {
                     is Resource.Success -> {
+                        setVisibilityContent(View.VISIBLE)
+
                         resource.data?.let { user ->
                             binding.apply {
                                 Glide.with(root.context)
@@ -87,6 +91,11 @@ class ProfileFragment : Fragment() {
         }
 
         binding.buttonLogout.setOnClickListener { logout() }
+
+        binding.buttonEditProfile.setOnClickListener {
+            val direction = ProfileFragmentDirections.actionNavigationProfileToEditProfileActivity()
+            view.findNavController().navigate(direction)
+        }
     }
 
     private fun logout() {
