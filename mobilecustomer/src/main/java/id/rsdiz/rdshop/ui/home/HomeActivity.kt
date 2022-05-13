@@ -42,9 +42,11 @@ class HomeActivity : AppCompatActivity() {
         val fragment = navHostFragment.childFragmentManager.fragments[0]
         if (fragment is IOnBackPressed) {
             (fragment as? IOnBackPressed)?.onBackPressed()?.not()?.let {
-                super.onBackPressed()
+                if (it) super.onBackPressed()
             }
-        } else super.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onDestroy() {

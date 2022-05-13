@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,13 +17,14 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.adapter.FooterPagingAdapter
+import id.rsdiz.rdshop.adapter.ProductGridAdapter
 import id.rsdiz.rdshop.adapter.ProductPagingGridAdapter
 import id.rsdiz.rdshop.base.utils.collect
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.common.LoadStateUi
 import id.rsdiz.rdshop.common.ProductItemUiState
+import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.databinding.FragmentHomeBinding
-import id.rsdiz.rdshop.ui.auth.AuthFragmentDirections
 import id.rsdiz.rdshop.ui.home.IOnBackPressed
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -41,6 +43,8 @@ class HomeFragment : Fragment(), IOnBackPressed {
     @Inject
     lateinit var productPagingAdapter: ProductPagingGridAdapter
 
+    private lateinit var productSearchAdapter: ProductGridAdapter
+
     private var isSearching = false
 
     override fun onCreateView(
@@ -56,7 +60,8 @@ class HomeFragment : Fragment(), IOnBackPressed {
         super.onViewCreated(view, savedInstanceState)
 
         productPagingAdapter.setOnItemClickListener {
-            val direction = HomeFragmentDirections.actionNavigationHomeToDetailFragment(it.productId)
+            val direction =
+                HomeFragmentDirections.actionNavigationHomeToDetailFragment(it.productId)
             view.findNavController().navigate(direction)
         }
 
@@ -93,6 +98,25 @@ class HomeFragment : Fragment(), IOnBackPressed {
                     query?.let {
                         lifecycleScope.launch {
                             isSearching = true
+                            when (val response = viewModel.searchProducts(it)) {
+                                is Resource.Success -> {
+                                    response.data?.let {
+                                        productSearchAdapter = ProductGridAdapter(
+                                            it.map { product ->
+                                                ProductItemUiState(product)
+                                            }
+                                        )
+                                        binding.rvProductList.adapter = productSearchAdapter
+                                    }
+                                }
+                                else -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Data tidak ditemukan!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
                         }
                     }
 
@@ -192,13 +216,20 @@ class HomeFragment : Fragment(), IOnBackPressed {
                 searchProduct.query.isNotEmpty() -> {
                     searchProduct.setQuery("", false)
                     searchProduct.clearFocus()
+                    binding.rvProductList.adapter =
+                        productPagingAdapter.withLoadStateFooter(
+                            FooterPagingAdapter(productPagingAdapter::retry)
+                        )
+                    isSearching = false
                     true
                 }
                 isSearching -> {
-                    lifecycleScope.launch {
-                        fetchProducts()
-                        isSearching = false
-                    }.isCompleted
+                    binding.rvProductList.adapter =
+                        productPagingAdapter.withLoadStateFooter(
+                            FooterPagingAdapter(productPagingAdapter::retry)
+                        )
+                    isSearching = false
+                    true
                 }
                 else -> false
             }

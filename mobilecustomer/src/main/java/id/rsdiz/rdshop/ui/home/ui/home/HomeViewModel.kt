@@ -35,8 +35,9 @@ class HomeViewModel @Inject constructor(
                 pagingData.map { ProductItemUiState(it) }
             }.cachedIn(viewModelScope)
 
-    suspend fun searchProducts(query: String) =
-        productUseCase.searchProduct(query = query)
+    suspend fun searchProducts(query: String) = productUseCase.searchProduct(
+        query = StringBuilder("%").append(query).append("%").toString()
+    )
 
     init {
         refreshCategory()
