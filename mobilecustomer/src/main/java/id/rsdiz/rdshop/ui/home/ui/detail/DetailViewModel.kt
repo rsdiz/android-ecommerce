@@ -12,22 +12,22 @@ class DetailViewModel @Inject constructor(
     private val categoryUseCase: CategoryUseCase
 ) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
-    private var _categories = categoryUseCase.getCategories()
 
     fun getProduct(productId: String) = reloadTrigger.switchMap {
         productUseCase.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
     }.asFlow()
 
-    fun getCategories() =
-        _categories.asLiveData(viewModelScope.coroutineContext)
+    fun getCategories() = categoryUseCase.getCategories()
 
-    fun refreshCategory() {
+    suspend fun countCategories() = categoryUseCase.count()
+
+    fun refresh() {
         reloadTrigger.value = true
     }
 
     suspend fun switchFavorite(productId: String) = productUseCase.switchProductFavorite(productId)
 
     init {
-        refreshCategory()
+        refresh()
     }
 }

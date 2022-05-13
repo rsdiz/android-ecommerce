@@ -1,10 +1,12 @@
 package id.rsdiz.rdshop.ui.home.ui.detail
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,8 +15,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.R
 import id.rsdiz.rdshop.adapter.ProductImageSliderAdapter
-import id.rsdiz.rdshop.base.utils.collectLast
-import id.rsdiz.rdshop.base.utils.toRupiah
+import id.rsdiz.rdshop.base.utils.*
+import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
+import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.databinding.FragmentDetailBinding
@@ -32,11 +35,16 @@ class DetailFragment : Fragment() {
 
     private val dataArgs get() = DetailFragmentArgs.fromBundle(arguments as Bundle)
 
+    private lateinit var prefs: SharedPreferences
+
+    private lateinit var product: Product
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        prefs = PreferenceHelper(requireContext()).customPrefs(Consts.PREFERENCE_NAME)
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,10 +56,48 @@ class DetailFragment : Fragment() {
             requireActivity().onBackPressed()
         }
 
-        // TODO: Set Action for Button
+        binding.buttonAddToCart.setOnClickListener {
+            val set: MutableSet<String> = prefs[Consts.PREF_CART, mutableSetOf()]
+            if (set.firstOrNull { productId -> productId == product.productId } == null) {
+                set.add(product.productId)
+                prefs[Consts.PREF_CART] = set
+                Toast.makeText(
+                    context,
+                    "Produk ini berhasil ditambahkan ke keranjang!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Produk ini sudah ditambahkan ke keranjang!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
         lifecycleScope.launch {
             fetchProductData(dataArgs.productId)
+            fetchCategories()
+        }
+    }
+
+    private suspend fun fetchCategories() {
+        viewModel.countCategories()
+        collectLast(viewModel.getCategories()) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    response.data?.firstOrNull { category -> category.categoryId == product.categoryId }
+                        ?.let {
+                            binding.productCategory.text = it.name
+                            Log.d("RDSHOP-DEBUG", "setProductUi: Category = ${it.name}")
+                        }
+                }
+                is Resource.Error -> {
+                    Log.d("RDSHOP-DEBUG", "setProductUi: ERROR, cause: ${response.message}")
+                }
+                is Resource.Loading -> {
+                }
+            }
         }
     }
 
@@ -60,8 +106,9 @@ class DetailFragment : Fragment() {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let {
+                        product = it
                         productImageSliderAdapter = ProductImageSliderAdapter(it.image)
-                        setProductUi(it)
+                        setProductUi(product)
                         setVisibilityContent(View.VISIBLE)
                     }
                 }
@@ -104,17 +151,7 @@ class DetailFragment : Fragment() {
 
             productTitle.text = product.name
             productPrice.text = product.price.toRupiah()
-
-            viewModel.getCategories().observe(viewLifecycleOwner) { resource ->
-                if (resource is Resource.Success) {
-                    resource.data?.firstOrNull { category ->
-                        category.categoryId == product.categoryId
-                    }?.let {
-                        productCategory.text = it.name
-                        Log.d("RDSHOP-DEBUG", "setProductUi: Category = ${it.name}")
-                    }
-                }
-            }
+            productStock.text = StringBuilder("Stok: ").append(product.stock).toString()
 
             productDescription.text = product.description
         }

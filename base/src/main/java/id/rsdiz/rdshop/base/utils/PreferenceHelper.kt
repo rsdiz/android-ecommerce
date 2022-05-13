@@ -30,6 +30,9 @@ class PreferenceHelper constructor(private val context: Context) {
             is Boolean -> edit { it.putBoolean(key, value) }
             is Float -> edit { it.putFloat(key, value) }
             is Long -> edit { it.putLong(key, value) }
+            is HashSet<*> -> edit {
+                it.putStringSet(key, value as MutableSet<String>?)
+            }
             else -> throw UnsupportedOperationException("SharedPreference.set() Not yet implemented")
         }
 
@@ -47,6 +50,10 @@ class PreferenceHelper constructor(private val context: Context) {
             Boolean::class -> getBoolean(key, defaultValue as? Boolean ?: false) as T
             Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T
             Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
+            Set::class -> getStringSet(
+                key,
+                defaultValue as? Set<*> as MutableSet<String>?
+            ) as T
             else -> throw UnsupportedOperationException("SharedPreference.get() Not yet implemented")
         }
     }
