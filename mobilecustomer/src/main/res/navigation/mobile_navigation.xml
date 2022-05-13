@@ -37,5 +37,14 @@
         android:name="id.rsdiz.rdshop.ui.home.ui.profile.edit.EditProfileActivity"
         android:label="activity_edit_profile"
         tools:layout="@layout/activity_edit_profile" />
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="id.rsdiz.rdshop.ui.home.ui.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_navigation_favorite_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 
 </navigation>
