@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.R
 import id.rsdiz.rdshop.adapter.ProductImageSliderAdapter
@@ -19,6 +20,8 @@ import id.rsdiz.rdshop.base.utils.*
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.CartDetail
+import id.rsdiz.rdshop.data.model.OrderDetail
 import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.databinding.FragmentDetailBinding
 import kotlinx.coroutines.launch
@@ -58,8 +61,21 @@ class DetailFragment : Fragment() {
 
         binding.buttonAddToCart.setOnClickListener {
             val set: MutableSet<String> = prefs[Consts.PREF_CART, mutableSetOf()]
-            if (set.firstOrNull { productId -> productId == product.productId } == null) {
-                set.add(product.productId)
+
+            val cartDetail = CartDetail(
+                productId = product.productId,
+                price = product.price,
+                quantity = 1,
+                isChecked = true
+            )
+            val data = Gson().toJson(cartDetail)
+
+            if (set.firstOrNull { cart ->
+                val currentCartDetail = Gson().fromJson(cart, CartDetail::class.java)
+                currentCartDetail.productId == product.productId
+            } == null
+            ) {
+                set.add(data)
                 prefs[Consts.PREF_CART] = set
                 Toast.makeText(
                     context,
