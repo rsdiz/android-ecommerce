@@ -46,5 +46,14 @@
             android:id="@+id/action_navigation_favorite_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="id.rsdiz.rdshop.ui.home.ui.cart.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 
 </navigation>

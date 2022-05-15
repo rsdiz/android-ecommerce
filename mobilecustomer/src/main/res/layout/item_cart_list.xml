@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="?attr/colorBackground"
+    app:cardCornerRadius="@dimen/card_view_small_radius"
+    app:cardElevation="@dimen/card_view_small_elevation"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/product_image"
+            android:layout_width="100dp"
+            android:layout_height="110dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/bg_image_loading" />
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingVertical="@dimen/margin_padding_size_micro"
+            android:textAlignment="textStart"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintEnd_toStartOf="@+id/layout_checkbox"
+            app:layout_constraintStart_toEndOf="@+id/product_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Product Name" />
+
+        <TextView
+            android:id="@+id/product_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+            android:alpha="0.5"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingVertical="@dimen/margin_padding_size_micro"
+            android:textAlignment="textStart"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintEnd_toStartOf="@+id/layout_checkbox"
+            app:layout_constraintStart_toEndOf="@+id/product_image"
+            app:layout_constraintTop_toBottomOf="@id/product_name"
+            tools:text="Category Name" />
+
+        <LinearLayout
+            android:id="@+id/layout_checkbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".20"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/product_category"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:id="@+id/cart_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_small"
+                android:minWidth="0dp"
+                android:minHeight="0dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/product_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingVertical="@dimen/margin_padding_size_micro"
+            android:textAlignment="textStart"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_add_quantity"
+            app:layout_constraintStart_toEndOf="@+id/product_image"
+            app:layout_constraintTop_toBottomOf="@+id/product_category"
+            tools:text="Rp.000.000,-" />
+
+        <Button
+            android:id="@+id/button_minus_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:minWidth="0dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="2dp"
+            app:icon="@drawable/ic_baseline_remove_24"
+            app:iconTint="@color/hippie_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_category" />
+
+        <TextView
+            android:id="@+id/cart_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+            android:ellipsize="marquee"
+            android:lines="1"
+            android:paddingHorizontal="@dimen/margin_padding_size_small"
+            android:paddingVertical="@dimen/margin_padding_size_micro"
+            android:textAlignment="textStart"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="50sp"
+            android:autoSizeStepGranularity="2sp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_minus_quantity"
+            app:layout_constraintTop_toBottomOf="@+id/product_category"
+            tools:text="1" />
+
+        <Button
+            android:id="@+id/button_add_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+            android:background="@color/transparent"
+            android:minWidth="0dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="2dp"
+            app:icon="@drawable/ic_baseline_add_24"
+            app:iconTint="@color/hippie_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cart_quantity"
+            app:layout_constraintTop_toBottomOf="@+id/product_category" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
