@@ -1,9 +1,16 @@
 package id.rsdiz.rdshop.ui.home.ui.cart
 
+import android.util.Log
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.Category
+import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.domain.usecase.category.CategoryUseCase
 import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
 import javax.inject.Inject
@@ -13,11 +20,60 @@ class CartViewModel @Inject constructor(
     private val productUseCase: ProductUseCase,
     private val categoryUseCase: CategoryUseCase
 ) : ViewModel() {
-    fun getProduct(productId: String) =
+    private val _categoryData = MutableLiveData<List<Category>>()
+    val categoryData = _categoryData as LiveData<List<Category>>
+    private val _productData = MutableLiveData<List<Product>>()
+    val productData = _productData as LiveData<List<Product>>
+
+    private fun getProduct(productId: String) =
         productUseCase.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
 
-    fun getCategory() =
+    private fun getCategory() =
         categoryUseCase.getCategories().asLiveData(viewModelScope.coroutineContext)
 
     suspend fun countCategory() = categoryUseCase.count()
+
+    fun observerProduct(owner: LifecycleOwner, productId: String) {
+        getProduct(productId).observe(owner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    response.data?.let {
+                        val newData = mutableListOf<Product>()
+                        _productData.value?.let { old -> newData.addAll(old) }
+                        if (!newData.contains(it))
+                            newData.add(it)
+                        _productData.postValue(newData)
+                    }
+                }
+                is Resource.Error -> {
+                    Log.e(
+                        "RDSHOP-ERROR",
+                        "observerProduct: Error Occurred, cause: ${response.message}"
+                    )
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun productHasObserver(productId: String) = getProduct(productId).hasActiveObservers()
+
+    fun observeCategory(owner: LifecycleOwner) {
+        getCategory().observe(owner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    response.data?.let {
+                        _categoryData.postValue(it)
+                    }
+                }
+                is Resource.Error -> {
+                    Log.e(
+                        "RDSHOP-ERROR",
+                        "observeCategory: Error Occurred, cause: ${response.message}"
+                    )
+                }
+                else -> {}
+            }
+        }
+    }
 }

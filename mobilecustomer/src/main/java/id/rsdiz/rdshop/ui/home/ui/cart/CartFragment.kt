@@ -22,10 +22,8 @@ import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.base.utils.toRupiah
 import id.rsdiz.rdshop.common.CartDetailUiState
-import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.CartDetail
 import id.rsdiz.rdshop.data.model.Category
-import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.databinding.FragmentCartBinding
 import kotlinx.coroutines.launch
 
@@ -50,7 +48,10 @@ class CartFragment : Fragment() {
     ): View {
         prefs = PreferenceHelper(requireContext()).customPrefs(Consts.PREFERENCE_NAME)
         _binding = FragmentCartBinding.inflate(inflater, container, false)
-        lifecycleScope.launch { viewModel.countCategory() }
+        lifecycleScope.launch {
+            viewModel.countCategory()
+            viewModel.observeCategory(viewLifecycleOwner)
+        }
         return binding.root
     }
 
@@ -73,50 +74,44 @@ class CartFragment : Fragment() {
 
     private fun fetchData() {
         setVisibilityContent(View.GONE, isLoading = true, isEmpty = false)
+
         val set: MutableSet<String> = prefs[Consts.PREF_CART, mutableSetOf()]
+        val total = set.size
+
+        val cartDetail = mutableListOf<CartDetail>()
 
         if (!set.isNullOrEmpty()) {
-            val total = set.size
-            set.forEachIndexed { index, cart ->
+            set.forEach { cart ->
                 val currentCartDetail = Gson().fromJson(cart, CartDetail::class.java)
-
-                viewModel.getProduct(currentCartDetail.productId)
-                    .observe(viewLifecycleOwner) { response ->
-                        when (response) {
-                            is Resource.Success -> {
-                                val product: Product? = response.data
-                                product?.let {
-                                    viewModel.getCategory()
-                                        .observe(viewLifecycleOwner) { response ->
-                                            when (response) {
-                                                is Resource.Success -> {
-                                                    val category: Category? =
-                                                        response.data?.firstOrNull { category ->
-                                                            category.categoryId == product.categoryId
-                                                        }
-
-                                                    category?.let {
-                                                        val cartDetailUiState = CartDetailUiState(
-                                                            cartDetail = currentCartDetail,
-                                                            product = product,
-                                                            category = category
-                                                        )
-
-                                                        cartListAdapter.insertData(cartDetailUiState)
-                                                    }
-
-                                                    if (index == total - 1)
-                                                        setVisibilityContent(View.VISIBLE)
-                                                }
-                                                else -> {}
-                                            }
-                                        }
-                                }
-                            }
-                            else -> {}
-                        }
-                    }
+                if (!viewModel.productHasObserver(currentCartDetail.productId))
+                    viewModel.observerProduct(viewLifecycleOwner, currentCartDetail.productId)
+                cartDetail.add(currentCartDetail)
             }
+
+            viewModel.categoryData.observe(viewLifecycleOwner) { categories ->
+                viewModel.productData.observe(viewLifecycleOwner) { list ->
+                    list.forEachIndexed { index, product ->
+                        val category: Category? =
+                            categories.firstOrNull { category ->
+                                category.categoryId == product.categoryId
+                            }
+
+                        category?.let {
+                            cartListAdapter.insertData(
+                                CartDetailUiState(
+                                    cartDetail = cartDetail.first { cart -> cart.productId == product.productId },
+                                    product = product,
+                                    category = category
+                                )
+                            )
+                        }
+
+                        if (index == total - 1)
+                            setVisibilityContent(View.VISIBLE)
+                    }
+                }
+            }
+
             calculateTotal()
         } else {
             setVisibilityContent(View.GONE, isEmpty = true)
