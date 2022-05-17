@@ -6,6 +6,9 @@ import id.rsdiz.rdshop.data.source.remote.network.ApiResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -92,7 +95,10 @@ class RajaOngkirRemoteDataSource @Inject constructor(
         flow {
             try {
                 val response = apiRajaOngkirService.getShippingCost(
-                    origin, destination, weight, courier
+                    generateRequestBody(origin.toString()),
+                    generateRequestBody(destination.toString()),
+                    generateRequestBody(weight.toString()),
+                    generateRequestBody(courier)
                 )
                 when (response.rajaongkir.status.code) {
                     200 -> emit(
@@ -106,4 +112,7 @@ class RajaOngkirRemoteDataSource @Inject constructor(
                 emit(ApiResponse.Error(e.localizedMessage ?: e.toString()))
             }
         }.flowOn(Dispatchers.IO)
+
+    private fun generateRequestBody(text: String): RequestBody =
+        text.toRequestBody("text/plain".toMediaTypeOrNull())
 }

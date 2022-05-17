@@ -17,6 +17,7 @@ android {
 
         buildConfigField "String", "API_KEY", '"QmlzbWlsbGFoIFRBIEtlbGFy"'
         buildConfigField "String", "API_RAJAONGKIR", '"3e3575c064471c7093430c6f36d63679"'
+        buildConfigField "String", "API_MIDTRANS_SANDBOX", '"SB-Mid-client-NjBwrGQWQNbDrpiy"'
     }
 
     buildTypes {

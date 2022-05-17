@@ -54,6 +54,14 @@
         <action
             android:id="@+id/action_cartFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_navigation_cart_to_checkoutActivity"
+            app:destination="@id/checkoutActivity" />
     </fragment>
+    <activity
+        android:id="@+id/checkoutActivity"
+        android:name="id.rsdiz.rdshop.ui.home.ui.cart.checkout.CheckoutActivity"
+        android:label="activity_checkout"
+        tools:layout="@layout/activity_checkout" />
 
 </navigation>

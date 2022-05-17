@@ -11,5 +11,5 @@ data class BaseCostResponse(
     @field:SerializedName("status")
     override val status: RajaOngkirStatusResponse,
     @field:SerializedName("results")
-    override val results: CostResponse?
-) : IBaseRajaOngkirResponse<CostResponse>
+    override val results: List<CostResponse>
+) : IBaseRajaOngkirResponse<List<CostResponse>>

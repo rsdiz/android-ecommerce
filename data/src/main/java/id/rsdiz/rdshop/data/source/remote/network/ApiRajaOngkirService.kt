@@ -5,6 +5,7 @@ import id.rsdiz.rdshop.data.source.remote.response.rajaongkir.city.RajaOngkirCit
 import id.rsdiz.rdshop.data.source.remote.response.rajaongkir.cost.RajaOngkirCostResponse
 import id.rsdiz.rdshop.data.source.remote.response.rajaongkir.province.RajaOngkirProvinceResponse
 import id.rsdiz.rdshop.data.source.remote.response.rajaongkir.province.RajaOngkirProvincesResponse
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 /**
@@ -30,9 +31,9 @@ interface ApiRajaOngkirService {
     @Multipart
     @POST(value = "cost")
     suspend fun getShippingCost(
-        @Part(value = "origin") origin: Int,
-        @Part(value = "destination") destination: Int,
-        @Part(value = "weight") weight: Int,
-        @Part(value = "courier") courier: String
+        @Part(value = "origin") origin: RequestBody,
+        @Part(value = "destination") destination: RequestBody,
+        @Part(value = "weight") weight: RequestBody,
+        @Part(value = "courier") courier: RequestBody
     ): RajaOngkirCostResponse
 }

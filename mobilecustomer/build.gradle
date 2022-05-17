@@ -61,6 +61,8 @@ dependencies {
     implementation mobileUiDependencies.lifecycleExtension
     implementation mobileUiDependencies.navFragment
     implementation mobileUiDependencies.navUi
+    implementation mobileUiDependencies.cardinalCommerceSdk
+    implementation mobileUiDependencies.xenditSdk
 
     implementation dataDependencies.roomRuntime
     implementation dataDependencies.roomPaging

@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
+    tools:context=".ui.home.ui.cart.checkout.CheckoutActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_gradient_reverse_bluewood_no_radius"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:title="Checkout Pesanan"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"
+        app:titleTextColor="@color/white" />
+
+    <ScrollView
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_padding_size_medium"
+                android:gravity="center"
+                android:text="Pastikan Semua Informasi yang Anda masukkan benar!"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnBackground" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_order_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_small"
+                android:background="?attr/colorBackground"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/margin_padding_size_small"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                    android:layout_marginVertical="@dimen/margin_padding_size_small"
+                    android:fontFamily="@font/capriola"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="Produk yang dibeli"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_large" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_order_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="visible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_order_list" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_order_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_small"
+                android:background="?attr/colorBackground"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/margin_padding_size_small"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                    android:layout_marginVertical="@dimen/margin_padding_size_small"
+                    android:fontFamily="@font/capriola"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="Alamat Penerima"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_large" />
+
+                <RadioGroup
+                    android:id="@+id/rg_address_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_address_my"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+                        android:text="Gunakan Alamat Saya" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_address_custom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+                        android:text="Pakai Alamat Lain" />
+
+                </RadioGroup>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="?attr/colorBackground"
+                    app:cardCornerRadius="@dimen/card_view_small_radius"
+                    app:cardElevation="@dimen/card_view_small_elevation"
+                    app:cardUseCompatPadding="true">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/input_order_name"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_padding_size_medium"
+                            android:hint="Nama Penerima">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:inputType="text"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/input_order_address"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_padding_size_medium"
+                            android:hint="Alamat">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:inputType="text"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/input_order_phone"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_padding_size_medium"
+                            android:hint="No Telp/WA">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:inputType="text"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_padding_size_medium"
+                            android:text="Kota:" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/input_order_address_city"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:padding="@dimen/margin_padding_size_medium"
+                            android:spinnerMode="dialog" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_padding_size_medium"
+                            android:text="Provinsi:" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/input_order_address_province"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:padding="@dimen/margin_padding_size_medium"
+                            android:spinnerMode="dialog" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/input_order_address_postal_code"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:layout_marginVertical="@dimen/margin_padding_size_medium"
+                            android:hint="Kode POS"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="5">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:inputType="number"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_order_delivery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_small"
+                android:background="?attr/colorBackground"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/margin_padding_size_small"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                    android:layout_marginVertical="@dimen/margin_padding_size_small"
+                    android:fontFamily="@font/capriola"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="Pengiriman"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_large" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_ongkir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/margin_padding_size_medium"
+                    android:paddingVertical="@dimen/margin_padding_size_small"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/view2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/ongkir_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:orientation="vertical"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/ongkir_cost"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="@dimen/text_size_medium"
+                            tools:text="Rp.000,00-" />
+
+                        <TextView
+                            android:id="@+id/ongkir_estimation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/capriola"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="@dimen/text_size_small"
+                            tools:text="Estimasi tiba 0 - 0 Bulan" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_select_courier"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Pilih Pengiriman"
+                        android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+                        app:icon="@drawable/ic_baseline_arrow_right_alt_24"
+                        app:iconGravity="end"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ongkir_detail"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_order_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_small"
+                android:background="?attr/colorBackground"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/margin_padding_size_small"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                    android:layout_marginVertical="@dimen/margin_padding_size_small"
+                    android:fontFamily="@font/capriola"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:text="Ringkasan Belanja"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_large" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                    android:layout_marginVertical="@dimen/margin_padding_size_small">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:id="@+id/label_total_price"
+                            android:layout_weight="0.4"
+                            android:gravity="start"
+                            android:text="@string/label_total_price"
+                            android:textAlignment="textStart" />
+
+                        <TextView
+                            android:id="@+id/order_total_price"
+                            android:layout_weight="0.6"
+                            android:gravity="end"
+                            android:text="Rp.000,00"
+                            android:textAlignment="textEnd" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:id="@+id/label_total_ongkir"
+                            android:layout_weight="0.4"
+                            android:gravity="start"
+                            android:text="Total Ongkos Kirim"
+                            android:textAlignment="textStart" />
+
+                        <TextView
+                            android:id="@+id/order_total_ongkir"
+                            android:layout_weight="0.6"
+                            android:gravity="end"
+                            android:text="Rp.000,00"
+                            android:textAlignment="textEnd" />
+                    </TableRow>
+                </TableLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_bill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_small"
+                android:background="?attr/colorBackground"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_padding_size_medium"
+                android:visibility="visible"
+                android:weightSum="3">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        android:text="Total Tagihan"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <TextView
+                        android:id="@+id/order_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/capriola"
+                        android:text="Rp.000.000,-"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="@dimen/text_size_large" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minWidth="0dp"
+                    android:text="Bayar"
+                    app:icon="@drawable/ic_baseline_credit_card_24" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/hippie_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:fontFamily="@font/capriola"
+            android:text="Loading"
+            android:textColor="?attr/colorOnBackground" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:text="Oh tidak, Terjadi Masalah!"
+            android:textColor="@color/pomegranate"
+            android:textSize="@dimen/text_size_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="Sepertinya ada masalah saat mengambil data,\ntetap tenang dan coba lagi nanti."
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground" />
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="[VALUE ERROR]"
+            android:textAlignment="center"
+            android:textColor="@color/hippie_blue"
+            android:textSize="@dimen/text_size_micro" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

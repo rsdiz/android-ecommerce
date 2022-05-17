@@ -3,7 +3,7 @@
     package="id.rsdiz.rdshop">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -13,6 +13,9 @@
         android:roundIcon="@mipmap/ic_rdshop_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RDSHOP.NoActionBar">
+        <activity
+            android:name=".ui.home.ui.cart.checkout.CheckoutActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.home.ui.profile.edit.EditProfileActivity"
             android:exported="false" />
@@ -32,6 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.xendit.XenditActivity"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

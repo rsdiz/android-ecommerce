@@ -44,6 +44,9 @@ ext {
     navVersion = "2.3.5"
     roomPagingVersion = "2.5.0-alpha01"
     activityVersion = "1.2.4"
+    midtransSdkVersion = "1.31.1"
+    xenditSdkVersion = "3.6.1"
+    cardinalCommerceSdkVersion = "2.2.4-1"
 
     // Testing
     robolectricVersion = "4.7.3"
@@ -57,7 +60,7 @@ ext {
     mockwebserverVersion = "4.9.3"
 
     shareDependencies = [
-            coreKtx     : "androidx.core:core-ktx:${coreKtxVersion}"
+            coreKtx: "androidx.core:core-ktx:${coreKtxVersion}"
     ]
 
     domainDependencies = [
@@ -87,22 +90,26 @@ ext {
     ]
 
     mobileUiDependencies = [
-            activity          : "androidx.activity:activity-ktx:${activityVersion}",
-            appcompat         : "androidx.appcompat:appcompat:${appcompatVersion}",
-            material          : "com.google.android.material:material:${materialVersion}",
-            constraintLayout  : "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}",
-            recyclerView      : "androidx.recyclerview:recyclerview:${recyclerviewVersion}",
-            pallete           : "androidx.palette:palette-ktx:${palleteVersion}",
-            fragment          : "androidx.fragment:fragment-ktx:${fragmentVersion}",
-            navFragment       : "androidx.navigation:navigation-fragment-ktx:${navVersion}",
-            navUi             : "androidx.navigation:navigation-ui-ktx:${navVersion}",
-            paging            : "androidx.paging:paging-runtime-ktx:${pagingVersion}",
-            glide             : "com.github.bumptech.glide:glide:${glideVersion}",
-            viewmodel         : "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion",
-            livedata          : "androidx.lifecycle:lifecycle-livedata-ktx:$androidLifecycleVersion",
-            runtimeKtx        : "androidx.lifecycle:lifecycle-runtime-ktx:$androidLifecycleVersion",
-            commonJava8       : "androidx.lifecycle:lifecycle-common-java8:$androidLifecycleVersion",
-            lifecycleExtension: "androidx.lifecycle:lifecycle-extensions:$androidLifecycleExtensionVersion"
+            activity           : "androidx.activity:activity-ktx:${activityVersion}",
+            appcompat          : "androidx.appcompat:appcompat:${appcompatVersion}",
+            material           : "com.google.android.material:material:${materialVersion}",
+            constraintLayout   : "androidx.constraintlayout:constraintlayout:${constraintlayoutVersion}",
+            recyclerView       : "androidx.recyclerview:recyclerview:${recyclerviewVersion}",
+            pallete            : "androidx.palette:palette-ktx:${palleteVersion}",
+            fragment           : "androidx.fragment:fragment-ktx:${fragmentVersion}",
+            navFragment        : "androidx.navigation:navigation-fragment-ktx:${navVersion}",
+            navUi              : "androidx.navigation:navigation-ui-ktx:${navVersion}",
+            paging             : "androidx.paging:paging-runtime-ktx:${pagingVersion}",
+            glide              : "com.github.bumptech.glide:glide:${glideVersion}",
+            viewmodel          : "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidLifecycleVersion",
+            livedata           : "androidx.lifecycle:lifecycle-livedata-ktx:$androidLifecycleVersion",
+            runtimeKtx         : "androidx.lifecycle:lifecycle-runtime-ktx:$androidLifecycleVersion",
+            commonJava8        : "androidx.lifecycle:lifecycle-common-java8:$androidLifecycleVersion",
+            lifecycleExtension : "androidx.lifecycle:lifecycle-extensions:$androidLifecycleExtensionVersion",
+            midtransSdkSandbox : "com.midtrans:uikit:$midtransSdkVersion-UAT",
+            midtransSdkProd    : "com.midtrans:uikit:$midtransSdkVersion",
+            xenditSdk          : "com.xendit:xendit-android:$xenditSdkVersion",
+            cardinalCommerceSdk: "org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:$cardinalCommerceSdkVersion"
     ]
 
     dependencyInjector = [

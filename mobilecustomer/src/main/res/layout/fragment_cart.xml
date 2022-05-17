@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:minWidth="0dp"
-                android:text="Bayar"
+                android:text="Checkout"
                 app:icon="@drawable/ic_baseline_credit_card_24" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -33,5 +33,5 @@ interface IOngkirUseCase {
     /**
      * Calculate Shipping Cost
      */
-    suspend fun getShippingCost(origin: Int, destination: Int, weight: Int, courier: String): Resource<Cost>
+    suspend fun getShippingCost(origin: Int, destination: Int, weight: Int, courier: String): Resource<List<Cost>>
 }

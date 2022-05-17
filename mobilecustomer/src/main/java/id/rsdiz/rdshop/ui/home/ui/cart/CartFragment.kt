@@ -63,6 +63,11 @@ class CartFragment : Fragment() {
 
         setupListAndAdapter()
 
+        binding.buttonCheckout.setOnClickListener {
+            val direction = CartFragmentDirections.actionNavigationCartToCheckoutActivity()
+            view.findNavController().navigate(direction)
+        }
+
         fetchData()
     }
 

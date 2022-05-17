@@ -81,13 +81,13 @@ class OngkirRepository @Inject constructor(
         destination: Int,
         weight: Int,
         courier: String
-    ): Resource<Cost> =
+    ): Resource<List<Cost>> =
         when (
             val response =
                 remoteDataSource.getShippingCost(origin, destination, weight, courier).first()
         ) {
             is ApiResponse.Success -> {
-                val data = response.data?.let { remoteDataSource.costMapper.mapRemoteToEntity(it) }
+                val data = remoteDataSource.costMapper.mapRemoteToEntities(response.data)
                 if (data != null) {
                     Resource.Success(data)
                 } else {
