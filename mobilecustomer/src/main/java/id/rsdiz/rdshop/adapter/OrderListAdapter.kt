@@ -16,7 +16,7 @@ class OrderListAdapter : RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
 
     fun insertData(cartDetailUiState: OrderUiState) {
         val position = itemCount
-        data.add(position, cartDetailUiState)
+        if (!data.contains(cartDetailUiState)) data.add(position, cartDetailUiState)
         notifyItemInserted(position)
     }
 

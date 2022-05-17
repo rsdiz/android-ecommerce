@@ -14,6 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/bg_gradient_reverse_bluewood_no_radius"
         app:navigationIcon="@drawable/ic_arrow_left"
+        app:navigationIconTint="@color/white"
         app:title="Checkout Pesanan"
         app:titleCentered="true"
         app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"
@@ -261,7 +262,7 @@
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="@dimen/text_size_large" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/layout_ongkir"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -278,11 +279,10 @@
                         android:id="@+id/ongkir_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_padding_size_medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:orientation="vertical"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginHorizontal="@dimen/margin_padding_size_small"
                         android:visibility="visible">
 
                         <TextView
@@ -306,18 +306,13 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_select_courier"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pilih Pengiriman"
-                        android:layout_marginHorizontal="@dimen/margin_padding_size_small"
                         app:icon="@drawable/ic_baseline_arrow_right_alt_24"
-                        app:iconGravity="end"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ongkir_detail"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:iconGravity="end" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

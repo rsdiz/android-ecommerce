@@ -64,6 +64,7 @@ class CheckoutActivity : AppCompatActivity() {
         lifecycleScope.launch {
             fetchOrderData()
         }
+
         lifecycleScope.launch {
             fetchCityList()
             fetchProvinceList()
@@ -386,7 +387,8 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun calculateTotal() {
-        binding.labelTotalPrice.text = getString(R.string.label_total_price, orderListAdapter.getTotalQuantity())
+        binding.labelTotalPrice.text =
+            getString(R.string.label_total_price, orderListAdapter.getTotalQuantity())
 
         binding.orderTotalPrice.text = orderListAdapter.getTotalPrice().toRupiah()
         binding.orderTotalOngkir.text = ongkirTotal.toRupiah()
