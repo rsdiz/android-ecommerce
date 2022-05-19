@@ -3,39 +3,58 @@ package id.rsdiz.rdshop.domain.usecase.order
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Order
-import id.rsdiz.rdshop.domain.repository.order.IOrderRepository
 import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.OffsetDateTime
-import javax.inject.Inject
 
 /**
- * Implementation of [IOrderUseCase]
+ * Contract for Order Use Case
  */
-class OrderUseCase @Inject constructor(
-    private val repository: IOrderRepository
-) : IOrderUseCase {
-    override suspend fun count() = repository.count()
+interface OrderUseCase {
 
-    override fun getOrders(status: Short?): Flow<PagingData<Order>> = repository.getOrders(status = status)
+    /**
+     * Count total row in orders
+     */
+    suspend fun count(): Resource<Int>
 
-    override fun getNewestOrders(): Flow<Resource<List<Order>>> = repository.getNewestOrders()
+    /**
+     * Get list of orders
+     */
+    fun getOrders(status: Short?): Flow<PagingData<Order>>
 
-    override fun getOrder(orderId: String): Flow<Resource<Order>> = repository.getOrder(orderId)
+    /**
+     * Get newest list of orders
+     */
+    fun getNewestOrders(): Flow<Resource<List<Order>>>
 
-    override fun getOrderByUserId(userId: String): Flow<Resource<List<Order>>> =
-        repository.getOrderByUserId(userId)
+    /**
+     * Get specified order by [orderId]
+     */
+    fun getOrder(orderId: String): Flow<Resource<Order>>
 
-    override fun getOrderByDate(
+    /**
+     * Get specified order by [userId]
+     */
+    fun getOrderByUserId(userId: String): Flow<Resource<List<Order>>>
+
+    /**
+     * Get specified order by date
+     */
+    fun getOrderByDate(
         startDate: OffsetDateTime?,
         endDate: OffsetDateTime?
-    ): Flow<Resource<List<Order>>> = repository.getOrderByDate(startDate, endDate)
+    ): Flow<Resource<List<Order>>>
 
-    override suspend fun insertOrder(order: Order): Resource<String> = repository.insertOrder(order)
+    /**
+     * Insert new order
+     */
+    suspend fun insertOrder(order: Order): Resource<String>
 
-    override suspend fun updateOrder(
+    /**
+     * Update order by [orderId]
+     */
+    suspend fun updateOrder(
         orderId: String,
         status: Short,
-        trackingNumber: String
-    ): Resource<String> =
-        repository.updateOrder(orderId, status, trackingNumber)
+        trackingNumber: String = ""
+    ): Resource<String>
 }

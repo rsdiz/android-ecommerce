@@ -1,9 +1,9 @@
-package id.rsdiz.rdshop.seller.common
+package id.rsdiz.rdshop.common
 
 import id.rsdiz.rdshop.base.utils.stringTime
 import id.rsdiz.rdshop.base.utils.toRupiah
+import id.rsdiz.rdshop.common.base.BaseUiState
 import id.rsdiz.rdshop.data.model.Order
-import id.rsdiz.rdshop.seller.common.base.BaseUiState
 
 data class OrderItemUIState(
     private val order: Order
@@ -16,7 +16,11 @@ data class OrderItemUIState(
 
     fun getOrderMonthNumber() = order.date.monthValue
 
-    fun getFullDate() = StringBuilder(getOrderDate()).append(" ").append(getOrderMonth()).append(" ").append(getOrderYear()).toString()
+    fun getFullDate() =
+        StringBuilder(getOrderDate()).append(" ").append(getOrderMonth()).append(" ")
+            .append(getOrderYear()).toString()
+
+    fun getOffsetDate() = order.date
 
     fun getOrderTotal() = order.amount.toRupiah()
 

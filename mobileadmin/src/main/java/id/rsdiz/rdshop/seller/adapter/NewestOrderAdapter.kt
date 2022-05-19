@@ -30,7 +30,7 @@ class NewestOrderAdapter : RecyclerView.Adapter<NewestOrderAdapter.ViewHolder>()
         fun bind(orderItemUIState: OrderItemUIState) {
             binding.apply {
                 itemTotal.text = orderItemUIState.getOrderTotal()
-                itemOrderId.text = "Order: #${orderItemUIState.getSimpleOrderId()}"
+                itemOrderId.text = StringBuilder("Order: #").append(orderItemUIState.getSimpleOrderId()).toString()
                 itemOrderYear.text = orderItemUIState.getOrderYear()
                 itemOrderDate.text = orderItemUIState.getOrderDate()
                 itemOrderMonth.text = orderItemUIState.getOrderMonth()

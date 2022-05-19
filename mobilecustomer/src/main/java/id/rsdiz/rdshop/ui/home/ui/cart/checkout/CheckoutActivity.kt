@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
@@ -25,23 +26,26 @@ import com.midtrans.sdk.corekit.core.TransactionRequest
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme
 import com.midtrans.sdk.corekit.models.BillingAddress
 import com.midtrans.sdk.corekit.models.CustomerDetails
+import com.midtrans.sdk.corekit.models.ShippingAddress
 import com.midtrans.sdk.corekit.models.snap.TransactionResult
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.R
+import id.rsdiz.rdshop.adapter.CheckoutListAdapter
 import id.rsdiz.rdshop.adapter.DeliveryServiceAdapter
-import id.rsdiz.rdshop.adapter.OrderListAdapter
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.base.utils.toRupiah
-import id.rsdiz.rdshop.common.OrderUiState
+import id.rsdiz.rdshop.common.CheckoutUiState
+import id.rsdiz.rdshop.common.OrderItemUIState
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.*
 import id.rsdiz.rdshop.databinding.ActivityCheckoutBinding
 import id.rsdiz.rdshop.ui.home.HomeActivity
+import id.rsdiz.rdshop.ui.home.ui.profile.order.OrderHistoryActivity
 import kotlinx.coroutines.launch
 import org.threeten.bp.OffsetDateTime
 import java.util.*
@@ -55,10 +59,11 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
 
     private val viewModel: CheckoutViewModel by viewModels()
 
-    private lateinit var orderListAdapter: OrderListAdapter
+    private lateinit var checkoutListAdapter: CheckoutListAdapter
 
     private var ongkirTotal = 0
     private var user: User? = null
+    private var selectedCost: Cost? = null
     private var selectedServiceCost: ServiceCost? = null
     private var costs = mutableListOf<Cost>()
     private var cityList = mutableListOf<City>()
@@ -135,7 +140,63 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                 }
             }
             buttonPay.setOnClickListener {
-                if (selectedPaymentMethod != -1) {
+                resetErrorView()
+                var countError = 0
+
+                if (binding.inputOrderName.editText?.text.isNullOrEmpty()) {
+                    binding.inputOrderName.apply {
+                        isErrorEnabled = true
+                        error = "Nama Harus diisi!"
+                        countError++
+                    }
+                }
+
+                if (binding.inputOrderPhone.editText?.text.isNullOrEmpty()) {
+                    binding.inputOrderPhone.apply {
+                        isErrorEnabled = true
+                        error = "Nomor Telepon Harus diisi!"
+                        countError++
+                    }
+                }
+
+                if (selectedCity?.cityName.isNullOrEmpty()) {
+                    countError++
+                }
+
+                if (selectedProvince?.province.isNullOrEmpty()) {
+                    countError++
+                }
+
+                if (postalCode.isEmpty()) {
+                    binding.inputOrderAddressPostalCode.apply {
+                        isErrorEnabled = true
+                        error = "Kode Pos harus diisi!"
+                        countError++
+                    }
+                }
+
+                if (countError == 0 && selectedPaymentMethod != -1) {
+                    val courier =
+                        StringBuilder("|")
+                            .append(selectedCost?.code)
+                            .append("|")
+                            .append(selectedServiceCost?.service)
+                            .toString()
+
+                    order = Order(
+                        orderId = currentUUID,
+                        userId = prefs[Consts.PREF_ID],
+                        date = OffsetDateTime.now(),
+                        amount = this@CheckoutActivity.orderTotal,
+                        shipName = binding.inputOrderName.editText?.text.toString(),
+                        shipAddress = getShippingAddress(),
+                        shippingCost = ongkirTotal,
+                        phone = binding.inputOrderPhone.editText?.text.toString(),
+                        status = 0,
+                        trackingNumber = courier,
+                        orderDetail = listOrderDetail
+                    )
+
                     val paymentMethod = when (selectedPaymentMethod) {
                         0 -> PaymentMethod.CREDIT_CARD
                         1 -> PaymentMethod.BANK_TRANSFER
@@ -149,28 +210,79 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                         else -> null
                     }
 
-                    MidtransSDK.getInstance().transactionRequest = initTransactionRequest()
+                    MidtransSDK.getInstance().transactionRequest =
+                        initTransactionRequest(OrderItemUIState(order!!).getSimpleOrderId())
                     MidtransSDK.getInstance()
                         .startPaymentUiFlow(this@CheckoutActivity, paymentMethod)
+                } else {
+                    Toast.makeText(
+                        this@CheckoutActivity,
+                        "Form belum lengkap! Silahkan Cek Kembali Data yang Anda masukkan!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
 
-    private fun initTransactionRequest(): TransactionRequest {
-        val transanctionRequest =
-            TransactionRequest(currentUUID, orderTotal.toDouble())
-        transanctionRequest.customerDetails = getCustomerDetails()
-        return transanctionRequest
+    private fun getShippingAddress(): String =
+        StringBuilder(binding.inputOrderName.editText?.text.toString())
+            .append("|")
+            .append(binding.inputOrderAddress.editText?.text.toString())
+            .append("|")
+            .append(selectedCity?.cityName)
+            .append("|")
+            .append(selectedProvince?.province)
+            .append("|")
+            .append(postalCode)
+            .toString()
+
+    private fun resetErrorView() {
+        binding.inputOrderName.apply {
+            isErrorEnabled = false
+            error = ""
+        }
+
+        binding.inputOrderPhone.apply {
+            isErrorEnabled = false
+            error = ""
+        }
+
+        binding.inputOrderAddressPostalCode.apply {
+            isErrorEnabled = false
+            error = ""
+        }
+    }
+
+    private fun initTransactionRequest(orderId: String = currentUUID): TransactionRequest {
+        val transactionRequest =
+            TransactionRequest(orderId, orderTotal.toDouble())
+        transactionRequest.customerDetails = getCustomerDetails()
+        return transactionRequest
     }
 
     private fun getCustomerDetails(): CustomerDetails {
         val billingAddress = BillingAddress()
-        billingAddress.address = binding.inputOrderAddress.editText?.text.toString()
-        billingAddress.city = selectedCity?.cityName
-        billingAddress.postalCode = postalCode
-        billingAddress.phone = binding.inputOrderPhone.editText?.text.toString()
+        val shippingAddress = ShippingAddress()
+
+        binding.inputOrderAddress.editText?.text.toString().let {
+            billingAddress.address = it
+            shippingAddress.address = it
+        }
+        selectedCity?.cityName.let {
+            billingAddress.city = it
+            shippingAddress.city = it
+        }
+        postalCode.let {
+            billingAddress.postalCode = it
+            shippingAddress.postalCode = it
+        }
+        binding.inputOrderPhone.editText?.text.toString().let {
+            billingAddress.phone = it
+            shippingAddress.phone = it
+        }
         billingAddress.countryCode = "IDN"
+        shippingAddress.countryCode = "IDN"
 
         val customer = CustomerDetails()
         customer.firstName = prefs[Consts.PREF_NAME]
@@ -178,6 +290,7 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
         customer.phone = binding.inputOrderPhone.editText?.text.toString()
         customer.customerIdentifier = prefs[Consts.PREF_ID]
         customer.billingAddress = billingAddress
+        customer.shippingAddress = shippingAddress
 
         return customer
     }
@@ -294,7 +407,7 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                 city.cityName == Consts.ORIGIN_CITY
                             }?.cityId ?: 0
                             val destination = it.cityId
-                            val weight = orderListAdapter.getTotalOrderWeight() * 100
+                            val weight = checkoutListAdapter.getTotalOrderWeight() * 100
                             val couriers = arrayOf("jne", "tiki", "pos")
 
                             lifecycleScope.launch {
@@ -340,7 +453,6 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                 val layoutDelivery =
                     layout.findViewById<TextInputLayout>(R.id.list_delivery_option)
                 layoutDelivery.visibility = View.GONE
-                var selectedCost: Cost? = null
 
                 val courierList = arrayOf("", "jne", "pos", "tiki")
                 val adapterCourier =
@@ -434,13 +546,27 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                     val index =
                                         cityList.mapIndexed { index, s -> if (s.cityName == addressCity) index else null }
                                             .filterNotNull().toList()
-                                    inputOrderAddressCity.setSelection(index.first())
+                                    if (index.isNotEmpty()) inputOrderAddressCity.setSelection(index.first())
+                                    else
+                                        Toast.makeText(
+                                            rgAddressChoice.context,
+                                            "Gagal Mengambil Data Kota! Silahkan ulangi kembali nanti!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                 }
                                 addressProvince.let {
                                     val index =
                                         provinceList.mapIndexed { index, s -> if (s.province == addressProvince) index else null }
                                             .filterNotNull().toList()
-                                    inputOrderAddressProvince.setSelection(index.first())
+                                    if (index.isNotEmpty()) inputOrderAddressProvince.setSelection(
+                                        index.first()
+                                    )
+                                    else
+                                        Toast.makeText(
+                                            rgAddressChoice.context,
+                                            "Gagal Mengambil Data Provinsi! Silahkan ulangi kembali nanti!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                 }
                                 addressPostalCode.let {
                                     inputOrderAddressPostalCode.editText?.setText(
@@ -479,7 +605,7 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                 is Resource.Success -> {
                                     val product: Product? = response.data
                                     product?.let {
-                                        val orderUiState = OrderUiState(
+                                        val orderUiState = CheckoutUiState(
                                             cartDetail = currentCartDetail,
                                             product = product
                                         )
@@ -492,7 +618,7 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                                 quantity = currentCartDetail.quantity
                                             )
                                         )
-                                        orderListAdapter.insertData(orderUiState)
+                                        checkoutListAdapter.insertData(orderUiState)
                                     }
                                 }
                                 else -> {}
@@ -505,23 +631,23 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
 
     private fun calculateTotal() {
         binding.labelTotalPrice.text =
-            getString(R.string.label_total_price, orderListAdapter.getTotalQuantity())
+            getString(R.string.label_total_price, checkoutListAdapter.getTotalQuantity())
 
-        binding.orderTotalPrice.text = orderListAdapter.getTotalPrice().toRupiah()
+        binding.orderTotalPrice.text = checkoutListAdapter.getTotalPrice().toRupiah()
         binding.orderTotalOngkir.text = ongkirTotal.toRupiah()
 
-        orderTotal = orderListAdapter.getTotalPrice() + ongkirTotal
+        orderTotal = checkoutListAdapter.getTotalPrice() + ongkirTotal
         binding.orderTotal.text = orderTotal.toRupiah()
     }
 
     private fun setupListAndAdapter() {
-        orderListAdapter = OrderListAdapter()
+        checkoutListAdapter = CheckoutListAdapter()
 
         binding.apply {
             rvOrderList.setHasFixedSize(true)
             rvOrderList.layoutManager =
                 LinearLayoutManager(root.context, LinearLayoutManager.VERTICAL, false)
-            rvOrderList.adapter = orderListAdapter
+            rvOrderList.adapter = checkoutListAdapter
         }
     }
 
@@ -631,36 +757,9 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
 
         val oldCart: MutableSet<String> = prefs[Consts.PREF_CART, mutableSetOf()]
 
-        val shippingAddress =
-            StringBuilder(binding.inputOrderName.editText?.text.toString())
-                .append("|")
-                .append(binding.inputOrderAddress.editText?.text.toString())
-                .append("|")
-                .append(selectedCity?.cityName)
-                .append("|")
-                .append(selectedProvince?.province)
-                .append("|")
-                .append(postalCode)
-                .toString()
-
         if (result != null && result.response != null) {
             when (result.status) {
                 TransactionResult.STATUS_SUCCESS -> {
-
-                    order = Order(
-                        orderId = currentUUID,
-                        userId = prefs[Consts.PREF_ID],
-                        date = OffsetDateTime.now(),
-                        amount = orderTotal,
-                        shipName = binding.inputOrderName.editText?.text.toString(),
-                        shipAddress = shippingAddress,
-                        shippingCost = ongkirTotal,
-                        phone = binding.inputOrderPhone.editText?.text.toString(),
-                        status = 0,
-                        trackingNumber = null,
-                        orderDetail = listOrderDetail
-                    )
-
                     lifecycleScope.launch {
                         when (val response = viewModel.createOrder(orderRequest = order!!)) {
                             is Resource.Success -> {
@@ -717,29 +816,55 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                 TransactionResult.STATUS_PENDING -> {
                     setVisibilityContent(View.VISIBLE, isLoading = false)
                     order = Order(
-                        orderId = currentUUID,
-                        userId = prefs[Consts.PREF_ID],
-                        date = OffsetDateTime.now(),
-                        amount = orderTotal,
-                        shipName = binding.inputOrderName.editText?.text.toString(),
-                        shipAddress = shippingAddress,
-                        shippingCost = ongkirTotal,
-                        phone = binding.inputOrderPhone.editText?.text.toString(),
+                        orderId = order?.orderId ?: currentUUID,
+                        userId = order?.userId ?: prefs[Consts.PREF_ID],
+                        date = order?.date ?: OffsetDateTime.now(),
+                        amount = order?.amount ?: orderTotal,
+                        shipName = order?.shipName
+                            ?: binding.inputOrderName.editText?.text.toString(),
+                        shipAddress = order?.shipAddress ?: getShippingAddress(),
+                        shippingCost = order?.shippingCost ?: ongkirTotal,
+                        phone = order?.phone ?: binding.inputOrderPhone.editText?.text.toString(),
                         status = -1,
-                        trackingNumber = null,
-                        orderDetail = listOrderDetail
+                        trackingNumber = order?.trackingNumber,
+                        orderDetail = order?.orderDetail ?: listOrderDetail
                     )
 
-                    materialDialog.setTitle("Transaksi Belum Selesai!")
-                        .setMessage(result.statusMessage.toString())
-                        .setPositiveButton("Lihat Order") { dialog, _ ->
-
-                            dialog.dismiss()
+                    lifecycleScope.launch {
+                        when (val response = viewModel.createOrder(orderRequest = order!!)) {
+                            is Resource.Success -> {
+                                setVisibilityContent(View.VISIBLE, isLoading = false)
+                                prefs[Consts.PREF_CART] = oldCart.mapNotNull { cart ->
+                                    val currentCartDetail =
+                                        Gson().fromJson(cart, CartDetail::class.java)
+                                    if (currentCartDetail.isChecked) null
+                                    else cart
+                                }.toHashSet()
+                                materialDialog.setTitle("Transaksi Belum Selesai!")
+                                    .setMessage(result.statusMessage.toString())
+                                    .setPositiveButton("Lihat Order") { dialog, _ ->
+                                        startActivity(Intent(this@CheckoutActivity, OrderHistoryActivity::class.java))
+                                        finish()
+                                        dialog.dismiss()
+                                    }
+                                    .setOnDismissListener {
+                                        startActivity(
+                                            Intent(
+                                                this@CheckoutActivity,
+                                                HomeActivity::class.java
+                                            )
+                                        )
+                                        finish()
+                                    }.show()
+                            }
+                            else -> {
+                                Log.d(
+                                    "RDSHOP-DEBUG",
+                                    "onTransactionFinished: ERROR INSERT ORDER! Cause: ${response.message}"
+                                )
+                            }
                         }
-                        .setOnDismissListener {
-                            startActivity(Intent(this, HomeActivity::class.java))
-                            this.finish()
-                        }.show()
+                    }
                 }
                 TransactionResult.STATUS_INVALID -> {
                     setVisibilityContent(View.VISIBLE, isLoading = false)

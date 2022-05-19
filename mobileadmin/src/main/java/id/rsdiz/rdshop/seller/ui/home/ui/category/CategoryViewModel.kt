@@ -4,15 +4,15 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Category
-import id.rsdiz.rdshop.domain.usecase.category.CategoryUseCase
+import id.rsdiz.rdshop.domain.usecase.category.CategoryInteractor
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    private val categoryUseCase: CategoryUseCase
+    private val categoryInteractor: CategoryInteractor
 ) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
-    private var _categories = categoryUseCase.getCategories()
+    private var _categories = categoryInteractor.getCategories()
 
     init {
         refreshCategory()
@@ -22,13 +22,13 @@ class CategoryViewModel @Inject constructor(
         reloadTrigger.value = true
     }
 
-    suspend fun addCategory(name: String) = categoryUseCase.insertCategory(name = name)
+    suspend fun addCategory(name: String) = categoryInteractor.insertCategory(name = name)
 
     suspend fun deleteCategory(categoryId: String) =
-        categoryUseCase.deleteCategory(categoryId = categoryId)
+        categoryInteractor.deleteCategory(categoryId = categoryId)
 
     suspend fun updateCategory(category: Category) =
-        categoryUseCase.updateCategory(categoryId = category.categoryId, newName = category.name)
+        categoryInteractor.updateCategory(categoryId = category.categoryId, newName = category.name)
 
     val categories: LiveData<Resource<List<Category>>>
         get() = reloadTrigger.switchMap {

@@ -43,7 +43,7 @@ class ProductGridAdapter(private val data: List<ProductItemUiState>) : RecyclerV
 
         init {
             binding.root.setOnClickListener {
-                data[bindingAdapterPosition - 1].let { product ->
+                data[bindingAdapterPosition].let { product ->
                     onItemClick?.invoke(product)
                 }
             }

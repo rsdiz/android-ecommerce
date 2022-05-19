@@ -7,18 +7,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.rsdiz.rdshop.common.ProductItemUiState
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Category
-import id.rsdiz.rdshop.domain.usecase.category.CategoryUseCase
-import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
+import id.rsdiz.rdshop.domain.usecase.category.CategoryInteractor
+import id.rsdiz.rdshop.domain.usecase.product.ProductInteractor
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val productUseCase: ProductUseCase,
-    private val categoryUseCase: CategoryUseCase
+    private val productInteractor: ProductInteractor,
+    private val categoryInteractor: CategoryInteractor
 ) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
-    private var _categories = categoryUseCase.getCategories()
+    private var _categories = categoryInteractor.getCategories()
 
     val categories: LiveData<Resource<List<Category>>>
         get() = reloadTrigger.switchMap {
@@ -30,12 +30,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getProducts() =
-        productUseCase.getProducts()
+        productInteractor.getProducts()
             .map { pagingData ->
                 pagingData.map { ProductItemUiState(it) }
             }.cachedIn(viewModelScope)
 
-    suspend fun searchProducts(query: String) = productUseCase.searchProduct(
+    suspend fun searchProducts(query: String) = productInteractor.searchProduct(
         query = StringBuilder("%").append(query).append("%").toString()
     )
 

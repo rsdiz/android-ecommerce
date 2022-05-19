@@ -2,25 +2,35 @@ package id.rsdiz.rdshop.domain.usecase.category
 
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Category
-import id.rsdiz.rdshop.domain.repository.category.ICategoryRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 /**
- * Implementation of [ICategoryUseCase]
+ * Contract for Category Use Case
  */
-class CategoryUseCase @Inject constructor(
-    private val repository: ICategoryRepository
-) : ICategoryUseCase {
-    override suspend fun count() = repository.count()
+interface CategoryUseCase {
 
-    override fun getCategories(): Flow<Resource<List<Category>>> = repository.getCategories()
+    /**
+     * Count total row in categories
+     */
+    suspend fun count(): Resource<Int>
 
-    override suspend fun insertCategory(name: String): Resource<String> =
-        repository.insertCategory(name)
+    /**
+     * Get list of category
+     */
+    fun getCategories(): Flow<Resource<List<Category>>>
 
-    override suspend fun updateCategory(categoryId: String, newName: String): Resource<String> =
-        repository.updateCategory(categoryId, newName)
+    /**
+     * Insert new category
+     */
+    suspend fun insertCategory(name: String): Resource<String>
 
-    override suspend fun deleteCategory(categoryId: String) = repository.deleteCategory(categoryId)
+    /**
+     * Update category by [categoryId]
+     */
+    suspend fun updateCategory(categoryId: String, newName: String): Resource<String>
+
+    /**
+     * Delete category
+     */
+    suspend fun deleteCategory(categoryId: String): Resource<String>
 }

@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import id.rsdiz.rdshop.domain.usecase.user.UserUseCase
+import id.rsdiz.rdshop.domain.usecase.user.UserInteractor
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val userUseCase: UserUseCase
+    private val userInteractor: UserInteractor
 ) : ViewModel() {
-    fun getUsers() = userUseCase.getUsers().cachedIn(viewModelScope)
+    fun getUsers() = userInteractor.getUsers().cachedIn(viewModelScope)
 }

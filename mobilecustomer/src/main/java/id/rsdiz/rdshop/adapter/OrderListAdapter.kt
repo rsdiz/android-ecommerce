@@ -3,78 +3,44 @@ package id.rsdiz.rdshop.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import id.rsdiz.rdshop.R
-import id.rsdiz.rdshop.base.utils.toRupiah
-import id.rsdiz.rdshop.common.OrderUiState
-import id.rsdiz.rdshop.databinding.ItemOrderListBinding
-import kotlin.math.roundToInt
+import id.rsdiz.rdshop.common.OrderItemUIState
+import id.rsdiz.rdshop.databinding.ItemOrderBinding
 
-class OrderListAdapter : RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
-    private val data: MutableList<OrderUiState> = mutableListOf()
+class OrderListAdapter(private val data: List<OrderItemUIState>) :
+    RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
+    private var onItemClick: ((OrderItemUIState) -> Unit)? = null
 
-    fun insertData(cartDetailUiState: OrderUiState) {
-        val position = itemCount
-        if (!data.contains(cartDetailUiState)) data.add(position, cartDetailUiState)
-        notifyItemInserted(position)
-    }
-
-    fun getTotalOrderWeight(): Int {
-        var weight = 0
-        data.forEach {
-            weight += (it.product.weight * it.cartDetail.quantity).roundToInt()
-        }
-        return weight
-    }
-
-    fun getTotalQuantity(): Int {
-        var qty = 0
-        data.forEach {
-            qty += (it.cartDetail.quantity)
-        }
-        return qty
-    }
-
-    fun getTotalPrice(): Int {
-        var price = 0
-        data.forEach {
-            price += (it.product.price * it.cartDetail.quantity)
-        }
-        return price
+    fun setOnItemClickListener(listener: ((OrderItemUIState) -> Unit)) {
+        onItemClick = listener
     }
 
     inner class ViewHolder(
-        private val binding: ItemOrderListBinding
+        private val binding: ItemOrderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(uiState: OrderUiState) {
+        fun bind(orderItemUIState: OrderItemUIState) {
             binding.apply {
-                productName.text = uiState.product.name
-                productWeight.text =
-                    StringBuilder("Berat: ").append(uiState.product.weight).toString()
-                productPrice.text = uiState.product.price.toRupiah()
-                orderQuantity.text = StringBuilder("QTY: ").append(uiState.cartDetail.quantity)
+                itemTotal.text = orderItemUIState.getOrderTotal()
+                itemOrderId.text = StringBuilder("Order: #").append(orderItemUIState.getSimpleOrderId()).toString()
+                itemOrderYear.text = orderItemUIState.getOrderYear()
+                itemOrderDate.text = orderItemUIState.getOrderDate()
+                itemOrderMonth.text = orderItemUIState.getOrderMonth()
+                itemName.text = orderItemUIState.getOrderName()
+                itemStatus.text = orderItemUIState.getOrderStatusValue()
+            }
+        }
 
-                if (uiState.product.image.isNotEmpty())
-                    Glide.with(binding.root)
-                        .load(uiState.product.image[0].path)
-                        .apply(RequestOptions.placeholderOf(R.drawable.bg_image_loading))
-                        .error(R.drawable.bg_image_error)
-                        .centerCrop()
-                        .into(productImage)
-                else
-                    Glide.with(root.context)
-                        .load(R.drawable.bg_image_error)
-                        .apply(RequestOptions.placeholderOf(R.drawable.bg_image_loading))
-                        .centerCrop()
-                        .into(productImage)
+        init {
+            binding.root.setOnClickListener {
+                data[bindingAdapterPosition].let { orderItem ->
+                    onItemClick?.invoke(orderItem)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
-            ItemOrderListBinding.inflate(
+            ItemOrderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

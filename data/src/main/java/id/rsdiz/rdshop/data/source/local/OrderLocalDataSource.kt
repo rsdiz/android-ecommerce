@@ -58,4 +58,9 @@ class OrderLocalDataSource @Inject constructor(
         }
         orderDao.delete(data.order)
     }
+
+    suspend fun deleteAll() {
+        detailOrderDao.deleteAll()
+        orderDao.deleteAll()
+    }
 }

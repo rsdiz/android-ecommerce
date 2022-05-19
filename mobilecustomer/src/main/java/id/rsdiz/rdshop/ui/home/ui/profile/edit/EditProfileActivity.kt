@@ -27,6 +27,7 @@ import id.rsdiz.rdshop.R
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
+import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.base.utils.URIPathHelper
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.data.Resource

@@ -1,24 +1,28 @@
 package id.rsdiz.rdshop.domain.usecase.auth
 
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.domain.repository.auth.IAuthRepository
-import javax.inject.Inject
 
 /**
- * Implementation of [IAuthUseCase]
+ * Contract for Authentication Use Case
  */
-class AuthUseCase @Inject constructor(
-    private val repository: IAuthRepository
-) : IAuthUseCase {
-    override suspend fun signUp(
+interface AuthUseCase {
+    /**
+     * Do Sign Up new Account to System
+     */
+    suspend fun signUp(
         name: String,
         username: String,
         email: String,
         password: String
-    ): Resource<String> = repository.signUp(name, username, email, password)
+    ): Resource<String>
 
-    override suspend fun signIn(login: String, password: String): Resource<String> =
-        repository.signIn(login, password)
+    /**
+     * Do Sign In with existing Account
+     */
+    suspend fun signIn(login: String, password: String): Resource<String>
 
-    override suspend fun signOut(apiKey: String): Resource<String> = repository.signOut(apiKey)
+    /**
+     * Do Sign Out from System
+     */
+    suspend fun signOut(apiKey: String): Resource<String>
 }

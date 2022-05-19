@@ -15,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_left"
+        app:navigationIconTint="@color/white"
         app:title="Daftar Order"
         app:titleCentered="true"
         app:titleTextAppearance="@style/Theme.RDSHOP.ActionBar.TitleText"

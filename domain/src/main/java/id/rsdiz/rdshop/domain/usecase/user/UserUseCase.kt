@@ -3,37 +3,46 @@ package id.rsdiz.rdshop.domain.usecase.user
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.User
-import id.rsdiz.rdshop.domain.repository.user.IUserRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import javax.inject.Inject
 
 /**
- * Implementation of [IUserUseCase]
+ * Contract for User Use Case
  */
-class UserUseCase @Inject constructor(
-    private val repository: IUserRepository
-) : IUserUseCase {
-    override suspend fun count() = repository.count()
+interface UserUseCase {
 
-    override fun getUsers(): Flow<PagingData<User>> = repository.getUsers()
+    /**
+     * Count total row in users
+     */
+    suspend fun count(): Resource<Int>
 
-    override fun getUser(userId: String) = repository.getUser(userId)
+    /**
+     * Get list of users
+     */
+    fun getUsers(): Flow<PagingData<User>>
 
-    override suspend fun searchUser(query: String) =
-        repository.searchUser(query)
+    /**
+     * Get specified user by [userId]
+     */
+    fun getUser(userId: String): Flow<Resource<User>>
 
-    override suspend fun insertUser(
-        user: User,
-        password: String,
-        sourceFile: File?
-    ) = repository.insertUser(user, password, sourceFile)
+    /**
+     * Search user
+     */
+    suspend fun searchUser(query: String): Resource<List<User>>
 
-    override suspend fun updateUser(
-        user: User,
-        password: String,
-        sourceFile: File?
-    ) = repository.updateUser(user, password, sourceFile)
+    /**
+     * Insert new user
+     */
+    suspend fun insertUser(user: User, password: String, sourceFile: File?): Resource<String>
 
-    override suspend fun deleteUser(userId: String) = repository.deleteUser(userId)
+    /**
+     * Update user
+     */
+    suspend fun updateUser(user: User, password: String, sourceFile: File?): Resource<String>
+
+    /**
+     * Delete user
+     */
+    suspend fun deleteUser(userId: String): Resource<String>
 }

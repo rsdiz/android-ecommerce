@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.seller.adapter
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.rsdiz.rdshop.seller.databinding.ItemProductImageBinding
 
-class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
+class ImageListAdapter(private val context: Context) : RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
     private var mutableImageList = mutableListOf<Uri>()
     private var onItemClick: ((Int, Uri) -> Unit)? = null
 
@@ -40,7 +41,7 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
                     .into(image)
 
                 buttonRemove.setOnClickListener {
-                    deleteData(bindingAdapterPosition - 1)
+                    deleteData(bindingAdapterPosition)
                 }
             }
         }
@@ -58,16 +59,12 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ImageListAdapter.ViewHolder =
+    ): ViewHolder =
         ViewHolder(
-            ItemProductImageBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+            ItemProductImageBinding.inflate(LayoutInflater.from(context))
         )
 
-    override fun onBindViewHolder(holder: ImageListAdapter.ViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(uri = mutableImageList[position])
 
     override fun getItemCount(): Int = mutableImageList.size

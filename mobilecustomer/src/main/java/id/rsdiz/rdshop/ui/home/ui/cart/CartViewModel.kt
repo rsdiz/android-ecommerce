@@ -11,14 +11,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Category
 import id.rsdiz.rdshop.data.model.Product
-import id.rsdiz.rdshop.domain.usecase.category.CategoryUseCase
-import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
+import id.rsdiz.rdshop.domain.usecase.category.CategoryInteractor
+import id.rsdiz.rdshop.domain.usecase.product.ProductInteractor
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
-    private val productUseCase: ProductUseCase,
-    private val categoryUseCase: CategoryUseCase
+    private val productInteractor: ProductInteractor,
+    private val categoryInteractor: CategoryInteractor
 ) : ViewModel() {
     private val _categoryData = MutableLiveData<List<Category>>()
     val categoryData = _categoryData as LiveData<List<Category>>
@@ -26,12 +26,12 @@ class CartViewModel @Inject constructor(
     val productData = _productData as LiveData<List<Product>>
 
     private fun getProduct(productId: String) =
-        productUseCase.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
+        productInteractor.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
 
     private fun getCategory() =
-        categoryUseCase.getCategories().asLiveData(viewModelScope.coroutineContext)
+        categoryInteractor.getCategories().asLiveData(viewModelScope.coroutineContext)
 
-    suspend fun countCategory() = categoryUseCase.count()
+    suspend fun countCategory() = categoryInteractor.count()
 
     fun observerProduct(owner: LifecycleOwner, productId: String) {
         getProduct(productId).observe(owner) { response ->

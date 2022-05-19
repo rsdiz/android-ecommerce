@@ -9,12 +9,15 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        tools:replace="android:allowBackup"
         android:icon="@mipmap/ic_rdshop"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_rdshop_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RDSHOP.NoActionBar">
+        android:theme="@style/Theme.RDSHOP.NoActionBar"
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".ui.home.ui.profile.order.OrderHistoryActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.home.ui.cart.checkout.CheckoutActivity"
             android:exported="false" />

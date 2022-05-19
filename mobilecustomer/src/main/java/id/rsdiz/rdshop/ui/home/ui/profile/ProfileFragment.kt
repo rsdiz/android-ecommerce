@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,6 @@ import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
-import id.rsdiz.rdshop.base.utils.collect
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.databinding.FragmentProfileBinding
@@ -55,11 +55,21 @@ class ProfileFragment : Fragment() {
                         setVisibilityContent(View.VISIBLE)
 
                         resource.data?.let { user ->
+
+                            prefs[Consts.PREF_ID] = user.userId
+                            prefs[Consts.PREF_USERNAME] = user.username
+                            prefs[Consts.PREF_NAME] = user.name
+                            prefs[Consts.PREF_ADDRESS] = user.address
+                            prefs[Consts.PREF_GENDER] = user.gender?.name
+                            prefs[Consts.PREF_PHOTO] = user.photo
+
                             binding.apply {
                                 Glide.with(root.context)
                                     .load(user.photo)
                                     .error(R.drawable.bg_image_error)
                                     .transition(DrawableTransitionOptions.withCrossFade())
+                                    .skipMemoryCache(true)
+                                    .circleCrop()
                                     .into(profileImage)
 
                                 profileName.text = user.name
@@ -96,13 +106,20 @@ class ProfileFragment : Fragment() {
             val direction = ProfileFragmentDirections.actionNavigationProfileToEditProfileActivity()
             view.findNavController().navigate(direction)
         }
+
+        binding.buttonLastOrder.setOnClickListener {
+            val direction = ProfileFragmentDirections.actionNavigationProfileToOrderHistoryActivity()
+            view.findNavController().navigate(direction)
+        }
     }
 
     private fun logout() {
         binding.apply {
             lifecycleScope.launch {
+                progressBarLogout.visibility = View.VISIBLE
                 when (val response = viewModel.signOut(prefs[Consts.PREF_TOKEN, ""])) {
                     is Resource.Success -> {
+                        progressBarLogout.visibility = View.GONE
                         Snackbar.make(
                             requireContext(),
                             layoutContent,
@@ -130,6 +147,7 @@ class ProfileFragment : Fragment() {
                         }).show()
                     }
                     is Resource.Error -> {
+                        progressBarLogout.visibility = View.GONE
                         Snackbar.make(
                             requireContext(),
                             layoutContent,

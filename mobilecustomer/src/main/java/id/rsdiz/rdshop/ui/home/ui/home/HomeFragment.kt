@@ -106,6 +106,13 @@ class HomeFragment : Fragment(), IOnBackPressed {
                                                 ProductItemUiState(product)
                                             }
                                         )
+
+                                        productSearchAdapter.setOnItemClickListener {
+                                            val direction =
+                                                HomeFragmentDirections.actionNavigationHomeToDetailFragment(it.productId)
+                                            view?.findNavController()?.navigate(direction)
+                                        }
+
                                         binding.rvProductList.adapter = productSearchAdapter
                                     }
                                 }

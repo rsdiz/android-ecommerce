@@ -4,28 +4,28 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Order
-import id.rsdiz.rdshop.domain.usecase.auth.AuthUseCase
-import id.rsdiz.rdshop.domain.usecase.category.CategoryUseCase
-import id.rsdiz.rdshop.domain.usecase.order.OrderUseCase
-import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
-import id.rsdiz.rdshop.domain.usecase.user.UserUseCase
+import id.rsdiz.rdshop.domain.usecase.auth.AuthInteractor
+import id.rsdiz.rdshop.domain.usecase.category.CategoryInteractor
+import id.rsdiz.rdshop.domain.usecase.order.OrderInteractor
+import id.rsdiz.rdshop.domain.usecase.product.ProductInteractor
+import id.rsdiz.rdshop.domain.usecase.user.UserInteractor
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val authUseCase: AuthUseCase,
-    private val orderUseCase: OrderUseCase,
-    private val userUseCase: UserUseCase,
-    private val productUseCase: ProductUseCase,
-    private val categoryUseCase: CategoryUseCase
+    private val authInteractor: AuthInteractor,
+    private val orderInteractor: OrderInteractor,
+    private val userInteractor: UserInteractor,
+    private val productInteractor: ProductInteractor,
+    private val categoryInteractor: CategoryInteractor
 ) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
-    private var _newestOrder = orderUseCase.getNewestOrders()
+    private var _newestOrder = orderInteractor.getNewestOrders()
 
-    suspend fun countUser() = userUseCase.count()
-    suspend fun countCategory() = categoryUseCase.count()
-    suspend fun countProduct() = productUseCase.count()
-    suspend fun countOrder() = orderUseCase.count()
+    suspend fun countUser() = userInteractor.count()
+    suspend fun countCategory() = categoryInteractor.count()
+    suspend fun countProduct() = productInteractor.count()
+    suspend fun countOrder() = orderInteractor.count()
 
     init {
         refreshOrder()
@@ -40,5 +40,5 @@ class DashboardViewModel @Inject constructor(
         reloadTrigger.value = true
     }
 
-    suspend fun signOut(token: String) = authUseCase.signOut(token)
+    suspend fun signOut(token: String) = authInteractor.signOut(token)
 }

@@ -99,18 +99,24 @@ class OrderRepository @Inject constructor(
 
     override fun getOrderByUserId(userId: String): Flow<Resource<List<Order>>> =
         object : NetworkBoundResource<List<Order>, OrdersResponse>() {
+            private var countLocal = 0
+            private var countRemote = 0
+
             override fun loadFromDB(): Flow<List<Order>?> =
                 localDataSource.getOrderByUserId(userId = userId).map {
+                    countLocal = it.size
                     localDataSource.mapper.mapFromEntities(it)
                 }
 
-            override fun shouldFetch(data: List<Order>?): Boolean = data.isNullOrEmpty()
+            override fun shouldFetch(data: List<Order>?): Boolean = countLocal != countRemote
 
             override suspend fun createCall(): Flow<ApiResponse<OrdersResponse>> =
                 remoteDataSource.getOrderByUserId(userId = userId)
 
             override suspend fun saveCallResult(data: OrdersResponse) =
                 remoteDataSource.mapper.mapRemoteToEntities(data.results).let {
+                    localDataSource.deleteAll()
+                    countRemote = it.size
                     localDataSource.insertAll(it)
                 }
         }.asFlow() as Flow<Resource<List<Order>>>

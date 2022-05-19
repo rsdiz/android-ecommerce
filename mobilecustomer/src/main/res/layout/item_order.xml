@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_item_order"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    app:cardBackgroundColor="?attr/colorBackground"
+    app:cardCornerRadius="@dimen/margin_padding_size_small"
+    app:cardElevation="@dimen/margin_padding_size_small"
+    app:cardMaxElevation="@dimen/margin_padding_size_small"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_padding_size_small">
+
+        <TextView
+            android:id="@+id/item_order_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="2021"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
+
+        <TextView
+            android:id="@+id/item_order_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_padding_size_micro"
+            android:fontFamily="@font/capriola"
+            android:text="24"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="@+id/item_order_year"
+            app:layout_constraintStart_toStartOf="@+id/item_order_year"
+            app:layout_constraintTop_toBottomOf="@+id/item_order_year" />
+
+        <TextView
+            android:id="@+id/item_order_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:text="Mei"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_order_year"
+            app:layout_constraintStart_toStartOf="@+id/item_order_year"
+            app:layout_constraintTop_toBottomOf="@+id/item_order_date" />
+
+        <TextView
+            android:id="@+id/item_order_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_medium"
+            android:layout_marginEnd="@dimen/margin_padding_size_small"
+            android:fontFamily="@font/capriola"
+            android:text="Order: #1234"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/item_status"
+            app:layout_constraintStart_toEndOf="@+id/item_order_year"
+            app:layout_constraintTop_toTopOf="@+id/item_order_year" />
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/capriola"
+            android:text="Order Name"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintBottom_toTopOf="@+id/item_total"
+            app:layout_constraintEnd_toEndOf="@+id/item_order_id"
+            app:layout_constraintStart_toStartOf="@+id/item_order_id"
+            app:layout_constraintTop_toBottomOf="@+id/item_order_id" />
+
+        <TextView
+            android:id="@+id/item_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:text="Rp. 000,000,-"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_order_id"
+            app:layout_constraintStart_toStartOf="@+id/item_order_id"
+            app:layout_constraintTop_toBottomOf="@+id/item_order_id"
+            app:layout_constraintVertical_bias="1" />
+
+        <TextView
+            android:id="@+id/item_status"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_padding_size_small"
+            android:ellipsize="end"
+            android:fontFamily="@font/capriola"
+            android:maxLines="2"
+            android:text="Sampai\nTujuan"
+            android:textAlignment="center"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="120dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

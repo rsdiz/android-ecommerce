@@ -7,18 +7,17 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.rsdiz.rdshop.common.ProductItemUiState
-import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
+import id.rsdiz.rdshop.domain.usecase.product.ProductInteractor
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val productUseCase: ProductUseCase
+    private val productInteractor: ProductInteractor
 ) : ViewModel() {
     fun getProducts(): Flow<PagingData<ProductItemUiState>> =
-        productUseCase.getProducts()
+        productInteractor.getProducts()
             .map { pagingData ->
                 pagingData.map { product ->
                     ProductItemUiState(product)

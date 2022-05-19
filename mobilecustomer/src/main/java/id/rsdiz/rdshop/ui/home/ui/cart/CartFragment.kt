@@ -65,8 +65,27 @@ class CartFragment : Fragment() {
         setupListAndAdapter()
 
         binding.buttonCheckout.setOnClickListener {
-            val direction = CartFragmentDirections.actionNavigationCartToCheckoutActivity()
-            view.findNavController().navigate(direction)
+            val set: MutableSet<String> = prefs[Consts.PREF_CART, mutableSetOf()]
+            var totalProductSelected = 0
+
+            if (!set.isNullOrEmpty()) {
+                set.forEach { cart ->
+                    val currentCartDetail = Gson().fromJson(cart, CartDetail::class.java)
+                    if (currentCartDetail.isChecked) totalProductSelected++
+                }
+            }
+
+            if (totalProductSelected > 0) {
+                val direction = CartFragmentDirections.actionNavigationCartToCheckoutActivity()
+                view.findNavController().navigate(direction)
+            } else {
+                Snackbar.make(
+                    requireContext(),
+                    binding.root,
+                    "Keranjang Belanja Anda masih kosong!",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
 
         fetchData()

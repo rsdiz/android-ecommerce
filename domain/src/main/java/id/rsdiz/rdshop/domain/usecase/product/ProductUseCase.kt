@@ -3,44 +3,62 @@ package id.rsdiz.rdshop.domain.usecase.product
 import androidx.paging.PagingData
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.Product
-import id.rsdiz.rdshop.domain.repository.product.IProductRepository
+import id.rsdiz.rdshop.data.model.ProductImage
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import javax.inject.Inject
 
 /**
- * Implementation of [IProductUseCase]
+ * Contract for Product Use Case
  */
-class ProductUseCase @Inject constructor(
-    private val repository: IProductRepository
-) : IProductUseCase {
-    override suspend fun count() = repository.count()
+interface ProductUseCase {
 
-    override fun getProducts(): Flow<PagingData<Product>> = repository.getProducts()
+    /**
+     * Count total row in products
+     */
+    suspend fun count(): Resource<Int>
 
-    override fun getProduct(productId: String): Flow<Resource<Product>> =
-        repository.getProduct(productId)
+    /**
+     * Get list of products
+     */
+    fun getProducts(): Flow<PagingData<Product>>
 
-    override suspend fun searchProduct(query: String): Resource<List<Product>> =
-        repository.searchProduct(query)
+    /**
+     * Get specified product by [productId]
+     */
+    fun getProduct(productId: String): Flow<Resource<Product>>
 
-    override suspend fun insertProduct(product: Product, sourceFile: File?): Resource<String> =
-        repository.insertProduct(product, sourceFile)
+    /**
+     * Search product
+     */
+    suspend fun searchProduct(query: String): Resource<List<Product>>
 
-    override suspend fun updateProduct(product: Product, sourceFile: File?): Resource<String> =
-        repository.updateProduct(product, sourceFile)
+    /**
+     * Insert new product
+     */
+    suspend fun insertProduct(product: Product, sourceFile: File?): Resource<String>
 
-    override suspend fun deleteProduct(productId: String): Resource<String> =
-        repository.deleteProduct(productId)
+    /**
+     * Update product
+     */
+    suspend fun updateProduct(product: Product, sourceFile: File?): Resource<String>
 
-    override suspend fun addProductImage(
-        productId: String,
-        sourceFile: File
-    ) = repository.addProductImage(productId, sourceFile)
+    /**
+     * Delete product
+     */
+    suspend fun deleteProduct(productId: String): Resource<String>
 
-    override suspend fun removeProductImage(productId: String, imageId: String) =
-        repository.removeProductImage(productId, imageId)
+    /**
+     * Insert Product Image to repository
+     */
+    suspend fun addProductImage(productId: String, sourceFile: File): Resource<ProductImage>
 
-    override suspend fun switchProductFavorite(productId: String) =
-        repository.switchProductFavorite(productId)
+    /**
+     * Delete Product Image from repository
+     */
+    suspend fun removeProductImage(productId: String, imageId: String): Resource<String>
+
+    /**
+     * Add Product to Favorite Product
+     */
+    suspend fun switchProductFavorite(productId: String)
 }

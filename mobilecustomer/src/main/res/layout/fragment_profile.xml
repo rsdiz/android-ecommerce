@@ -44,7 +44,7 @@
                 android:layout_marginTop="@dimen/margin_padding_size_medium"
                 android:fontFamily="@font/bebas_neue"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_large"
+                android:textSize="@dimen/text_size_xlarge"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image"
@@ -53,24 +53,48 @@
 
             <Button
                 android:id="@+id/button_edit_profile"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_padding_size_large"
+                android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
                 android:text="Edit Profile"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
             <Button
+                android:id="@+id/button_last_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_padding_size_large"
+                android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                android:text="Daftar Transaksi"
+                app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toStartOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/button_edit_profile" />
+
+            <Button
                 android:id="@+id/button_logout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_padding_size_large"
                 android:text="Keluar"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/button_edit_profile" />
+                app:layout_constraintTop_toBottomOf="@+id/button_last_order" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress_bar_logout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:indeterminateTint="@color/web_orange"
+                app:layout_constraintBottom_toBottomOf="@+id/button_logout"
+                app:layout_constraintEnd_toEndOf="@+id/button_logout"
+                app:layout_constraintStart_toStartOf="@+id/button_logout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

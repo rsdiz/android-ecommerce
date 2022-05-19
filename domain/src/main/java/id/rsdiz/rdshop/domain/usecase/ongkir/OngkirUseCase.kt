@@ -1,26 +1,37 @@
 package id.rsdiz.rdshop.domain.usecase.ongkir
 
-import id.rsdiz.rdshop.domain.repository.ongkir.IOngkirRepository
-import javax.inject.Inject
+import id.rsdiz.rdshop.data.Resource
+import id.rsdiz.rdshop.data.model.City
+import id.rsdiz.rdshop.data.model.Cost
+import id.rsdiz.rdshop.data.model.Province
 
 /**
- * Implement of [IOngkirUseCase]
+ * Contract for Ongkir Use Case
  */
-class OngkirUseCase @Inject constructor(
-    private val repository: IOngkirRepository
-) : IOngkirUseCase {
-    override suspend fun getCities() = repository.getCities()
+interface OngkirUseCase {
 
-    override suspend fun getCity(cityId: Int) = repository.getCity(cityId)
+    /**
+     * Get list of City
+     */
+    suspend fun getCities(): Resource<List<City>>
 
-    override suspend fun getProvinces() = repository.getProvinces()
+    /**
+     * Get specified city by [cityId]
+     */
+    suspend fun getCity(cityId: Int): Resource<City>
 
-    override suspend fun getProvince(provinceId: Int) = repository.getProvince(provinceId)
+    /**
+     * Get list of Province
+     */
+    suspend fun getProvinces(): Resource<List<Province>>
 
-    override suspend fun getShippingCost(
-        origin: Int,
-        destination: Int,
-        weight: Int,
-        courier: String
-    ) = repository.getShippingCost(origin, destination, weight, courier)
+    /**
+     * Get specified province by [provinceId]
+     */
+    suspend fun getProvince(provinceId: Int): Resource<Province>
+
+    /**
+     * Calculate Shipping Cost
+     */
+    suspend fun getShippingCost(origin: Int, destination: Int, weight: Int, courier: String): Resource<List<Cost>>
 }

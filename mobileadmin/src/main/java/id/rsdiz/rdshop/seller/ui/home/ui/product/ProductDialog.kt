@@ -3,7 +3,6 @@ package id.rsdiz.rdshop.seller.ui.home.ui.product
 import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.data.Resource
-import id.rsdiz.rdshop.data.model.Category
 import id.rsdiz.rdshop.data.model.Product
 import id.rsdiz.rdshop.seller.BuildConfig
 import id.rsdiz.rdshop.seller.R
 import id.rsdiz.rdshop.seller.adapter.ImageListAdapter
 import id.rsdiz.rdshop.seller.databinding.DialogAddEditProductBinding
-import kotlinx.coroutines.launch
 import java.io.File
 
 @AndroidEntryPoint
@@ -33,7 +30,7 @@ class ProductDialog : DialogFragment() {
     private var _binding: DialogAddEditProductBinding? = null
     private val binding get() = _binding as DialogAddEditProductBinding
 
-    private val imageListAdapter by lazy { ImageListAdapter() }
+    private lateinit var imageListAdapter: ImageListAdapter
     private var latestTemporaryUri: Uri? = null
 
     private val dataArgs get() = ProductDialogArgs.fromBundle(arguments as Bundle)
@@ -63,6 +60,7 @@ class ProductDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        imageListAdapter = ImageListAdapter(requireContext())
         setStyle(
             STYLE_NORMAL, R.style.Theme_RDSHOP_FullScreenDialog
         )
@@ -139,10 +137,21 @@ class ProductDialog : DialogFragment() {
                                                 categories.add(category.name)
                                             }
 
-                                            val adapter = ArrayAdapter(requireContext(), R.layout.item_list_text, categories)
+                                            val adapter = ArrayAdapter(
+                                                requireContext(),
+                                                R.layout.item_list_text,
+                                                categories
+                                            )
                                             (inputCategory.editText as? AutoCompleteTextView)?.apply {
                                                 setAdapter(adapter)
-                                                setText(adapter.getItem(categoryIndex.indexOf(product.categoryId)), false)
+                                                setText(
+                                                    adapter.getItem(
+                                                        categoryIndex.indexOf(
+                                                            product.categoryId
+                                                        )
+                                                    ),
+                                                    false
+                                                )
                                             }
                                         }
                                     }
@@ -155,8 +164,8 @@ class ProductDialog : DialogFragment() {
                         }
                         inputProductName.editText?.setText(product.name)
                         inputProductDescription.editText?.setText(product.description)
-                        inputProductPrice.editText?.setText(product.price)
-                        inputProductStock.editText?.setText(product.stock)
+                        inputProductPrice.editText?.setText(product.price.toString())
+                        inputProductStock.editText?.setText(product.stock.toString())
                         inputProductWeight.editText?.setText(product.weight.toString())
                     }
                     buttonAddImage.setOnClickListener {

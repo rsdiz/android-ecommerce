@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_navigation_profile_to_editProfileActivity"
             app:destination="@id/editProfileActivity" />
+        <action
+            android:id="@+id/action_navigation_profile_to_orderHistoryActivity"
+            app:destination="@id/orderHistoryActivity" />
     </fragment>
     <activity
         android:id="@+id/editProfileActivity"
@@ -63,5 +66,10 @@
         android:name="id.rsdiz.rdshop.ui.home.ui.cart.checkout.CheckoutActivity"
         android:label="activity_checkout"
         tools:layout="@layout/activity_checkout" />
+    <activity
+        android:id="@+id/orderHistoryActivity"
+        android:name="id.rsdiz.rdshop.ui.home.ui.profile.order.OrderHistoryActivity"
+        android:label="activity_order_history"
+        tools:layout="@layout/activity_order_history" />
 
 </navigation>
