@@ -106,7 +106,7 @@ ext {
             runtimeKtx         : "androidx.lifecycle:lifecycle-runtime-ktx:$androidLifecycleVersion",
             commonJava8        : "androidx.lifecycle:lifecycle-common-java8:$androidLifecycleVersion",
             lifecycleExtension : "androidx.lifecycle:lifecycle-extensions:$androidLifecycleExtensionVersion",
-            midtransSdkSandbox : "com.midtrans:uikit:$midtransSdkVersion-UAT",
+            midtransSdkSandbox : "com.midtrans:uikit:$midtransSdkVersion-SANDBOX",
             midtransSdkProd    : "com.midtrans:uikit:$midtransSdkVersion",
             xenditSdk          : "com.xendit:xendit-android:$xenditSdkVersion",
             cardinalCommerceSdk: "org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:$cardinalCommerceSdkVersion"

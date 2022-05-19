@@ -5,7 +5,9 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import id.rsdiz.rdshop.data.model.Order
 import id.rsdiz.rdshop.domain.usecase.ongkir.OngkirUseCase
+import id.rsdiz.rdshop.domain.usecase.order.OrderUseCase
 import id.rsdiz.rdshop.domain.usecase.product.ProductUseCase
 import id.rsdiz.rdshop.domain.usecase.user.UserUseCase
 import javax.inject.Inject
@@ -14,7 +16,8 @@ import javax.inject.Inject
 class CheckoutViewModel @Inject constructor(
     private val productUseCase: ProductUseCase,
     private val userUseCase: UserUseCase,
-    private val ongkirUseCase: OngkirUseCase
+    private val ongkirUseCase: OngkirUseCase,
+    private val orderUseCase: OrderUseCase
 ) : ViewModel() {
     fun getProduct(productId: String) =
         productUseCase.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
@@ -28,4 +31,6 @@ class CheckoutViewModel @Inject constructor(
 
     suspend fun getShippingCost(origin: Int, destination: Int, weight: Int, courier: String) =
         ongkirUseCase.getShippingCost(origin, destination, weight, courier)
+
+    suspend fun createOrder(orderRequest: Order) = orderUseCase.insertOrder(order = orderRequest)
 }

@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.ui.home.ui.cart.checkout
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
+import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
+import com.midtrans.sdk.corekit.core.MidtransSDK
+import com.midtrans.sdk.corekit.core.PaymentMethod
+import com.midtrans.sdk.corekit.core.TransactionRequest
+import com.midtrans.sdk.corekit.core.themes.CustomColorTheme
+import com.midtrans.sdk.corekit.models.BillingAddress
+import com.midtrans.sdk.corekit.models.CustomerDetails
+import com.midtrans.sdk.corekit.models.snap.TransactionResult
+import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.R
 import id.rsdiz.rdshop.adapter.DeliveryServiceAdapter
@@ -24,16 +34,20 @@ import id.rsdiz.rdshop.adapter.OrderListAdapter
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
+import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.base.utils.toRupiah
 import id.rsdiz.rdshop.common.OrderUiState
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.*
 import id.rsdiz.rdshop.databinding.ActivityCheckoutBinding
+import id.rsdiz.rdshop.ui.home.HomeActivity
 import kotlinx.coroutines.launch
+import org.threeten.bp.OffsetDateTime
+import java.util.*
 
 @AndroidEntryPoint
-class CheckoutActivity : AppCompatActivity() {
+class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
     private var _binding: ActivityCheckoutBinding? = null
     private val binding get() = _binding as ActivityCheckoutBinding
 
@@ -49,12 +63,22 @@ class CheckoutActivity : AppCompatActivity() {
     private var costs = mutableListOf<Cost>()
     private var cityList = mutableListOf<City>()
     private var provinceList = mutableListOf<Province>()
+    private var selectedPaymentMethod = -1
+    private var orderTotal: Int = 0
+    private var selectedCity: City? = null
+    private var selectedProvince: Province? = null
+    private var postalCode: String = ""
+    private var listOrderDetail = mutableListOf<OrderDetail>()
+
+    private lateinit var currentUUID: String
+    private var order: Order? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityCheckoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         prefs = PreferenceHelper(this).customPrefs(Consts.PREFERENCE_NAME)
+        currentUUID = UUID.randomUUID().toString()
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -62,6 +86,7 @@ class CheckoutActivity : AppCompatActivity() {
 
         setupListAndAdapter()
         lifecycleScope.launch {
+            initMidtransSdk()
             fetchOrderData()
         }
 
@@ -71,7 +96,90 @@ class CheckoutActivity : AppCompatActivity() {
             fetchUserData()
             setBindingAddress()
             setBindingDelivery()
+            setBindingPaymentMethod()
         }
+    }
+
+    private fun initMidtransSdk() {
+        SdkUIFlowBuilder.init()
+            .setContext(this)
+            .setClientKey(Consts.MIDTRANS_API_KEY)
+            .setMerchantBaseUrl(Consts.RDSHOP_MERCHANT_URL)
+            .setTransactionFinishedCallback(this)
+            .enableLog(true)
+            .setColorTheme(
+                CustomColorTheme(
+                    "#FF028AC4",
+                    "#38B5E2",
+                    "#FFEEEEEE"
+                )
+            ).buildSDK()
+    }
+
+    private fun setBindingPaymentMethod() {
+        binding.apply {
+            val paymentLayout = listPaymentMethod.editText as? AutoCompleteTextView
+            val paymentMethodList = resources.getStringArray(R.array.payment_method).toList()
+            paymentLayout?.apply {
+                setAdapter(
+                    ArrayAdapter(
+                        listPaymentMethod.context,
+                        R.layout.item_list_text,
+                        paymentMethodList
+                    )
+                )
+
+                onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+                    selectedPaymentMethod = position
+                    setVisibilityContent(VISIBLE_PAY)
+                }
+            }
+            buttonPay.setOnClickListener {
+                if (selectedPaymentMethod != -1) {
+                    val paymentMethod = when (selectedPaymentMethod) {
+                        0 -> PaymentMethod.CREDIT_CARD
+                        1 -> PaymentMethod.BANK_TRANSFER
+                        2 -> PaymentMethod.GO_PAY
+                        3 -> PaymentMethod.KLIKBCA
+                        4 -> PaymentMethod.MANDIRI_CLICKPAY
+                        5 -> PaymentMethod.EPAY_BRI
+                        6 -> PaymentMethod.INDOMARET
+                        7 -> PaymentMethod.ALFAMART
+                        8 -> PaymentMethod.SHOPEEPAY
+                        else -> null
+                    }
+
+                    MidtransSDK.getInstance().transactionRequest = initTransactionRequest()
+                    MidtransSDK.getInstance()
+                        .startPaymentUiFlow(this@CheckoutActivity, paymentMethod)
+                }
+            }
+        }
+    }
+
+    private fun initTransactionRequest(): TransactionRequest {
+        val transanctionRequest =
+            TransactionRequest(currentUUID, orderTotal.toDouble())
+        transanctionRequest.customerDetails = getCustomerDetails()
+        return transanctionRequest
+    }
+
+    private fun getCustomerDetails(): CustomerDetails {
+        val billingAddress = BillingAddress()
+        billingAddress.address = binding.inputOrderAddress.editText?.text.toString()
+        billingAddress.city = selectedCity?.cityName
+        billingAddress.postalCode = postalCode
+        billingAddress.phone = binding.inputOrderPhone.editText?.text.toString()
+        billingAddress.countryCode = "IDN"
+
+        val customer = CustomerDetails()
+        customer.firstName = prefs[Consts.PREF_NAME]
+        customer.email = prefs[Consts.PREF_EMAIL]
+        customer.phone = binding.inputOrderPhone.editText?.text.toString()
+        customer.customerIdentifier = prefs[Consts.PREF_ID]
+        customer.billingAddress = billingAddress
+
+        return customer
     }
 
     private suspend fun fetchUserData() {
@@ -117,9 +225,7 @@ class CheckoutActivity : AppCompatActivity() {
                 binding.inputOrderAddressProvince.adapter = arrayAdapter
                 binding.inputOrderAddressProvince.setSelection(0)
             }
-            else -> {
-                Log.d("RDSHOP-DEBUG", "fetchProvinceList: Error: ${response.message}")
-            }
+            else -> {}
         }
     }
 
@@ -147,9 +253,7 @@ class CheckoutActivity : AppCompatActivity() {
                 binding.inputOrderAddressCity.adapter = arrayAdapter
                 binding.inputOrderAddressCity.setSelection(0)
             }
-            else -> {
-                Log.d("RDSHOP-DEBUG", "fetchCityList: Error: ${response.message}")
-            }
+            else -> {}
         }
     }
 
@@ -165,18 +269,25 @@ class CheckoutActivity : AppCompatActivity() {
                     ) {
                         val selected =
                             binding.inputOrderAddressCity.adapter.getItem(position).toString()
-                        val selectedCity = cityList.find { city -> city.cityName == selected }
+                        selectedCity = cityList.find { city -> city.cityName == selected }
                         selectedCity?.let {
                             setVisibilityContent(VISIBLE_DELIVERY)
 
                             val indexProvince =
-                                provinceList.mapIndexed { i, s -> if (s.province == it.province) i else null }
+                                provinceList.mapIndexed { i, s ->
+                                    if (s.province == it.province) {
+                                        selectedProvince = s
+                                        i
+                                    } else null
+                                }
                                     .filterNotNull().toList()
                             if (!indexProvince.isNullOrEmpty()) {
                                 binding.inputOrderAddressProvince.setSelection(
                                     indexProvince.first()
                                 )
                             }
+
+                            postalCode = it.postalCode.toString()
                             binding.inputOrderAddressPostalCode.editText?.setText(it.postalCode.toString())
 
                             val origin = cityList.find { city ->
@@ -272,7 +383,6 @@ class CheckoutActivity : AppCompatActivity() {
 
                 (layoutDelivery.editText as? AutoCompleteTextView)?.onItemClickListener =
                     AdapterView.OnItemClickListener { _, _, position, _ ->
-                        Log.d("RDSHOP-DEBUG", "onItemSelected: SELECTED DELIVERY: $position")
                         selectedCost?.let {
                             selectedServiceCost = it.costs?.get(position)
                             layoutDelivery.editText?.setText(selectedServiceCost?.service)
@@ -291,7 +401,7 @@ class CheckoutActivity : AppCompatActivity() {
                                     .append(" Hari").toString()
 
                             setVisibilityContent(View.VISIBLE, isLoading = false, isEmpty = false)
-                            setVisibilityContent(VISIBLE_PAY)
+                            setVisibilityContent(VISIBLE_PAYMENT_METHOD)
                             calculateTotal()
                             removeParent(layout)
                             dialog.dismiss()
@@ -374,6 +484,14 @@ class CheckoutActivity : AppCompatActivity() {
                                             product = product
                                         )
 
+                                        listOrderDetail.add(
+                                            OrderDetail(
+                                                detailId = UUID.randomUUID().toString(),
+                                                productId = product.productId,
+                                                price = currentCartDetail.price,
+                                                quantity = currentCartDetail.quantity
+                                            )
+                                        )
                                         orderListAdapter.insertData(orderUiState)
                                     }
                                 }
@@ -382,7 +500,6 @@ class CheckoutActivity : AppCompatActivity() {
                         }
                 }
             }
-            calculateTotal()
         }
     }
 
@@ -393,7 +510,7 @@ class CheckoutActivity : AppCompatActivity() {
         binding.orderTotalPrice.text = orderListAdapter.getTotalPrice().toRupiah()
         binding.orderTotalOngkir.text = ongkirTotal.toRupiah()
 
-        val orderTotal = orderListAdapter.getTotalPrice() + ongkirTotal
+        orderTotal = orderListAdapter.getTotalPrice() + ongkirTotal
         binding.orderTotal.text = orderTotal.toRupiah()
     }
 
@@ -447,6 +564,7 @@ class CheckoutActivity : AppCompatActivity() {
                     layoutOrderAddress.visibility = View.GONE
                     layoutOrderDelivery.visibility = View.GONE
                     layoutOrderSummary.visibility = View.GONE
+                    layoutPaymentMethod.visibility = View.GONE
                     layoutBill.visibility = View.GONE
                 }
                 VISIBLE_ADDRESS -> {
@@ -454,6 +572,7 @@ class CheckoutActivity : AppCompatActivity() {
                     layoutOrderAddress.visibility = View.VISIBLE
                     layoutOrderDelivery.visibility = View.GONE
                     layoutOrderSummary.visibility = View.GONE
+                    layoutPaymentMethod.visibility = View.GONE
                     layoutBill.visibility = View.GONE
                 }
                 VISIBLE_DELIVERY -> {
@@ -461,6 +580,15 @@ class CheckoutActivity : AppCompatActivity() {
                     layoutOrderAddress.visibility = View.VISIBLE
                     layoutOrderDelivery.visibility = View.VISIBLE
                     layoutOrderSummary.visibility = View.GONE
+                    layoutPaymentMethod.visibility = View.GONE
+                    layoutBill.visibility = View.GONE
+                }
+                VISIBLE_PAYMENT_METHOD -> {
+                    layoutOrderDetail.visibility = View.VISIBLE
+                    layoutOrderAddress.visibility = View.VISIBLE
+                    layoutOrderDelivery.visibility = View.VISIBLE
+                    layoutOrderSummary.visibility = View.VISIBLE
+                    layoutPaymentMethod.visibility = View.VISIBLE
                     layoutBill.visibility = View.GONE
                 }
                 VISIBLE_PAY -> {
@@ -468,6 +596,7 @@ class CheckoutActivity : AppCompatActivity() {
                     layoutOrderAddress.visibility = View.VISIBLE
                     layoutOrderDelivery.visibility = View.VISIBLE
                     layoutOrderSummary.visibility = View.VISIBLE
+                    layoutPaymentMethod.visibility = View.VISIBLE
                     layoutBill.visibility = View.VISIBLE
                 }
                 else -> {
@@ -492,6 +621,166 @@ class CheckoutActivity : AppCompatActivity() {
         private const val VISIBLE_LIST = 1
         private const val VISIBLE_ADDRESS = 2
         private const val VISIBLE_DELIVERY = 3
-        private const val VISIBLE_PAY = 4
+        private const val VISIBLE_PAYMENT_METHOD = 4
+        private const val VISIBLE_PAY = 5
+    }
+
+    override fun onTransactionFinished(result: TransactionResult?) {
+        setVisibilityContent(View.GONE, isLoading = true)
+        val materialDialog = MaterialAlertDialogBuilder(binding.root.context)
+
+        val oldCart: MutableSet<String> = prefs[Consts.PREF_CART, mutableSetOf()]
+
+        val shippingAddress =
+            StringBuilder(binding.inputOrderName.editText?.text.toString())
+                .append("|")
+                .append(binding.inputOrderAddress.editText?.text.toString())
+                .append("|")
+                .append(selectedCity?.cityName)
+                .append("|")
+                .append(selectedProvince?.province)
+                .append("|")
+                .append(postalCode)
+                .toString()
+
+        if (result != null && result.response != null) {
+            when (result.status) {
+                TransactionResult.STATUS_SUCCESS -> {
+
+                    order = Order(
+                        orderId = currentUUID,
+                        userId = prefs[Consts.PREF_ID],
+                        date = OffsetDateTime.now(),
+                        amount = orderTotal,
+                        shipName = binding.inputOrderName.editText?.text.toString(),
+                        shipAddress = shippingAddress,
+                        shippingCost = ongkirTotal,
+                        phone = binding.inputOrderPhone.editText?.text.toString(),
+                        status = 0,
+                        trackingNumber = null,
+                        orderDetail = listOrderDetail
+                    )
+
+                    lifecycleScope.launch {
+                        when (val response = viewModel.createOrder(orderRequest = order!!)) {
+                            is Resource.Success -> {
+                                setVisibilityContent(View.VISIBLE, isLoading = false)
+                                prefs[Consts.PREF_CART] = oldCart.mapNotNull { cart ->
+                                    val currentCartDetail =
+                                        Gson().fromJson(cart, CartDetail::class.java)
+                                    if (currentCartDetail.isChecked) null
+                                    else cart
+                                }.toHashSet()
+
+                                materialDialog.setTitle("Transaksi Berhasil!")
+                                    .setMessage("Pesanan anda telah berhasil dibuat! Admin akan segera mengirimkan pesanan Anda!")
+                                    .setNegativeButton("Produk Lain") { dialog, _ ->
+                                        startActivity(
+                                            Intent(
+                                                this@CheckoutActivity,
+                                                HomeActivity::class.java
+                                            )
+                                        )
+                                        finish()
+                                        dialog.dismiss()
+                                    }
+                                    .setPositiveButton("Kembali") { dialog, _ ->
+                                        onBackPressed()
+                                        dialog.dismiss()
+                                    }
+                                    .setOnDismissListener {
+                                    }.show()
+                            }
+                            else -> {
+                                Log.d(
+                                    "RDSHOP-DEBUG",
+                                    "onTransactionFinished: ERROR INSERT ORDER! Cause: ${response.message}"
+                                )
+                            }
+                        }
+                    }
+                }
+                TransactionResult.STATUS_FAILED -> {
+                    setVisibilityContent(View.VISIBLE, isLoading = false)
+                    materialDialog.setTitle("Transaksi Gagal!")
+                        .setMessage(result.statusMessage.toString())
+                        .setPositiveButton("Kembali") { dialog, _ ->
+                            (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                            setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                            dialog.dismiss()
+                        }
+                        .setOnDismissListener {
+                            (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                            setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                        }.show()
+                }
+                TransactionResult.STATUS_PENDING -> {
+                    setVisibilityContent(View.VISIBLE, isLoading = false)
+                    order = Order(
+                        orderId = currentUUID,
+                        userId = prefs[Consts.PREF_ID],
+                        date = OffsetDateTime.now(),
+                        amount = orderTotal,
+                        shipName = binding.inputOrderName.editText?.text.toString(),
+                        shipAddress = shippingAddress,
+                        shippingCost = ongkirTotal,
+                        phone = binding.inputOrderPhone.editText?.text.toString(),
+                        status = -1,
+                        trackingNumber = null,
+                        orderDetail = listOrderDetail
+                    )
+
+                    materialDialog.setTitle("Transaksi Belum Selesai!")
+                        .setMessage(result.statusMessage.toString())
+                        .setPositiveButton("Lihat Order") { dialog, _ ->
+
+                            dialog.dismiss()
+                        }
+                        .setOnDismissListener {
+                            startActivity(Intent(this, HomeActivity::class.java))
+                            this.finish()
+                        }.show()
+                }
+                TransactionResult.STATUS_INVALID -> {
+                    setVisibilityContent(View.VISIBLE, isLoading = false)
+                    materialDialog.setTitle("Transaksi Gagal!")
+                        .setMessage(result.statusMessage.toString())
+                        .setPositiveButton("Kembali") { dialog, _ ->
+                            (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                            setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                            dialog.dismiss()
+                        }
+                        .setOnDismissListener {
+                            (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                            setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                        }.show()
+                }
+            }
+        } else if (result?.isTransactionCanceled == true) {
+            setVisibilityContent(View.VISIBLE, isLoading = false)
+            materialDialog.setTitle("Transaksi dibatalkan!")
+                .setMessage(result.statusMessage.toString())
+                .setPositiveButton("OK") { dialog, _ ->
+                    (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                    setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                    dialog.dismiss()
+                }
+                .setOnDismissListener {
+                    (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                    setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                }.show()
+        } else {
+            setVisibilityContent(View.VISIBLE, isLoading = false)
+            materialDialog.setTitle("Transaksi Gagal!")
+                .setMessage(result?.statusMessage.toString())
+                .setPositiveButton("OK") { dialog, _ ->
+                    (binding.listPaymentMethod.editText as? AutoCompleteTextView)?.clearListSelection()
+                    setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                    dialog.dismiss()
+                }
+                .setOnDismissListener {
+                    setVisibilityContent(VISIBLE_PAYMENT_METHOD)
+                }.show()
+        }
     }
 }

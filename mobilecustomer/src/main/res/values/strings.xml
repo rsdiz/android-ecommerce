@@ -16,7 +16,17 @@
         <item>Laki-Laki</item>
         <item>Perempuan</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="payment_method">
+        <item>Credit Card</item>
+        <item>Bank Transfer</item>
+        <item>GO-PAY</item>
+        <item>KlikBCA</item>
+        <item>Mandiri Clickpay</item>
+        <item>BRImo</item>
+        <item>Indomaret</item>
+        <item>Alfamart</item>
+        <item>ShopeePay</item>
+    </string-array>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>

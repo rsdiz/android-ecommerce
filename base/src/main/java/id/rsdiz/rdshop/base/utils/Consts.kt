@@ -10,8 +10,8 @@ object Consts {
     const val PASSPHRASE = "rsdiz-rdshop"
     const val TIMEOUT = 120L
     const val RDSHOP_BASE_URL = "https://rdshop.herokuapp.com/api/"
+    const val RDSHOP_MERCHANT_URL = "https://payment-rdshop.herokuapp.com/pay.php/"
     const val RAJAONGKIR_BASE_URL = "https://api.rajaongkir.com/starter/"
-    const val MIDTRANS_BASE_URL = "https://merchant-url-sandbox.com/"
     const val RDSHOP_HOSTNAME = "rdshop.herokuapp.com"
     const val RDSHOP_API_KEY = BuildConfig.API_KEY
     const val RAJAONGKIR_API_KEY = BuildConfig.API_RAJAONGKIR
