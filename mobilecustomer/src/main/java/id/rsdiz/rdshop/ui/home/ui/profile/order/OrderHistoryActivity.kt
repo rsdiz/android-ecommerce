@@ -75,6 +75,7 @@ class OrderHistoryActivity : AppCompatActivity() {
             layoutContent.visibility = visibility
 
             if (isEmpty) {
+                layoutEmpty.visibility = View.VISIBLE
                 layoutLoading.visibility = View.GONE
                 layoutError.visibility = View.GONE
             } else {

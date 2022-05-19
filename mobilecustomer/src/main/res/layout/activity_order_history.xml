@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/capriola"
             android:textAlignment="center"
-            android:text="Keranjang Belanjamu masih kosong nih!"
+            android:text="Belum ada transaksi yang terjadi!"
             android:textColor="@color/hippie_blue"
             android:textSize="@dimen/text_size_large" />
 
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_small"
             android:fontFamily="@font/capriola"
-            android:text="Yuk, isi dengan barang impianmu"
+            android:text="Yuk, beli barang impianmu yang ada sebelum kehabisan stok."
             android:textAlignment="center"
             android:textColor="?attr/colorOnBackground" />
 
