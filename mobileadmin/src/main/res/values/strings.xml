@@ -10,7 +10,7 @@
     <string name="label_shipping_cost">Ongkos Kirim</string>
     <string name="label_total">Total</string>
     <string name="label_order_address">Alamat Penerima</string>
-    <string name="string_order_address">%1$s\n%2$s\n%3$s (%4$s)</string>
+    <string name="string_order_address">%1$s\n%2$s\n%3$s\n%4$s (%5$s)</string>
     <string name="string_phone_number">Telp. %1$s</string>
     <string name="label_order_status">Status Pesanan</string>
     <string name="string_user_fullname">Nama: %1$s</string>

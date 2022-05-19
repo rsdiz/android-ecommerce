@@ -126,6 +126,7 @@ class DetailOrderFragment : Fragment() {
                 R.string.string_order_address,
                 orderItemUiState.getOrderName(),
                 orderItemUiState.getAddressStreetName(),
+                orderItemUiState.getAddressCity(),
                 orderItemUiState.getAddressProvince(),
                 orderItemUiState.getAddressPostalCode()
             )
