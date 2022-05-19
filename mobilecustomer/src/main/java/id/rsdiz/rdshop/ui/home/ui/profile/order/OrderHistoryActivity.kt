@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.ui.home.ui.profile.order
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,7 @@ import id.rsdiz.rdshop.base.utils.PreferenceHelper
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
 import id.rsdiz.rdshop.databinding.ActivityOrderHistoryBinding
+import id.rsdiz.rdshop.ui.home.ui.profile.order.detail.OrderDetailActivity
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -61,7 +63,10 @@ class OrderHistoryActivity : AppCompatActivity() {
                 adapter = orderListAdapter
             }
 
-            orderListAdapter.setOnItemClickListener {
+            orderListAdapter.setOnItemClickListener { orderItem ->
+                val orderDetailIntent = Intent(this, OrderDetailActivity::class.java)
+                orderDetailIntent.putExtra("orderId", orderItem.getOriginalOrderId())
+                startActivity(orderDetailIntent)
             }
         }
     }

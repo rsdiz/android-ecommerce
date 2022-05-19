@@ -16,6 +16,9 @@
         android:theme="@style/Theme.RDSHOP.NoActionBar"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".ui.home.ui.profile.order.detail.OrderDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.home.ui.profile.order.OrderHistoryActivity"
             android:exported="false" />
         <activity

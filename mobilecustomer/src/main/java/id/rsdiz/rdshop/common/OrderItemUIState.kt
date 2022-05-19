@@ -51,13 +51,13 @@ data class OrderItemUIState(
 
     fun getOrderStatusKey() = order.status
 
-    fun getAddressStreetName() = order.shipAddress.split('|')[0]
+    fun getAddressStreetName() = order.shipAddress.split('|')[1]
 
-    fun getAddressCity() = order.shipAddress.split('|')[1]
+    fun getAddressCity() = order.shipAddress.split('|')[2]
 
-    fun getAddressProvince() = order.shipAddress.split('|')[2]
+    fun getAddressProvince() = order.shipAddress.split('|')[3]
 
-    fun getAddressPostalCode() = order.shipAddress.split('|')[3]
+    fun getAddressPostalCode() = order.shipAddress.split('|')[4]
 
     fun getTrackingNumber() = order.trackingNumber?.split('|')?.get(0) ?: ""
 
