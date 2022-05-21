@@ -396,7 +396,7 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                     .filterNotNull().toList()
                             if (!indexProvince.isNullOrEmpty()) {
                                 binding.inputOrderAddressProvince.setSelection(
-                                    indexProvince.first()
+                                    indexProvince.first().plus(1)
                                 )
                             }
 
@@ -541,12 +541,18 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                 val addressProvince = it.split('|')[2]
                                 val addressPostalCode = it.split('|')[3]
 
+                                inputOrderName.editText?.setText(user?.name)
                                 inputOrderAddress.editText?.setText(addressStreetName)
                                 addressCity.let {
                                     val index =
-                                        cityList.mapIndexed { index, s -> if (s.cityName == addressCity) index else null }
+                                        cityList.mapIndexed { index, s ->
+                                            if (s.cityName == addressCity) {
+                                                selectedCity = s
+                                                index
+                                            } else null
+                                        }
                                             .filterNotNull().toList()
-                                    if (index.isNotEmpty()) inputOrderAddressCity.setSelection(index.first())
+                                    if (index.isNotEmpty()) inputOrderAddressCity.setSelection(index.first().plus(1))
                                     else
                                         Toast.makeText(
                                             rgAddressChoice.context,
@@ -556,10 +562,15 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                 }
                                 addressProvince.let {
                                     val index =
-                                        provinceList.mapIndexed { index, s -> if (s.province == addressProvince) index else null }
+                                        provinceList.mapIndexed { index, s ->
+                                            if (s.province == addressProvince) {
+                                                selectedProvince = s
+                                                index
+                                            } else null
+                                        }
                                             .filterNotNull().toList()
                                     if (index.isNotEmpty()) inputOrderAddressProvince.setSelection(
-                                        index.first()
+                                        index.first().plus(1)
                                     )
                                     else
                                         Toast.makeText(
@@ -568,7 +579,9 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                             Toast.LENGTH_SHORT
                                         ).show()
                                 }
+
                                 addressPostalCode.let {
+                                    postalCode = addressPostalCode
                                     inputOrderAddressPostalCode.editText?.setText(
                                         addressPostalCode
                                     )

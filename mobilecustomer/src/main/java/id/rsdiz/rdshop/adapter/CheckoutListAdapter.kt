@@ -16,7 +16,9 @@ class CheckoutListAdapter : RecyclerView.Adapter<CheckoutListAdapter.ViewHolder>
 
     fun insertData(cartDetailUiState: CheckoutUiState) {
         val position = itemCount
-        if (!data.contains(cartDetailUiState)) data.add(position, cartDetailUiState)
+        if (data.firstOrNull {
+                    checkout -> checkout.cartDetail.productId == cartDetailUiState.cartDetail.productId
+        } == null) data.add(position, cartDetailUiState)
         notifyItemInserted(position)
     }
 
