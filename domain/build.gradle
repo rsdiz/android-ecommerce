@@ -48,6 +48,11 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.4.0'
 
     testImplementation testDependencies.junit
+    testImplementation testDependencies.mockito
+    testImplementation testDependencies.assertj
+    testImplementation testDependencies.kotlinJunit
+    testImplementation testDependencies.archCore
+    testImplementation testDependencies.coroutines
 
     implementation project(":base")
     implementation project(":data")
