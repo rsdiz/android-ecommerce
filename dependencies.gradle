@@ -58,6 +58,8 @@ ext {
     mockitoKotlinVersion = "4.0.0"
     testSupportVersion = "1.0.2"
     mockwebserverVersion = "4.9.3"
+    archCoreVersion = "2.1.0"
+    testMonitorVersion = "1.5.0"
 
     shareDependencies = [
             coreKtx: "androidx.core:core-ktx:${coreKtxVersion}"
@@ -127,7 +129,10 @@ ext {
             supportRunner: "com.android.support.test:runner:${testSupportVersion}",
             supportRules : "com.android.support.test:rules:${testSupportVersion}",
             mockWebServer: "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}",
-            paging       : "androidx.paging:paging-common:${pagingVersion}"
+            paging       : "androidx.paging:paging-common:${pagingVersion}",
+            archCore     : "androidx.arch.core:core-testing:${archCoreVersion}",
+            coroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${kotlinxCoroutinesVersion}",
+            testMonitor  : "androidx.test:monitor:${testMonitorVersion}"
     ]
 
     uiTestDependencies = [
