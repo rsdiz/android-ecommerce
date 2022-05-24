@@ -107,6 +107,9 @@
             app:destination="@id/productDialog"
             app:enterAnim="@anim/slide_up"
             app:exitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_productFragment_to_manageProductActivity"
+            app:destination="@id/manageProductActivity" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -131,4 +134,18 @@
             app:argType="id.rsdiz.rdshop.data.model.Product"
             app:nullable="true" />
     </dialog>
+    <activity
+        android:id="@+id/manageProductActivity"
+        android:name="id.rsdiz.rdshop.seller.ui.home.ui.product.manage.ManageProductActivity"
+        android:label="activity_manage_product"
+        app:action="android.intent.action.OPEN_DOCUMENT and android.intent.action.GET_CONTENT"
+        tools:layout="@layout/activity_manage_product">
+        <argument
+            android:name="type"
+            app:argType="integer" />
+        <argument
+            android:name="product"
+            app:argType="id.rsdiz.rdshop.data.model.Product"
+            app:nullable="true" />
+    </activity>
 </navigation>

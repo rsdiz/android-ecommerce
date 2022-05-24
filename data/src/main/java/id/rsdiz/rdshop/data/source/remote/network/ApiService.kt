@@ -127,7 +127,13 @@ interface ApiService {
     @PUT(value = "products/{productId}")
     suspend fun updateProduct(
         @Path(value = "productId") productId: String,
-        @Body data: RequestBody
+        @Part(value = "category_id") categoryId: RequestBody,
+        @Part(value = "name") name: RequestBody,
+        @Part(value = "weight") weight: RequestBody,
+        @Part(value = "stock") stock: RequestBody,
+        @Part(value = "description") description: RequestBody,
+        @Part(value = "price") price: RequestBody,
+        @Part image: MultipartBody.Part?
     ): BaseProductResponse
 
     @Multipart
@@ -166,13 +172,22 @@ interface ApiService {
 
     @Multipart
     @POST(value = "products")
-    suspend fun createProduct(@Body data: RequestBody): BaseProductResponse
+    suspend fun createProduct(
+        @Part(value = "productId") productId: RequestBody,
+        @Part(value = "categoryId") categoryId: RequestBody,
+        @Part(value = "name") name: RequestBody,
+        @Part(value = "weight") weight: RequestBody,
+        @Part(value = "stock") stock: RequestBody,
+        @Part(value = "description") description: RequestBody,
+        @Part(value = "price") price: RequestBody,
+        @Part image: MultipartBody.Part?
+    ): BaseProductResponse
 
     @Multipart
-    @POST(value = "products/{productId}")
+    @POST(value = "products/{id}")
     suspend fun addProductImage(
-        @Path(value = "productId") productId: String,
-        @Part(value = "image") image: RequestBody
+        @Path(value = "id") productId: String,
+        @Part image: MultipartBody.Part?
     ): BaseProductImageResponse
 
     @POST(value = "orders")

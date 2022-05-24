@@ -1,5 +1,6 @@
 package id.rsdiz.rdshop.seller.ui.home.ui.product
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigator
 import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -20,6 +23,7 @@ import id.rsdiz.rdshop.seller.adapter.ProductPagingGridAdapter
 import id.rsdiz.rdshop.seller.common.LoadStateUi
 import id.rsdiz.rdshop.seller.common.ProductItemUiState
 import id.rsdiz.rdshop.seller.databinding.FragmentProductBinding
+import id.rsdiz.rdshop.seller.ui.home.ui.product.manage.ManageProductActivity
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,11 +54,8 @@ class ProductFragment : Fragment() {
         }
 
         productPagingAdapter.setOnItemClickListener {
-//            Toast.makeText(requireContext(), "Clicked ${it.productName} !", Toast.LENGTH_SHORT)
-//                .show()
-//            ProductDialog.display(ProductDialog.TYPE_EDIT, requireActivity().supportFragmentManager)
-            val directions = ProductFragmentDirections.actionProductFragmentToProductDialog(
-                ProductDialog.TYPE_EDIT,
+            val directions = ProductFragmentDirections.actionProductFragmentToManageProductActivity(
+                ManageProductActivity.TYPE_EDIT,
                 it.data
             )
             view.findNavController().navigate(directions)
@@ -162,10 +163,8 @@ class ProductFragment : Fragment() {
     private fun setupFabButton() {
         binding.apply {
             buttonAddProduct.setOnClickListener {
-//                Toast.makeText(requireContext(), "Add Button Clicked!", Toast.LENGTH_SHORT).show()
-//                ProductDialog.display(ProductDialog.TYPE_ADD, requireActivity().supportFragmentManager)
-                val directions = ProductFragmentDirections.actionProductFragmentToProductDialog(
-                    ProductDialog.TYPE_ADD,
+                val directions = ProductFragmentDirections.actionProductFragmentToManageProductActivity(
+                    ManageProductActivity.TYPE_ADD,
                     null
                 )
                 view?.findNavController()?.navigate(directions)

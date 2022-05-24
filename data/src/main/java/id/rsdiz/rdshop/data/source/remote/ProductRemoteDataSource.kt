@@ -12,6 +12,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -83,15 +84,19 @@ class ProductRemoteDataSource @Inject constructor(
             try {
                 val response = apiService.updateProduct(
                     productId = product.productId,
-                    data = generateRequestBody(
-                        product = product,
-                        sourceFile = sourceFile
-                    )
+                    categoryId = generateRequestBody(product.categoryId),
+                    name = generateRequestBody(product.name),
+                    weight = generateRequestBody(product.weight.toString()),
+                    stock = generateRequestBody(product.stock.toString()),
+                    description = generateRequestBody(product.description),
+                    price = generateRequestBody(product.price.toString()),
+                    image = generateRequestMultipart(sourceFile)
                 )
+
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.status
+                            data = response.data
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -110,7 +115,7 @@ class ProductRemoteDataSource @Inject constructor(
                 when (response.code) {
                     200 -> emit(
                         ApiResponse.Success(
-                            data = response.data
+                            data = response.status
                         )
                     )
                     else -> emit(ApiResponse.Error(response.status))
@@ -124,10 +129,14 @@ class ProductRemoteDataSource @Inject constructor(
         flow {
             try {
                 val response = apiService.createProduct(
-                    data = generateRequestBody(
-                        product = product,
-                        sourceFile = sourceFile
-                    )
+                    productId = generateRequestBody(product.productId),
+                    categoryId = generateRequestBody(product.categoryId),
+                    name = generateRequestBody(product.name),
+                    weight = generateRequestBody(product.weight.toString()),
+                    stock = generateRequestBody(product.stock.toString()),
+                    description = generateRequestBody(product.description),
+                    price = generateRequestBody(product.price.toString()),
+                    image = generateRequestMultipart(sourceFile)
                 )
                 when (response.code) {
                     200 -> emit(
@@ -167,7 +176,7 @@ class ProductRemoteDataSource @Inject constructor(
             try {
                 val response = apiService.addProductImage(
                     productId = productId,
-                    image = generateRequestBody(sourceFile)
+                    image = generateRequestMultipart(sourceFile)
                 )
                 when (response.code) {
                     200 -> emit(
@@ -220,5 +229,20 @@ class ProductRemoteDataSource @Inject constructor(
             )
         }
         return multipartBody.build()
+    }
+
+    private fun generateRequestBody(text: String, type: String = "text/plain"): RequestBody =
+        text.toRequestBody(type.toMediaTypeOrNull())
+
+    private fun generateRequestMultipart(sourceFile: File?): MultipartBody.Part? {
+        val filePart = sourceFile?.let {
+            MultipartBody.Part.createFormData(
+                "photoFile",
+                it.nameWithoutExtension,
+                it.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+        return filePart
     }
 }

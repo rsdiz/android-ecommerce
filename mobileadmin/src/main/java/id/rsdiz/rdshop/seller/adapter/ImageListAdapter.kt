@@ -1,71 +1,68 @@
 package id.rsdiz.rdshop.seller.adapter
 
-import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import id.rsdiz.rdshop.seller.databinding.ItemProductImageBinding
+import id.rsdiz.rdshop.seller.R
+import id.rsdiz.rdshop.seller.databinding.ItemImageListBinding
 
-class ImageListAdapter(private val context: Context) : RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
-    private var mutableImageList = mutableListOf<Uri>()
-    private var onItemClick: ((Int, Uri) -> Unit)? = null
+class ImageListAdapter constructor(private val productId: String) :
+    RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
+    private var mutableImageList = mutableListOf<String>()
+    private var mutableImageIdList = mutableListOf<String>()
+    private var onItemClick: ((Int, String, String) -> Unit)? = null
 
-    fun insertData(uri: Uri) {
+    fun insertData(imageId: String, urlPath: String) {
         val position = itemCount
-        mutableImageList.add(position, uri)
+        mutableImageList.add(position, urlPath)
+        mutableImageIdList.add(position, imageId)
         notifyItemInserted(position)
     }
 
     fun deleteData(index: Int) {
         mutableImageList.removeAt(index)
+        mutableImageIdList.removeAt(index)
         notifyItemRemoved(index)
     }
 
-    fun setOnItemClickListener(listener: (Int, Uri) -> Unit) {
+    fun setOnDeleteListener(listener: (position: Int, productId: String, imageId: String) -> Unit) {
         onItemClick = listener
     }
 
-    inner class ViewHolder(private val binding: ItemProductImageBinding) :
+    inner class ViewHolder(private val binding: ItemImageListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(uri: Uri) {
+        fun bind(urlPath: String) {
             binding.apply {
                 Glide.with(root.context)
-                    .load(uri)
-                    .apply(RequestOptions().override(120, 120))
-//                    .apply(RequestOptions.placeholderOf(R.drawable.bg_image_loading))
-//                    .error(R.drawable.bg_image_error)
+                    .load(urlPath)
+                    .apply(RequestOptions.placeholderOf(R.drawable.bg_image_loading))
+                    .error(R.drawable.bg_image_error)
                     .centerCrop()
-                    .into(image)
+                    .into(imagePreview)
 
                 buttonRemove.setOnClickListener {
-                    deleteData(bindingAdapterPosition)
+                    onItemClick?.invoke(
+                        bindingAdapterPosition,
+                        productId,
+                        mutableImageIdList[bindingAdapterPosition]
+                    )
                 }
-            }
-        }
-
-        init {
-            binding.root.setOnClickListener {
-                onItemClick?.invoke(
-                    bindingAdapterPosition,
-                    mutableImageList[bindingAdapterPosition]
-                )
             }
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder =
-        ViewHolder(
-            ItemProductImageBinding.inflate(LayoutInflater.from(context))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            ItemImageListBinding.inflate(
+                LayoutInflater.from(parent.context)
+            )
         )
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(uri = mutableImageList[position])
+        holder.bind(urlPath = mutableImageList[position])
 
     override fun getItemCount(): Int = mutableImageList.size
 }
