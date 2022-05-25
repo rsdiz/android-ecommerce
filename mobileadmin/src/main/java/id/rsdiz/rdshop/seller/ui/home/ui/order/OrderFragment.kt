@@ -77,7 +77,7 @@ class OrderFragment : Fragment() {
     lateinit var orderPagingAdapter: OrderPagingAdapter
 
     private var filterButtonClicked = false
-    private var isFilterActive = false
+    private var isFilterActive: Boolean? = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,6 +106,7 @@ class OrderFragment : Fragment() {
         lifecycleScope.launch {
             setupFabFilter()
             setupOrderPagingAdapter()
+            updateNotification()
         }
     }
 
@@ -156,19 +157,21 @@ class OrderFragment : Fragment() {
             if (ui.getErrorVisibility() == View.VISIBLE) {
                 errorText.text = ui.getErrorMessage()
             }
+
+            updateNotification()
         }
     }
 
     private fun setVisibilityContent(visibility: Int, isLoading: Boolean = false) {
         binding.apply {
+            layoutContent.visibility = visibility
             when (visibility) {
                 View.VISIBLE -> {
-                    layoutContent.visibility = visibility
                     layoutLoading.visibility = View.GONE
                     layoutError.visibility = View.GONE
                 }
                 View.GONE -> {
-                    layoutContent.visibility = visibility
+                    fabClearFilter.visibility = View.GONE
                     if (isLoading) {
                         layoutLoading.visibility = View.VISIBLE
                         layoutError.visibility = View.GONE
@@ -178,14 +181,13 @@ class OrderFragment : Fragment() {
                     }
                 }
             }
-            if (isFilterActive) fabClearFilter.visibility = View.VISIBLE
-            else fabClearFilter.visibility = View.INVISIBLE
         }
     }
 
     private suspend fun setOrders(orderItemsPagingData: PagingData<OrderItemUIState>) {
         orderPagingAdapter.submitData(orderItemsPagingData)
-        updateNotification()
+        if (isFilterActive == null) isFilterActive = true
+        setFabClearFilter()
     }
 
     private fun setupFabFilter() {
@@ -197,39 +199,34 @@ class OrderFragment : Fragment() {
                 lifecycleScope.launch {
                     collectOrders(Consts.STATUS_WAITING)
                     onFabFilterClicked()
-                    isFilterActive = true
-                    setFabClearFilter()
+                    isFilterActive = null
                 }
             }
             fabFilter2.setOnClickListener {
                 lifecycleScope.launch {
                     collectOrders(Consts.STATUS_PROCESSED)
                     onFabFilterClicked()
-                    isFilterActive = true
-                    setFabClearFilter()
+                    isFilterActive = null
                 }
             }
             fabFilter3.setOnClickListener {
                 lifecycleScope.launch {
                     collectOrders(Consts.STATUS_DISPATCH)
                     onFabFilterClicked()
-                    isFilterActive = true
-                    setFabClearFilter()
+                    isFilterActive = null
                 }
             }
             fabFilter4.setOnClickListener {
                 lifecycleScope.launch {
                     collectOrders(Consts.STATUS_ARRIVED)
                     onFabFilterClicked()
-                    isFilterActive = true
-                    setFabClearFilter()
+                    isFilterActive = null
                 }
             }
             fabClearFilter.setOnClickListener {
                 lifecycleScope.launch {
                     collectOrders()
                     isFilterActive = false
-                    setFabClearFilter()
                 }
             }
         }
@@ -245,7 +242,7 @@ class OrderFragment : Fragment() {
 
     private fun setFabClearFilter() {
         binding.apply {
-            if (isFilterActive) {
+            if (isFilterActive == true) {
                 fabClearFilter.visibility = View.VISIBLE
                 fabClearFilter.startAnimation(fromBottomAnimationClear)
             } else {
