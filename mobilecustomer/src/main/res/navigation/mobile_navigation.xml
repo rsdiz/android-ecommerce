@@ -22,6 +22,9 @@
         <argument
             android:name="productId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detailFragment_to_checkoutActivity"
+            app:destination="@id/checkoutActivity" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"
