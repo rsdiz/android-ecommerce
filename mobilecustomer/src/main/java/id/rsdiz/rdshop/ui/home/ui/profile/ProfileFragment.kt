@@ -68,7 +68,7 @@ class ProfileFragment : Fragment() {
                                     .load(user.photo)
                                     .error(R.drawable.bg_image_error)
                                     .transition(DrawableTransitionOptions.withCrossFade())
-                                    .skipMemoryCache(true)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .circleCrop()
                                     .into(profileImage)
 

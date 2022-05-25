@@ -1,10 +1,13 @@
 package id.rsdiz.rdshop.ui.home.ui.profile.edit
 
 import android.Manifest
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +18,20 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import id.rsdiz.rdshop.BuildConfig
 import id.rsdiz.rdshop.R
-import id.rsdiz.rdshop.base.utils.Consts
-import id.rsdiz.rdshop.base.utils.PreferenceHelper
+import id.rsdiz.rdshop.base.utils.*
 import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.get
-import id.rsdiz.rdshop.base.utils.PreferenceHelper.Ext.set
-import id.rsdiz.rdshop.base.utils.URIPathHelper
-import id.rsdiz.rdshop.base.utils.collectLast
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.City
 import id.rsdiz.rdshop.data.model.Province
@@ -45,7 +47,7 @@ import java.io.File
 @AndroidEntryPoint
 class EditProfileActivity : AppCompatActivity() {
     companion object {
-        private const val PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 101
+        private const val PERMISSIONS_REQUEST = 102
     }
 
     private var _binding: ActivityEditProfileBinding? = null
@@ -54,47 +56,41 @@ class EditProfileActivity : AppCompatActivity() {
     private val viewModel: ProfileViewModel by viewModels()
 
     private lateinit var userProfile: User
-
+    private lateinit var managePermissions: ManagePermissions
     private lateinit var prefs: SharedPreferences
 
-    private val takeImageResult =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-            if (isSuccess) {
-                latestTmpUri?.let {
-                    imageFile = File(it.path.toString())
-
-                    Glide.with(binding.root.context)
-                        .load(imageFile)
-                        .error(R.drawable.bg_image_error)
-                        .into(binding.imagePreview)
-
-//                    binding.imagePreview.setImageURI(uri)
-                }
-            } else {
-                Log.d("RDSHOP-DEBUG", "TakeImageResult: Not Succes")
-            }
-        }
+    private var imageFile: File? = null
 
     private val selectImageFromGalleryResult =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            if (uri != null) {
-                URIPathHelper.getPath(this, uri)?.let {
-                    imageFile = File(it)
-                }
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
 
-                Glide.with(binding.root.context)
-                    .load(imageFile)
-                    .error(R.drawable.bg_image_error)
-                    .into(binding.imagePreview)
-//                binding.imagePreview.setImageURI(uri)
-            } else {
-                Log.d("RDSHOP-DEBUG", "SelectImageFromGalleryResult: is NULL")
+                data?.let { intent ->
+                    intent.data?.let { selectedImageUri ->
+                        val selectedImageBitmap: Bitmap
+                        try {
+                            URIPathHelper.getPath(this, selectedImageUri)?.let { path ->
+                                imageFile = File(path)
+                            }
+
+                            selectedImageBitmap =
+                                MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
+
+                            Glide.with(this@EditProfileActivity)
+                                .load(selectedImageBitmap)
+                                .apply(RequestOptions.placeholderOf(R.drawable.bg_image_loading))
+                                .error(R.drawable.bg_image_error)
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .centerCrop()
+                                .into(binding.imagePreview)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
             }
         }
-
-    private var latestTmpUri: Uri? = null
-
-    private var imageFile: File? = null
 
     private var cityList = mutableListOf<City>()
 
@@ -106,14 +102,30 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         prefs = PreferenceHelper(this).customPrefs(Consts.PREFERENCE_NAME)
 
-        checkRuntimePermission()
+        val permissions = listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        managePermissions = ManagePermissions(this, permissions, PERMISSIONS_REQUEST)
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
-        binding.buttonCamera.setOnClickListener { takeImage() }
-        binding.buttonGallery.setOnClickListener { selectImageFromGallery() }
+        binding.buttonGallery.setOnClickListener {
+            when (managePermissions.isPermissionsGranted()) {
+                PackageManager.PERMISSION_GRANTED -> {
+                    val intent = Intent()
+                    intent.type = "image/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+
+                    selectImageFromGalleryResult.launch(intent)
+                }
+                PackageManager.PERMISSION_DENIED -> {
+                    managePermissions.checkPermissions()
+                }
+            }
+        }
         binding.buttonSave.setOnClickListener {
             val materialDialog = MaterialAlertDialogBuilder(binding.root.context)
             val layout = DialogPasswordConfirmationBinding.inflate(layoutInflater)
@@ -233,19 +245,6 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkRuntimePermission() {
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(
-                arrayOf("Manifest.permission.READ_EXTERNAL_STORAGE"),
-                PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-            )
-
-            return
-        }
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -254,9 +253,14 @@ class EditProfileActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
-            PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("RDSHOP-DEBUG", "onRequestPermissionsResult: GRANTED")
+            PERMISSIONS_REQUEST -> {
+                grantResults[0].let {
+                    if (it == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(
+                            "RDSHOP-DEBUG",
+                            "onRequestPermissionsResult: ${permissions[it]}: GRANTED"
+                        )
+                    }
                 }
             }
         }
@@ -324,11 +328,19 @@ class EditProfileActivity : AppCompatActivity() {
                         userProfile = user
 
                         binding.apply {
-                            Glide.with(root.context)
-                                .load(userProfile.photo)
-                                .error(R.drawable.bg_image_error)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(imagePreview)
+                            if (userProfile.photo != null) {
+                                Glide.with(this@EditProfileActivity)
+                                    .load(userProfile.photo)
+                                    .error(R.drawable.bg_image_error)
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(imagePreview)
+                            } else {
+                                Glide.with(this@EditProfileActivity)
+                                    .load(R.drawable.bg_image_loading)
+                                    .error(R.drawable.bg_image_error)
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(imagePreview)
+                            }
 
                             inputProfileName.editText?.setText(userProfile.name)
                             inputProfileUsername.editText?.setText(userProfile.username)
@@ -400,31 +412,6 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun takeImage() {
-        lifecycleScope.launchWhenStarted {
-            getTmpFileUri().let { uri ->
-                latestTmpUri = uri
-                takeImageResult.launch(latestTmpUri)
-            }
-        }
-    }
-
-    private fun selectImageFromGallery() = selectImageFromGalleryResult.launch("image/*")
-
-    private fun getTmpFileUri(): Uri {
-
-        val tmpFile = File.createTempFile("tmp_img_", ".png", cacheDir).apply {
-            createNewFile()
-            deleteOnExit()
-        }
-
-        return FileProvider.getUriForFile(
-            applicationContext,
-            "${BuildConfig.APPLICATION_ID}.provider",
-            tmpFile
-        )
     }
 
     private fun removeParent(view: View) {

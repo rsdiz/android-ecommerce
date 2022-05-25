@@ -65,6 +65,7 @@
         android:id="@+id/checkoutActivity"
         android:name="id.rsdiz.rdshop.ui.home.ui.cart.checkout.CheckoutActivity"
         android:label="activity_checkout"
+        app:action="android.intent.action.OPEN_DOCUMENT and android.intent.action.GET_CONTENT"
         tools:layout="@layout/activity_checkout" />
     <activity
         android:id="@+id/orderHistoryActivity"
