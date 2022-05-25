@@ -30,7 +30,7 @@ ext {
     hiltLifecycleVersion = '1.0.0-alpha03'
     hiltCompilerVersion = '1.0.0'
     fragmentVersion = '1.4.1'
-    okhttpVersion = '3.14.9'
+    okhttpVersion = '5.0.0-alpha.6'
     androidCoreTestVersion = '2.1.0'
     mockitoKotlinVersion = '4.0.0'
     coroutinesTestVersion = '1.6.0'

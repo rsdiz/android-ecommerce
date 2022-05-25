@@ -176,7 +176,7 @@ class ProductRemoteDataSource @Inject constructor(
             try {
                 val response = apiService.addProductImage(
                     productId = productId,
-                    image = generateRequestMultipart(sourceFile)
+                    image = generateRequestMultipart(sourceFile)!!
                 )
                 when (response.code) {
                     200 -> emit(
@@ -237,7 +237,7 @@ class ProductRemoteDataSource @Inject constructor(
     private fun generateRequestMultipart(sourceFile: File?): MultipartBody.Part? {
         val filePart = sourceFile?.let {
             MultipartBody.Part.createFormData(
-                "photoFile",
+                "image",
                 it.nameWithoutExtension,
                 it.asRequestBody("image/*".toMediaTypeOrNull())
             )

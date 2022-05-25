@@ -184,10 +184,10 @@ interface ApiService {
     ): BaseProductResponse
 
     @Multipart
-    @POST(value = "products/{id}")
+    @POST(value = "products/{productId}")
     suspend fun addProductImage(
-        @Path(value = "id") productId: String,
-        @Part image: MultipartBody.Part?
+        @Path(value = "productId") productId: String,
+        @Part image: MultipartBody.Part
     ): BaseProductImageResponse
 
     @POST(value = "orders")

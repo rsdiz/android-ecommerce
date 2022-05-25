@@ -419,10 +419,6 @@ class ManageProductActivity : AppCompatActivity() {
                         materialDialog.setView(layout.root)
                             .setTitle("Gambar Produk")
                             .setMessage("Pilih opsi pengambilan gambar")
-                            .setNeutralButton("Batal") { dialog, _ ->
-                                removeParent(layout.root)
-                                dialog.dismiss()
-                            }
                             .setPositiveButton("OK") { dialog, _ ->
                                 refreshProductData()
                                 removeParent(layout.root)
@@ -430,6 +426,7 @@ class ManageProductActivity : AppCompatActivity() {
                                 dialog.dismiss()
                             }
                             .setOnCancelListener {
+                                refreshProductData()
                                 removeParent(layout.root)
                                 it.dismiss()
                             }
@@ -531,7 +528,7 @@ class ManageProductActivity : AppCompatActivity() {
                             else -> {
                                 Toast.makeText(
                                     this@ManageProductActivity,
-                                    "Data mengupdate data!",
+                                    "Data telah diupdate!",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
