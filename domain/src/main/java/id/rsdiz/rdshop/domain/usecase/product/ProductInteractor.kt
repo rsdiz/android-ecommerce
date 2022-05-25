@@ -14,7 +14,7 @@ import javax.inject.Inject
 class ProductInteractor @Inject constructor(
     private val repository: IProductRepository
 ) : ProductUseCase {
-    override suspend fun count() = repository.count()
+    override suspend fun count(type: String?) = repository.count(type)
 
     override fun getProducts(): Flow<PagingData<Product>> = repository.getProducts()
 

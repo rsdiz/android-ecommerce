@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.rsdiz.rdshop.base.utils.Consts
 import id.rsdiz.rdshop.base.utils.PreferenceHelper
@@ -28,7 +27,7 @@ import id.rsdiz.rdshop.seller.adapter.DashboardMenuAdapter
 import id.rsdiz.rdshop.seller.adapter.NewestOrderAdapter
 import id.rsdiz.rdshop.seller.common.DashboardMenu
 import id.rsdiz.rdshop.seller.databinding.FragmentDashboardBinding
-import id.rsdiz.rdshop.seller.ui.splash.SplashActivity
+import id.rsdiz.rdshop.seller.ui.home.ui.profile.ProfileActivity
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -115,47 +114,8 @@ class DashboardFragment : Fragment() {
 
             toolbar.menu.forEach {
                 it.setOnMenuItemClickListener {
-                    lifecycleScope.launch {
-                        when (val response = viewModel.signOut(prefs[Consts.PREF_TOKEN, ""])) {
-                            is Resource.Success -> {
-                                Snackbar.make(
-                                    requireContext(),
-                                    content,
-                                    response.data.toString(),
-                                    Snackbar.LENGTH_SHORT
-                                ).addCallback(object : Snackbar.Callback() {
-                                    override fun onDismissed(
-                                        transientBottomBar: Snackbar?,
-                                        event: Int
-                                    ) {
-                                        super.onDismissed(transientBottomBar, event)
-                                        requireActivity().applicationContext.startActivity(
-                                            Intent(
-                                                requireActivity().applicationContext,
-                                                SplashActivity::class.java
-                                            ).addFlags(
-                                                Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                            ).addFlags(
-                                                Intent.FLAG_ACTIVITY_NEW_TASK
-                                            )
-                                        )
-                                        prefs[Consts.PREF_TOKEN] = Consts.RDSHOP_API_KEY
-                                        requireActivity().finishAffinity()
-                                    }
-                                }).show()
-                            }
-                            is Resource.Error -> {
-                                Snackbar.make(
-                                    requireContext(),
-                                    content,
-                                    "Gagal Logout!",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
-                            }
-                            else -> {
-                            }
-                        }
-                    }
+                    val intent = Intent(requireContext(), ProfileActivity::class.java)
+                    startActivity(intent)
                     true
                 }
             }
@@ -218,7 +178,7 @@ class DashboardFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            observeMenu(listMenu[2], viewModel.countProduct())
+            observeMenu(listMenu[2], viewModel.countProduct("all"))
         }
 
         lifecycleScope.launch {

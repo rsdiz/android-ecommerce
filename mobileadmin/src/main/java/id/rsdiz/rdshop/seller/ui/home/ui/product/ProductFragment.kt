@@ -1,6 +1,5 @@
 package id.rsdiz.rdshop.seller.ui.home.ui.product
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
 import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -66,6 +63,7 @@ class ProductFragment : Fragment() {
                 productPagingAdapter.refresh()
                 collectProducts()
                 observeProductCount()
+                observeProductSoldCount()
                 binding.refreshProducts.isRefreshing = false
             }
         }
@@ -74,6 +72,7 @@ class ProductFragment : Fragment() {
 
         lifecycleScope.launch {
             observeProductCount()
+            observeProductSoldCount()
         }
 
         lifecycleScope.launch {
@@ -84,17 +83,31 @@ class ProductFragment : Fragment() {
     private suspend fun observeProductCount() {
         binding.textProductCount.text = "Loading..."
 
-        when (val resource = viewModel.getProductCount()) {
+        binding.textProductCount.text = when (val resource = viewModel.getProductCount("all")) {
             is Resource.Success -> {
-                resource.data?.let {
-                    binding.textProductCount.text = it.toString()
-                }
+                resource.data?.toString()
             }
             is Resource.Error -> {
-                binding.textProductCount.text = resource.message
+                resource.message
             }
             else -> {
-                binding.textProductCount.text = "Loading..."
+                "Loading..."
+            }
+        }
+    }
+
+    private suspend fun observeProductSoldCount() {
+        binding.textSoldCount.text = "Loading..."
+
+        binding.textSoldCount.text = when (val resource = viewModel.getProductCount("sold")) {
+            is Resource.Success -> {
+                resource.data?.toString()
+            }
+            is Resource.Error -> {
+                resource.message
+            }
+            else -> {
+                "Loading..."
             }
         }
     }
@@ -163,10 +176,11 @@ class ProductFragment : Fragment() {
     private fun setupFabButton() {
         binding.apply {
             buttonAddProduct.setOnClickListener {
-                val directions = ProductFragmentDirections.actionProductFragmentToManageProductActivity(
-                    ManageProductActivity.TYPE_ADD,
-                    null
-                )
+                val directions =
+                    ProductFragmentDirections.actionProductFragmentToManageProductActivity(
+                        ManageProductActivity.TYPE_ADD,
+                        null
+                    )
                 view?.findNavController()?.navigate(directions)
             }
         }

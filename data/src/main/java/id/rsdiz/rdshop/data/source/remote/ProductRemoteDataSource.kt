@@ -22,10 +22,10 @@ class ProductRemoteDataSource @Inject constructor(
     val apiService: ApiService,
     val mapper: ProductRemoteMapper,
 ) {
-    suspend fun countProducts() =
+    suspend fun countProducts(type: String?) =
         flow {
             try {
-                val response = apiService.countProducts()
+                val response = apiService.countProducts(type)
                 if (response.data != null) {
                     when (response.code) {
                         200 -> emit(

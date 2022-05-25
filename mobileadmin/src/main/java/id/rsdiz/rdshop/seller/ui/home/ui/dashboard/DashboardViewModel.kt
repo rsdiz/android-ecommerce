@@ -24,7 +24,7 @@ class DashboardViewModel @Inject constructor(
 
     suspend fun countUser() = userInteractor.count()
     suspend fun countCategory() = categoryInteractor.count()
-    suspend fun countProduct() = productInteractor.count()
+    suspend fun countProduct(type: String?) = productInteractor.count(type)
     suspend fun countOrder() = orderInteractor.count()
 
     init {

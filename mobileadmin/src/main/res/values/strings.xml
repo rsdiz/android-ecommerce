@@ -15,6 +15,7 @@
     <string name="label_order_status">Status Pesanan</string>
     <string name="string_user_fullname">Nama: %1$s</string>
     <string name="string_user_username">Username: %1$s</string>
+    <string name="notif_unprocessed">Terdapat %1$s Orderan yang belum diproses</string>
     <string-array name="courier">
         <item>JNE Express</item>
         <item>J&amp;T Express</item>
@@ -27,6 +28,8 @@
         <item>TIKI</item>
         <item>AnterAja</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="gender">
+        <item>Laki-Laki</item>
+        <item>Perempuan</item>
+    </string-array>
 </resources>

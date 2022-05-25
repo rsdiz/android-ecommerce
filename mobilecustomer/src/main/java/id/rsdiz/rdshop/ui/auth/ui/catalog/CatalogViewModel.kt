@@ -21,5 +21,5 @@ class CatalogViewModel @Inject constructor(
                 pagingData.map { ProductItemUiState(it) }
             }.cachedIn(viewModelScope)
 
-    suspend fun getProductCount() = productInteractor.count()
+    suspend fun getProductCount(type: String) = productInteractor.count(type)
 }

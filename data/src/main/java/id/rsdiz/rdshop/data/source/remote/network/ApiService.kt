@@ -86,7 +86,9 @@ interface ApiService {
     suspend fun countUsers(): BaseIntResponse
 
     @GET(value = "products/count")
-    suspend fun countProducts(): BaseIntResponse
+    suspend fun countProducts(
+        @Query("type") type: String? = "all"
+    ): BaseIntResponse
 
     @GET(value = "orders/count")
     suspend fun countOrders(): BaseIntResponse

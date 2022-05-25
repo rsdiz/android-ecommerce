@@ -17,6 +17,17 @@ class OrderPagingAdapter @Inject constructor() :
         onItemClick = listener
     }
 
+    fun countProductUnprocessed(): Int {
+        var total = 0
+        repeat(itemCount) {
+            val order = getItem(it)
+            if (order?.getOrderStatusKey() == 0.toShort()) {
+                total++
+            }
+        }
+        return total
+    }
+
     inner class OrderViewHolder(
         private val binding: ItemOrderBinding
     ) : RecyclerView.ViewHolder(binding.root) {

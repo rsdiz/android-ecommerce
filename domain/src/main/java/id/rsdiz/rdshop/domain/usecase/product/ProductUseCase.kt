@@ -15,7 +15,7 @@ interface ProductUseCase {
     /**
      * Count total row in products
      */
-    suspend fun count(): Resource<Int>
+    suspend fun count(type: String?): Resource<Int>
 
     /**
      * Get list of products

@@ -1,6 +1,7 @@
 package id.rsdiz.rdshop.seller.ui.home.ui.order
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,9 +96,28 @@ class OrderFragment : Fragment() {
             requireActivity().onBackPressed()
         }
 
+        binding.content.setOnRefreshListener {
+            lifecycleScope.launch {
+                collectOrders()
+                binding.content.isRefreshing = false
+            }
+        }
+
         lifecycleScope.launch {
             setupFabFilter()
             setupOrderPagingAdapter()
+        }
+    }
+
+    private fun updateNotification() {
+        if (orderPagingAdapter.countProductUnprocessed() < 1) {
+            binding.notification.visibility = View.GONE
+        } else {
+            binding.notification.visibility = View.VISIBLE
+            binding.notification.text = getString(
+                R.string.notif_unprocessed,
+                orderPagingAdapter.countProductUnprocessed().toString()
+            )
         }
     }
 
@@ -165,6 +185,7 @@ class OrderFragment : Fragment() {
 
     private suspend fun setOrders(orderItemsPagingData: PagingData<OrderItemUIState>) {
         orderPagingAdapter.submitData(orderItemsPagingData)
+        updateNotification()
     }
 
     private fun setupFabFilter() {

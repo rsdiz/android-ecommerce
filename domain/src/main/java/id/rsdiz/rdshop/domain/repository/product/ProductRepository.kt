@@ -27,9 +27,9 @@ class ProductRepository @Inject constructor(
     private val localDataSource: ProductLocalDataSource,
     private val appExecutors: AppExecutors
 ) : IProductRepository {
-    override suspend fun count(): Resource<Int> =
+    override suspend fun count(type: String?): Resource<Int> =
         when (
-            val response = remoteDataSource.countProducts().first()
+            val response = remoteDataSource.countProducts(type).first()
         ) {
             is ApiResponse.Success -> {
                 Resource.Success(response.data)

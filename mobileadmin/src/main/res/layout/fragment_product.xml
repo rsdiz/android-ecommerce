@@ -97,7 +97,7 @@
                     android:textColor="@color/white" />
 
                 <TextView
-                    android:id="@+id/text_count_selling"
+                    android:id="@+id/text_sold_count"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/bebas_neue"

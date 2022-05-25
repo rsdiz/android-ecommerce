@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val productInteractor: ProductInteractor,
-    private val categoryInteractor: CategoryInteractor
+    categoryInteractor: CategoryInteractor
 ) : ViewModel() {
     private var reloadTrigger = MutableLiveData<Boolean>()
     private val _categories = categoryInteractor.getCategories()
@@ -35,7 +35,7 @@ class ProductViewModel @Inject constructor(
         productInteractor.getProduct(productId).asLiveData(viewModelScope.coroutineContext)
     }
 
-    suspend fun getProductCount() = productInteractor.count()
+    suspend fun getProductCount(type: String?) = productInteractor.count(type)
 
     suspend fun updateProducts(product: Product, imageFile: File?) =
         productInteractor.updateProduct(
