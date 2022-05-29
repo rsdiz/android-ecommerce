@@ -13,7 +13,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatSpinner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -44,6 +43,7 @@ import id.rsdiz.rdshop.common.OrderItemUIState
 import id.rsdiz.rdshop.data.Resource
 import id.rsdiz.rdshop.data.model.*
 import id.rsdiz.rdshop.databinding.ActivityCheckoutBinding
+import id.rsdiz.rdshop.databinding.DialogSelectCourierBinding
 import id.rsdiz.rdshop.ui.home.HomeActivity
 import id.rsdiz.rdshop.ui.home.ui.profile.order.OrderHistoryActivity
 import kotlinx.coroutines.launch
@@ -447,49 +447,39 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
 
             buttonSelectCourier.setOnClickListener {
                 val materialDialog = MaterialAlertDialogBuilder(buttonSelectCourier.context)
-                val layout = LayoutInflater.from(buttonSelectCourier.context)
-                    .inflate(R.layout.dialog_select_courier, null, false)
-                val layoutCourier = layout.findViewById<AppCompatSpinner>(R.id.input_courier)
-                val layoutDelivery =
-                    layout.findViewById<TextInputLayout>(R.id.list_delivery_option)
+                val layout = DialogSelectCourierBinding.inflate(layoutInflater)
+                val layoutCourier: TextInputLayout = layout.listCourierOption
+                val layoutDelivery: TextInputLayout = layout.listDeliveryOption
                 layoutDelivery.visibility = View.GONE
 
                 val courierList = arrayOf("", "jne", "pos", "tiki")
                 val adapterCourier =
                     ArrayAdapter(
-                        layout.context, R.layout.item_list_text,
+                        layout.root.context, R.layout.item_list_text,
                         courierList.map {
                             it.uppercase()
                         }
                     )
-                layoutCourier.adapter = adapterCourier
+                (layoutCourier.editText as? AutoCompleteTextView)?.setAdapter(adapterCourier)
 
-                layoutCourier.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            selectedCost = costs.firstOrNull { cost ->
-                                cost.code == layoutCourier.adapter.getItem(position).toString()
-                                    .lowercase()
-                            }
-                            selectedCost?.let {
-                                it.costs?.let { list ->
-                                    val adapter =
-                                        DeliveryServiceAdapter(layout.context, list)
-                                    (layoutDelivery.editText as? AutoCompleteTextView)?.setAdapter(
-                                        adapter
-                                    )
-                                    layoutDelivery.editText?.setText("")
-                                    layoutDelivery.visibility = View.VISIBLE
-                                }
-                            }
+                (layoutCourier.editText as? AutoCompleteTextView)?.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        selectedCost = costs.firstOrNull { cost ->
+                            cost.code == (layoutCourier.editText as? AutoCompleteTextView)?.adapter?.getItem(
+                                position
+                            ).toString()
+                                .lowercase()
                         }
-
-                        override fun onNothingSelected(p0: AdapterView<*>?) {
+                        selectedCost?.let {
+                            it.costs?.let { list ->
+                                val adapter =
+                                    DeliveryServiceAdapter(layout.root.context, list)
+                                (layoutDelivery.editText as? AutoCompleteTextView)?.setAdapter(
+                                    adapter
+                                )
+                                layoutDelivery.editText?.setText("")
+                                layoutDelivery.visibility = View.VISIBLE
+                            }
                         }
                     }
 
@@ -501,7 +491,7 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                         }
                     }
 
-                materialDialog.setView(layout)
+                materialDialog.setView(layout.root)
                     .setTitle("Pilih Pengiriman")
                     .setMessage("Silahkan Pilih Jasa Pengiriman yang Anda inginkan")
                     .setPositiveButton("Simpan") { dialog, _ ->
@@ -515,12 +505,12 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                             setVisibilityContent(View.VISIBLE, isLoading = false, isEmpty = false)
                             setVisibilityContent(VISIBLE_PAYMENT_METHOD)
                             calculateTotal()
-                            removeParent(layout)
+                            removeParent(layout.root)
                             dialog.dismiss()
                         }
                     }
                     .setOnCancelListener {
-                        removeParent(layout)
+                        removeParent(layout.root)
                     }
                     .show()
             }
@@ -552,7 +542,9 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                             } else null
                                         }
                                             .filterNotNull().toList()
-                                    if (index.isNotEmpty()) inputOrderAddressCity.setSelection(index.first().plus(1))
+                                    if (index.isNotEmpty()) inputOrderAddressCity.setSelection(
+                                        index.first().plus(1)
+                                    )
                                     else
                                         Toast.makeText(
                                             rgAddressChoice.context,
@@ -856,7 +848,12 @@ class CheckoutActivity : AppCompatActivity(), TransactionFinishedCallback {
                                 materialDialog.setTitle("Transaksi Belum Selesai!")
                                     .setMessage(result.statusMessage.toString())
                                     .setPositiveButton("Lihat Order") { dialog, _ ->
-                                        startActivity(Intent(this@CheckoutActivity, OrderHistoryActivity::class.java))
+                                        startActivity(
+                                            Intent(
+                                                this@CheckoutActivity,
+                                                OrderHistoryActivity::class.java
+                                            )
+                                        )
                                         finish()
                                         dialog.dismiss()
                                     }
